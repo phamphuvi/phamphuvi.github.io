@@ -205,3 +205,33 @@ body{
 /* Nếu vẫn cảm giác cao/ thấp hơn 1–2px, tinh chỉnh nhẹ ở đây: */
 /* .header-actions{ margin-top: 1px; } */
 /* .capsule{ margin-top: -1px; } */
+/* ==== Header actions sát mép PHẢI màn hình (Method B) ==== */
+/* Có thể chỉnh nhanh khoảng cách bằng 2 biến dưới */
+:root{
+  --actions-top: 16px;     /* cao/thấp so với đỉnh trang */
+  --actions-right: 16px;   /* sát mép phải bao nhiêu */
+}
+
+.header-actions{
+  position: fixed !important;                /* tách khỏi grid/container */
+  top: var(--actions-top) !important;
+  right: var(--actions-right) !important;
+  transform: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+
+  z-index: 1000;                              /* nổi trên nav */
+  /* vô hiệu hóa ảnh hưởng của rule cũ (nếu còn) */
+  grid-column: auto !important;
+  justify-self: initial !important;
+}
+
+@media (max-width: 980px){
+  /* thu gọn nhẹ trên mobile (có thể đổi số theo ý) */
+  :root{
+    --actions-top: 14px;
+    --actions-right: 14px;
+  }
+}
