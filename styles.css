@@ -1,128 +1,91 @@
 /* ================== THEME TOKENS ================== */
 :root{
-  --container: 1100px;          /* khớp với .container max-width */
-  --bg:#0e1b2f;
-  --surface:#13223a;
-  --text:#e8eef7;
-  --muted:#b8c5d9;
-  --pill:#e4e8f0;
-  --accent:#56A6FF;
-  --shadow:#9aa3b3;
+  --container: 1100px;          /* khớp .container max-width */
+  --bg:#0e1b2f; --surface:#13223a; --text:#e8eef7; --muted:#b8c5d9;
+  --pill:#e4e8f0; --accent:#56A6FF; --shadow:#9aa3b3; --border:rgba(255,255,255,.08);
   --headline:#ffffff;           /* tiêu đề PORTFOLIO ở dark */
-  --border: rgba(255,255,255,.08);
+
+  /* Kích thước (đã giảm ~30% cho 125%) */
+  --header-h: 32px;             /* chiều cao nav/toggle */
+  --nav-font: 10.5px;
+  --nav-ico: 10px;
+  --ctrl-size: 28px;            /* nút tròn ngôn ngữ */
+
+  /* Vị trí nhóm actions (Method B: fixed theo màn hình) */
+  --actions-top: 8px;
+  --actions-right: 12px;
+
+  /* Chừa slot bên phải để nav không bị đè (container padding-right) */
+  --actions-slot: calc(var(--ctrl-size) + var(--header-h) + 24px);
 }
 body.light{
-  --bg:#f5f7fb;
-  --surface:#ffffff;
-  --text:#0e1b2f;
-  --muted:#4b5b73;
-  --pill:#e4e8f0;
-  --accent:#2f6ae2;
-  --shadow:#c4c9d3;
-  --headline:#0e1b2f;           /* tiêu đề PORTFOLIO ở light */
-  --border: rgba(0,0,0,.08);
+  --bg:#f5f7fb; --surface:#ffffff; --text:#0e1b2f; --muted:#4b5b73;
+  --pill:#e4e8f0; --accent:#2f6ae2; --shadow:#c4c9d3; --border:rgba(0,0,0,.08);
+  --headline:#0e1b2f;
 }
 
 /* ================== BASE ================== */
 *{box-sizing:border-box}
 html,body{height:100%}
-body{
-  margin:0;
-  font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
+body{margin:0; font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text)}
 .container{max-width:var(--container); margin:0 auto; padding:0 20px}
 .center{text-align:center}
 
 /* ================== HEADER (Grid: 1fr | NAV | 1fr) ================== */
 .hero-header{position:sticky; top:0; z-index:50; padding:14px 0}
-.hero-header .container{position:relative}
+.hero-header .container{
+  position:relative;
+  padding-right: max(20px, var(--actions-slot)); /* chừa chỗ cho nhóm actions bên phải */
+}
 .header-row{
-  display:grid;
-  grid-template-columns: 1fr auto 1fr; /* trái | NAV | phải */
-  align-items:center;
-  min-height:60px;
+  display:grid; grid-template-columns:1fr auto 1fr;
+  align-items:center; min-height:var(--header-h);
 }
 
-/* NAV pill luôn ở giữa */
+/* NAV pill giữa */
 .capsule{
-  grid-column:2;
-  justify-self:center;
-  display:flex; gap:16px;
+  grid-column:2; justify-self:center;
+  display:flex; gap:8px; align-items:center;
+  height:var(--header-h); padding:0 10px;
   background:var(--pill); color:#0e1b2f;
-  padding:10px 18px; border-radius:999px; border:1px solid var(--border);
+  border:1px solid var(--border); border-radius:999px;
 }
-.cap-link{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:6px 10px; border-radius:999px; text-decoration:none;
-  color:#0e1b2f; font-weight:600
-}
+.cap-link{display:inline-flex; align-items:center; gap:6px; padding:4px 6px; line-height:1; font-size:var(--nav-font); color:#0e1b2f; font-weight:600; text-decoration:none}
 .cap-link:hover{background-color:rgba(0,0,0,.06)}
-.cap-link .ico{width:16px; height:16px; fill:currentColor}
+.cap-link .ico{width:var(--nav-ico); height:var(--nav-ico); fill:currentColor}
 
-/* Cụm Dark/Light + Ngôn ngữ ở cột phải, KHÔNG absolute/fixed */
+/* Group actions: GHIM PHẢI MÀN HÌNH (Method B) */
 .header-actions{
-  grid-column:3;
-  justify-self:end;
-  display:flex; align-items:center; gap:14px;
+  position:fixed; top:var(--actions-top); right:var(--actions-right);
+  transform:none; display:flex; align-items:center; gap:14px; z-index:1000;
 }
-
-/* Nút toggle & bubble */
-.seg{display:flex; align-items:center; background:var(--pill); border-radius:999px; padding:4px; border:1px solid var(--border); height:44px}
-.seg-btn{border:0; background:transparent; color:#0e1b2f; padding:8px 14px; border-radius:999px; cursor:pointer}
-.seg-btn .ico{width:18px; height:18px}
+.seg{height:var(--header-h); display:flex; align-items:center; padding:2px; background:var(--pill); border-radius:999px; border:1px solid var(--border)}
+.seg-btn{border:0; background:transparent; color:#0e1b2f; padding:4px 8px; border-radius:999px; cursor:pointer}
+.seg-btn .ico{width:var(--nav-ico); height:var(--nav-ico)}
 .seg-btn.active{background:#0e1b2f; color:#fff}
-.bubble{
-  position:relative; display:inline-flex; align-items:center; justify-content:center;
-  width:44px; height:44px; border-radius:999px; background:var(--pill); border:1px solid var(--border)
-}
-.bubble .ico{width:18px; height:18px; fill:#0e1b2f}
+.bubble{width:var(--ctrl-size); height:var(--ctrl-size); border-radius:999px; background:var(--pill); border:1px solid var(--border); display:inline-flex; align-items:center; justify-content:center; position:relative}
+.bubble .ico{width:var(--nav-ico); height:var(--nav-ico); fill:#0e1b2f}
 .bubble .chat{position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9}
 
 /* ================== HERO ================== */
-.hero{padding:30px 0 10px}
+.hero{padding:10px 0 0}
 .mega{
-  font-size: clamp(52px, 10vw, 120px);
-  letter-spacing:.02em;
-  font-weight:900;
-  line-height:1;
-  margin:10px 0 8px;
+  font-size:clamp(34px,5.9vw,67px);
+  letter-spacing:.02em; font-weight:900; line-height:1; margin:4px 0 8px;
   color:var(--headline);
-  text-shadow:
-    0.03em 0.03em 0 var(--shadow),
-    0.06em 0.06em 0 var(--shadow),
-    0.09em 0.09em 0 var(--shadow);
+  text-shadow:0.02em 0.02em 0 var(--shadow), 0.04em 0.04em 0 var(--shadow), 0.06em 0.06em 0 var(--shadow);
 }
-.avatar-wrap{display:flex; align-items:center; justify-content:center; margin:18px 0}
-
-/* AVATAR: lớn hơn, KHÔNG khung tròn ngoài */
-.avatar-frame{
-  position:relative;
-  width:min(56vw, 520px);
-  aspect-ratio:1 / 1;
-  border-radius:50%;
-  background:transparent;           /* bỏ “đĩa xanh” ngoài */
-  border:0; outline:0; overflow:hidden;
-}
-.avatar-frame::before,
-.avatar-frame::after{ display:none }
-.avatar-img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:contain;               /* không méo ảnh */
-  padding:0;                        /* ảnh chạm khung */
-  filter:drop-shadow(0 2px 0 rgba(0,0,0,.05));
-}
-
-.hero-sub{max-width:820px; margin:16px auto 0; font-size:1.25rem; font-weight:800}
-.chevrons{display:flex; flex-direction:column; gap:8px; align-items:center; margin:18px 0 4px}
-.chev{width:36px; height:36px; stroke:var(--muted); stroke-width:2.6; fill:none}
+.avatar-wrap{display:flex; align-items:center; justify-content:center; margin:12px 0}
+.avatar-frame{position:relative; width:min(25vw,252px); aspect-ratio:1/1; border-radius:50%; background:transparent; border:0; outline:0; overflow:hidden}
+.avatar-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:0; filter:drop-shadow(0 2px 0 rgba(0,0,0,.05))}
+.hero-sub{max-width:820px; margin:6px auto 0; font-size:1rem; font-weight:800}
+.chevrons{display:flex; flex-direction:column; gap:8px; align-items:center; margin:8px 0 0}
+.chev{width:32px; height:32px; stroke:var(--muted); stroke-width:2.4; fill:none}
 
 /* ================== LAYOUT BÊN DƯỚI ================== */
 .shell{display:grid; grid-template-columns:300px 1fr; gap:22px; padding:24px 0 60px}
 .profile{position:sticky; top:100px; align-self:start; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px}
-.profile h3{margin:6px 0 0; font-size:1.25rem}
+.profile h3{margin:6px 0 0; font-size:1.1rem}
 .profile .muted{color:var(--muted)}
 .chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
 .chip{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:transparent; color:var(--text); font-size:.85rem}
@@ -131,10 +94,9 @@ body{
 .btn.solid{background:#0e1b2f; color:#fff; border:1px solid var(--border)}
 .btn.outline{background:transparent; color:var(--text); border:1px solid var(--border)}
 .btn .ico{width:18px; height:18px; fill:currentColor}
-
 .content{min-width:0}
 .block{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:16px}
-.block h4{margin:0 0 8px 0; font-size:1.1rem}
+.block h4{margin:0 0 8px 0; font-size:1.05rem}
 .muted{color:var(--muted)}
 .list{margin:0; padding-left:20px}
 
@@ -146,7 +108,7 @@ body{
 .bar span{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--accent), #fff); transition:width .8s ease}
 
 /* ================== PROJECTS ================== */
-.grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:12px}
+.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
 .card{border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
 .card .thumb{aspect-ratio:16/9; border-radius:10px; background:radial-gradient(60% 100% at 50% 0, rgba(255,255,255,.2), rgba(0,0,0,.02)); margin-bottom:10px}
 .badges{display:flex; gap:8px; flex-wrap:wrap}
@@ -157,208 +119,12 @@ body{
 .footer-row{display:flex; align-items:center; justify-content:space-between}
 
 /* ================== RESPONSIVE ================== */
-@media (max-width: 980px){
+@media (max-width:980px){
   .shell{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr 1fr}
   .skills{grid-template-columns:1fr}
   .capsule{flex-wrap:wrap; row-gap:8px}
-}
-/* ==== Fix lệch dọc header: đồng bộ chiều cao & canh giữa ==== */
-:root{ --header-h: 52px; }           /* bạn có thể chỉnh 48–56px theo mắt */
-
-.header-row{
-  align-items: center !important;
-  min-height: var(--header-h) !important;
-}
-
-/* NAV pill ở giữa với chiều cao cố định */
-.capsule{
-  height: var(--header-h) !important;
-  padding: 0 18px !important;        /* bỏ padding dọc để không đội chiều cao */
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: nowrap !important;
-}
-.cap-link{ line-height: 1 !important; }
-
-/* Cụm toggle + ngôn ngữ: cùng chiều cao và canh giữa */
-.header-actions{
-  align-self: center !important;     /* bảo đảm cùng trục dọc với nav */
-  justify-self: end !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-}
-.seg{
-  height: var(--header-h) !important;
-  display: flex !important;
-  align-items: center !important;
-}
-.bubble{
-  width: var(--header-h) !important;
-  height: var(--header-h) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* Nếu vẫn cảm giác cao/ thấp hơn 1–2px, tinh chỉnh nhẹ ở đây: */
-/* .header-actions{ margin-top: 1px; } */
-/* .capsule{ margin-top: -1px; } */
-/* ==== Header actions sát mép PHẢI màn hình (Method B) ==== */
-/* Có thể chỉnh nhanh khoảng cách bằng 2 biến dưới */
-:root{
-  --actions-top: 16px;     /* cao/thấp so với đỉnh trang */
-  --actions-right: 16px;   /* sát mép phải bao nhiêu */
-}
-
-.header-actions{
-  position: fixed !important;                /* tách khỏi grid/container */
-  top: var(--actions-top) !important;
-  right: var(--actions-right) !important;
-  transform: none !important;
-
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-
-  z-index: 1000;                              /* nổi trên nav */
-  /* vô hiệu hóa ảnh hưởng của rule cũ (nếu còn) */
-  grid-column: auto !important;
-  justify-self: initial !important;
-}
-
-@media (max-width: 980px){
-  /* thu gọn nhẹ trên mobile (có thể đổi số theo ý) */
-  :root{
-    --actions-top: 14px;
-    --actions-right: 14px;
-  }
-}
-/* ===== Size tuning cho màn hình zoom ~125% ===== */
-:root{
-  /* Chiều cao chuẩn của header/menu */
-  --header-h: 46px;          /* thử 44–50 nếu muốn */
-  --nav-font: 15px;          /* cỡ chữ mục menu */
-  --nav-ico: 14px;           /* icon trong menu */
-  --ctrl-size: 40px;         /* kích thước nút tròn (globe) */
-  /* Nếu bạn đang dùng Cách 2 (header-actions fixed), chỉnh vị trí cụm này ở đây: */
-  --actions-top: 12px;       /* hạ thấp chút để thẳng hàng với nav */
-  --actions-right: 18px;     /* khoảng cách mép phải màn hình */
-}
-
-/* HERO nhỏ gọn hơn */
-.hero{ padding: 16px 0 0 !important; }
-.mega{
-  font-size: clamp(48px, 8.4vw, 96px) !important; /* trước max 120px */
-  margin: 6px 0 8px !important;
-  text-shadow:
-    0.02em 0.02em 0 var(--shadow),
-    0.04em 0.04em 0 var(--shadow),
-    0.06em 0.06em 0 var(--shadow) !important;
-}
-.avatar-frame{
-  width: min(36vw, 360px) !important;  /* trước 56vw/520px */
-}
-.hero-sub{ font-size: 1.125rem !important; margin-top: 8px !important; }
-.chevrons{ margin: 12px 0 0 !important; }
-
-/* NAV pill gọn lại */
-.capsule{
-  height: var(--header-h) !important;
-  padding: 0 14px !important;        /* giảm padding ngang */
-  gap: 12px !important;
-  align-items: center !important;
-}
-.cap-link{
-  font-size: var(--nav-font) !important;
-  padding: 6px 8px !important;
-  line-height: 1 !important;
-}
-.cap-link .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
-
-/* Cụm Dark/Light + Ngôn ngữ gọn lại */
-.seg{
-  height: var(--header-h) !important;
-  padding: 3px !important;
-  align-items: center !important;
-}
-.seg-btn{ padding: 6px 12px !important; }
-.seg-btn .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
-.bubble{
-  width: var(--ctrl-size) !important;
-  height: var(--ctrl-size) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* Nếu bạn đã áp dụng Cách 2 (header-actions fixed), cập nhật vị trí bằng biến trên */
-.header-actions{
-  top: var(--actions-top) !important;
-  right: var(--actions-right) !important;
-}
-/* ===== Giảm kích thước thêm ~30% (tối ưu cho zoom 125%) ===== */
-:root{
-  /* biến kích thước */
-  --header-h: 32px;             /* 46px × 0.7 */
-  --nav-font: 10.5px;           /* 15px × 0.7 */
-  --nav-ico: 10px;              /* 14px × 0.7 ≈ 10 */
-  --ctrl-size: 28px;            /* 40px × 0.7 */
-
-  /* nếu bạn dùng Cách 2 (header-actions fixed) thì chỉnh vị trí ở đây */
-  --actions-top: 8px;           /* 12px × 0.7 */
-  --actions-right: 12px;        /* 18px × 0.7 */
-}
-
-/* HERO gọn hơn 30% */
-.hero{ padding: 10px 0 0 !important; }
-.mega{
-  font-size: clamp(34px, 5.9vw, 67px) !important; /* 48→34, 8.4vw→5.9vw, 96→67 */
-  margin: 4px 0 8px !important;
-  text-shadow:
-    0.02em 0.02em 0 var(--shadow),
-    0.04em 0.04em 0 var(--shadow),
-    0.06em 0.06em 0 var(--shadow) !important;
-}
-.avatar-frame{
-  width: min(25vw, 252px) !important; /* 36vw→25vw, 360px→252px */
-}
-.hero-sub{ font-size: 1rem !important; margin-top: 6px !important; }
-.chevrons{ margin: 8px 0 0 !important; }
-
-/* NAV pill gọn 30% */
-.capsule{
-  height: var(--header-h) !important;
-  padding: 0 10px !important;          /* 14px → 10px */
-  gap: 8px !important;
-  align-items: center !important;
-}
-.cap-link{
-  font-size: var(--nav-font) !important;
-  padding: 4px 6px !important;
-  line-height: 1 !important;
-}
-.cap-link .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
-
-/* Cụm Dark/Light + Ngôn ngữ */
-.seg{
-  height: var(--header-h) !important;
-  padding: 2px !important;
-  align-items: center !important;
-}
-.seg-btn{ padding: 4px 8px !important; }
-.seg-btn .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
-.bubble{
-  width: var(--ctrl-size) !important;
-  height: var(--ctrl-size) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-/* Nếu đang dùng Cách 2 (actions fixed), cập nhật vị trí theo biến trên */
-.header-actions{
-  top: var(--actions-top) !important;
-  right: var(--actions-right) !important;
+  /* thu nhỏ & canh nhóm actions gọn hơn trên mobile */
+  :root{ --actions-top:10px; --actions-right:10px; }
+  .hero-header .container{ padding-right: max(12px, var(--actions-slot)); }
 }
