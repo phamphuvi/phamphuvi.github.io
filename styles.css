@@ -298,3 +298,67 @@ body{
   top: var(--actions-top) !important;
   right: var(--actions-right) !important;
 }
+/* ===== Giảm kích thước thêm ~30% (tối ưu cho zoom 125%) ===== */
+:root{
+  /* biến kích thước */
+  --header-h: 32px;             /* 46px × 0.7 */
+  --nav-font: 10.5px;           /* 15px × 0.7 */
+  --nav-ico: 10px;              /* 14px × 0.7 ≈ 10 */
+  --ctrl-size: 28px;            /* 40px × 0.7 */
+
+  /* nếu bạn dùng Cách 2 (header-actions fixed) thì chỉnh vị trí ở đây */
+  --actions-top: 8px;           /* 12px × 0.7 */
+  --actions-right: 12px;        /* 18px × 0.7 */
+}
+
+/* HERO gọn hơn 30% */
+.hero{ padding: 10px 0 0 !important; }
+.mega{
+  font-size: clamp(34px, 5.9vw, 67px) !important; /* 48→34, 8.4vw→5.9vw, 96→67 */
+  margin: 4px 0 8px !important;
+  text-shadow:
+    0.02em 0.02em 0 var(--shadow),
+    0.04em 0.04em 0 var(--shadow),
+    0.06em 0.06em 0 var(--shadow) !important;
+}
+.avatar-frame{
+  width: min(25vw, 252px) !important; /* 36vw→25vw, 360px→252px */
+}
+.hero-sub{ font-size: 1rem !important; margin-top: 6px !important; }
+.chevrons{ margin: 8px 0 0 !important; }
+
+/* NAV pill gọn 30% */
+.capsule{
+  height: var(--header-h) !important;
+  padding: 0 10px !important;          /* 14px → 10px */
+  gap: 8px !important;
+  align-items: center !important;
+}
+.cap-link{
+  font-size: var(--nav-font) !important;
+  padding: 4px 6px !important;
+  line-height: 1 !important;
+}
+.cap-link .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
+
+/* Cụm Dark/Light + Ngôn ngữ */
+.seg{
+  height: var(--header-h) !important;
+  padding: 2px !important;
+  align-items: center !important;
+}
+.seg-btn{ padding: 4px 8px !important; }
+.seg-btn .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
+.bubble{
+  width: var(--ctrl-size) !important;
+  height: var(--ctrl-size) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Nếu đang dùng Cách 2 (actions fixed), cập nhật vị trí theo biến trên */
+.header-actions{
+  top: var(--actions-top) !important;
+  right: var(--actions-right) !important;
+}
