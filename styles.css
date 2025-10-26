@@ -152,7 +152,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -48px 0 0 !important;  /* ~1.5cm ≈ 57–58px ở màn hình 96dpi */
+  margin: -1.5cm 0 0 !important;  /* ~1.5cm ≈ 57–58px ở màn hình 96dpi */
 }
 @media (max-width: 980px){
   .avatar-wrap{ margin-top: -28px !important; } /* dịch ít hơn trên màn hẹp */
