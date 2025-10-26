@@ -128,3 +128,42 @@ body{margin:0; font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Robo
   .grid{grid-template-columns:1fr 1fr}
   .skills{grid-template-columns:1fr}
 }
+/* ==== AVATAR: to hơn & bỏ khung tròn ngoài ==== */
+.avatar-frame{
+  width: min(52vw, 460px);   /* tăng kích thước khung */
+  border: none !important;   /* bỏ viền ngoài */
+  outline: none !important;  /* bỏ outline ngoài */
+}
+.avatar-frame::before,
+.avatar-frame::after{
+  display: none !important;  /* bỏ 2 vòng tròn mờ */
+}
+.avatar-img{
+  padding: 0 !important;     /* ảnh sát khung */
+  width: 100%; height: 100%;
+  object-fit: contain;       /* không méo ảnh */
+  transform: scale(1.25);    /* phóng to ảnh bên trong (tùy chỉnh 1.1–1.6) */
+  transform-origin: center;
+}
+
+/* ==== HEADER: menu ở giữa, toggle + ngôn ngữ ở góc phải ==== */
+.header-row{
+  display: grid !important;
+  grid-template-columns: 1fr; /* chỉ để canh giữa nav */
+}
+.capsule{
+  margin: 0 auto !important; /* đặt nav chính giữa */
+}
+.header-actions{
+  position: fixed !important;
+  top: 14px;                 /* chỉnh cao/thấp theo ý */
+  right: 20px;               /* sát góc phải */
+  z-index: 70;               /* nổi lên trên */
+  background: transparent;
+}
+
+/* (tùy chọn) Nhỏ hơn trên mobile */
+@media (max-width: 600px){
+  .avatar-frame{ width: min(70vw, 360px); }
+  .avatar-img{ transform: scale(1.15); }
+}
