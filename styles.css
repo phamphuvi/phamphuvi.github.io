@@ -140,7 +140,7 @@ body{
 .mega{
   font-size: clamp(34px, 5.9vw, 67px);
   letter-spacing:.02em; font-weight:900; line-height:1;
-  margin:4px 0 8px;
+  margin:4px 0 6px;
   color:var(--headline);          /* Tự đổi theo theme */
   text-shadow:
     0.02em 0.02em 0 var(--shadow),
