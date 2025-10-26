@@ -1,211 +1,257 @@
-// script.js — VI/EN + Dark/Light + Gmail + copy email (đợi DOMContentLoaded)
-window.addEventListener("DOMContentLoaded", function () {
+/* =========================
+   CONFIG
+   ========================= */
+const CONFIG = {
+  CV_URL: "cv.pdf",
+  EMAIL: "your.email@example.com",
+  PHONE: "+84 00 000 000",
+  GITHUB: "https://github.com/yourprofile",
+  LINKEDIN: "https://www.linkedin.com/in/yourprofile"
+};
 
-  /* ============ I18N ============ */
-  const I18N = {
-    vi: {
-      navAbout: "Về tôi",
-      navProjects: "Dự án",
-      navSkills: "Kỹ năng",
-      navContact: "Liên hệ",
-      kicker: "Portfolio cá nhân",
-      heroHelloPrefix: "Xin chào, tôi là",
-      heroLead:
-        "Sinh viên trường Đại học Công Nghệ - Kỹ Thuật Cần Thơ. Quan tâm đến công nghệ, tự động hoá, IoT, năng lượng, và các dự án thực tiễn.",
-      ctaProjects: "Xem dự án",
-      ctaContact: "Liên hệ nhanh",
-      ctaCV: "click để xem CV",
-      labelSchool: "Trường:",
-      labelPhone: "Điện thoại:",
-      labelFacebook: "Facebook:",
-      labelCV: "CV:",
-      labelCVLink: "click để xem CV",
-
-      titleAbout: "Về tôi",
-      aboutText:
-        "Tôi hiện là sinh viên năm cuối của Đại học Công Nghệ – Kỹ Thuật Cần Thơ, đam mê công nghệ và kỹ thuật. Đây là trang tổng hợp quá trình học tập, kinh nghiệm dự án và định hướng phát triển của tôi.",
-
-      titleProjects: "Dự án tiêu biểu",
-      p1Title: "Mô hình điều khiển mức nước",
-      p1Text:
-        "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
-      p2Title: "Giám sát từ xa qua IoT",
-      p2Text:
-        "Xây dựng dashboard thu thập dữ liệu, cảnh báo và trực quan hoá theo thời gian.",
-      p3Title: "Tối ưu hoá hệ PV bằng PVsyst",
-      p3Text:
-        "Nghiên cứu & mô phỏng để hỗ trợ ra quyết định đầu tư cho hộ gia đình.",
-
-      titleSkills: "Kỹ năng",
-      skTech: "Kỹ thuật",
-      skTools: "Công cụ",
-      skOther: "Khác",
-      skTechItem1: "Lập trình cơ bản, điện - điện tử",
-      skTechItem2: "Thiết kế mô hình thử nghiệm, phân tích kết quả",
-      skToolsItem1: "Matlab/Simulink (cơ bản), PVsyst, AutoCAD, bộ công cụ văn phòng",
-      skToolsItem2: "GitHub Pages, Netlify",
-      skOtherItem1: "Làm việc nhóm, trình bày báo cáo",
-      skOtherItem2: "Quan tâm IoT, tự động hoá, năng lượng",
-
-      titleContact: "Liên hệ",
-      contactHint: "Bạn có thể gọi hoặc gửi email cho mình:",
-      btnEmailText: "Gửi email",
-      emailLabel: "Địa chỉ email của Vĩ:",
-      btnEmailSubject: "Liên hệ từ website",
-      langBtn: "VI",
+/* =========================
+   I18N
+   ========================= */
+const I18N = {
+  vi: {
+    nav: { works:"Sản phẩm", skills:"Kỹ năng", about:"Về tôi", contact:"Liên hệ" },
+    hero: {
+      greeting: "Xin chào, mình là Vĩ—rất hân hạnh được đón bạn tại trang thông tin của mình!",
+      name: "PHẠM PHÚ VĨ",
+      sub: "Sinh viên năm cuối Đại học Công Nghệ – Kỹ Thuật Cần Thơ, đam mê công nghệ & kỹ thuật. Đây là portfolio về quá trình học, các dự án tiêu biểu và định hướng tương lai.",
+      cta1: "PORTFOLIO",
+      cta2: "Tải CV"
     },
-
-    en: {
-      navAbout: "About",
-      navProjects: "Projects",
-      navSkills: "Skills",
-      navContact: "Contact",
-      kicker: "Personal portfolio",
-      heroHelloPrefix: "Hi, I'm",
-      heroLead:
-        "Student at Can Tho University of Technology and Engineering. Interested in technology, automation, IoT, energy, and hands-on projects.",
-      ctaProjects: "View projects",
-      ctaContact: "Contact",
-      ctaCV: "View CV",
-      labelSchool: "University:",
-      labelPhone: "Phone:",
-      labelFacebook: "Facebook:",
-      labelCV: "CV:",
-      labelCVLink: "Click to view CV",
-
-      titleAbout: "About",
-      aboutText:
-        "I'm a final-year student at Can Tho University of Technology and Engineering, passionate about technology and engineering. This page summarizes my study path, project experience, and development goals.",
-
-      titleProjects: "Featured projects",
-      p1Title: "Water level control model",
-      p1Text:
-        "Designed and operated a tank model: level sensors, PID/inverter control, status display.",
-      p2Title: "Remote monitoring via IoT",
-      p2Text:
-        "Built a simple dashboard to collect data, alert, and visualize in real time.",
-      p3Title: "PV system optimization with PVsyst",
-      p3Text:
-        "Researched & simulated to support household investment decisions.",
-
-      titleSkills: "Skills",
-      skTech: "Technical",
-      skTools: "Tools",
-      skOther: "Other",
-      skTechItem1: "Basic programming, electrical & electronics",
-      skTechItem2: "Prototype design, result analysis",
-      skToolsItem1: "Matlab/Simulink (basic), PVsyst, AutoCAD, office suite",
-      skToolsItem2: "GitHub Pages, Netlify",
-      skOtherItem1: "Teamwork, presentation",
-      skOtherItem2: "Interest in IoT, automation, energy",
-
-      titleContact: "Contact",
-      contactHint: "You can call or email me:",
-      btnEmailText: "Email me",
-      emailLabel: "My email:",
-      btnEmailSubject: "Contact from website",
-      langBtn: "EN",
+    profile: { role: "Automation • IoT • Năng lượng tái tạo" },
+    sections: {
+      about: { title: "Về tôi", subtitle: "Tóm tắt nhanh" },
+      focus: { title: "Trọng tâm chuyên môn" },
+      skills: { title: "Kỹ năng" },
+      works: { title: "Sản phẩm", subtitle: "Một số dự án tiêu biểu" },
+      timeline: { title: "Kinh nghiệm & Học vấn" },
+      contact: { title: "Liên hệ" }
     },
-  };
-
-  const TEXT_IDS = [
-    "navAbout","navProjects","navSkills","navContact",
-    "kicker","heroHelloPrefix","heroLead",
-    "ctaProjects","ctaContact","ctaCV",
-    "labelSchool","labelPhone","labelFacebook","labelCV","labelCVLink",
-    "titleAbout","aboutText","titleProjects",
-    "p1Title","p1Text","p2Title","p2Text","p3Title","p3Text",
-    "titleSkills","skTech","skTools","skOther",
-    "titleContact","contactHint","btnEmailText","emailLabel",
-    "skTechItem1","skTechItem2","skToolsItem1","skToolsItem2","skOtherItem1","skOtherItem2",
-  ];
-
-  function setText(id, text){
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
+    aboutBullets: [
+      "Sinh viên năm cuối khoa Điện–Điện tử, định hướng Tự động hóa, IoT, Năng lượng tái tạo.",
+      "Khóa luận: Hệ điều hướng tấm pin mặt trời (PVsyst) & Điều khiển mức bồn nước (PLC S7‑1200).",
+      "Yêu thích dự án thực tiễn: PLC, VFD, Modbus RS‑485, mini‑SCADA, MATLAB/Simulink."
+    ],
+    focus: [
+      { title:"PLC & SCADA mini", text:"Lập trình S7‑1200/TIA, PID Compact, giao diện giám sát, cảnh báo, logging." },
+      { title:"IoT & Web Dashboard", text:"Kết nối thiết bị qua Modbus/RS‑485, hiển thị dữ liệu thời gian thực, báo cáo." },
+      { title:"PVsyst & PV Tracking", text:"Mô phỏng hiệu suất, phân tích bóng đổ, tối ưu một trục/hai trục." }
+    ],
+    contact: { note:"Mở cơ hội thực tập/toàn thời gian. Mình sẵn sàng học hỏi để phù hợp với yêu cầu công việc.", email:"Gửi email", call:"Gọi điện" }
+  },
+  en: {
+    nav: { works:"Works", skills:"Skills", about:"About", contact:"Contact" },
+    hero: {
+      greeting: "Hi, I'm Vi — welcome to my portfolio!",
+      name: "PHAM PHU VI",
+      sub: "Final-year student at CTUET. This is my journey, featured projects and future direction.",
+      cta1: "PORTFOLIO",
+      cta2: "Download CV"
+    },
+    profile: { role: "Automation • IoT • Renewable Energy" },
+    sections: {
+      about: { title: "About", subtitle: "Quick summary" },
+      focus: { title: "Core Focus" },
+      skills: { title: "Skills" },
+      works: { title: "Works", subtitle: "Selected projects" },
+      timeline: { title: "Experience & Education" },
+      contact: { title: "Contact" }
+    },
+    aboutBullets: [
+      "Final-year Electrical–Electronics student focusing on Automation, IoT, Renewable Energy.",
+      "Capstone: Solar tracking (PVsyst) & Single‑tank level control (Siemens S7‑1200).",
+      "Hands‑on: PLC, VFD, Modbus RS‑485, mini‑SCADA, MATLAB/Simulink."
+    ],
+    focus: [
+      { title:"PLC & mini‑SCADA", text:"S7‑1200/TIA programming, PID Compact, HMI/alarms/logging." },
+      { title:"IoT & Web Dashboard", text:"Modbus/RS‑485 device data, real‑time charts and reports." },
+      { title:"PVsyst & PV Tracking", text:"Performance modeling, shading analysis, 1‑axis/2‑axis optimization." }
+    ],
+    contact: { note:"Open to internships/full-time roles. Eager to learn and adapt.", email:"Send email", call:"Call" }
   }
+};
 
-  function applyLang(lang){
-    const dict = I18N[lang] || I18N.vi;
-    TEXT_IDS.forEach(id => dict[id] && setText(id, dict[id]));
-    const langBtn = document.getElementById("langBtn");
-    if (langBtn) langBtn.textContent = dict.langBtn || "VI";
-    document.documentElement.lang = (lang === "en") ? "en" : "vi";
-    try { localStorage.setItem("lang", lang); } catch(e) {}
-  }
+/* =========================
+   Content data
+   ========================= */
+const PROJECTS = [
+  { title: "PV Tracking — PVsyst", desc: "Mô phỏng tối ưu bức xạ, phân tích bóng đổ, 1‑trục/2‑trục.", tags: ["PVsyst","PV tracking","Optimization"], link: "#" },
+  { title: "Single‑Tank — PLC S7‑1200", desc: "PID Compact, cảm biến 4–20 mA, VFD INVT GD20, Modbus RS‑485.", tags: ["PLC","PID","Modbus"], link: "#" },
+  { title: "Mini‑SCADA Dashboard", desc: "Giám sát thời gian thực, cảnh báo mức, báo cáo dữ liệu.", tags: ["SCADA","IoT","Visualization"], link: "#" },
+  { title: "Web Portfolio", desc: "Trang portfolio tĩnh, dark/light, song ngữ VI/EN.", tags: ["HTML","CSS","JS"], link: "#" },
+  { title: "ANN‑PID (MATLAB)", desc: "Huấn luyện mạng nơ‑ron tối ưu điều khiển mức.", tags: ["MATLAB","ANN","Control"], link: "#" },
+  { title: "Modbus Toolkit", desc: "Bộ mã ví dụ đọc/ghi thanh ghi qua CB1241.", tags: ["Modbus","S7‑1200"], link: "#" }
+];
 
-  /* ============ Theme ============ */
-  const root = document.documentElement;
-  function setMode(m){
-    if (m === "light") root.classList.add("light");
-    else root.classList.remove("light");
-    try { localStorage.setItem("mode", m); } catch(e) {}
-  }
+const SKILLS = [
+  { name: "PLC S7‑1200 / TIA Portal", level: 80 },
+  { name: "INVT GD20 / VFD", level: 70 },
+  { name: "Modbus RS‑485", level: 75 },
+  { name: "MATLAB/Simulink", level: 65 },
+  { name: "PVsyst", level: 72 },
+  { name: "HTML/CSS/JS", level: 70 }
+];
 
-  /* ============ Your info ============ */
-  const YOUR_EMAIL = "phamphuvi9@gmail.com";                  // ← đổi nếu cần
-  const YOUR_FACEBOOK = "https://www.facebook.com/PhamVi1209"; // ← đổi nếu cần
+const TIMELINE = [
+  { title:"Khóa luận tốt nghiệp: PV Tracking & Bồn nước đơn", when:"2025", where:"CTUET", details:"Mô phỏng PVsyst; thiết kế điều khiển PID mức bồn; dashboard giám sát." },
+  { title:"Thực tập & dự án phòng lab", when:"2024", where:"Khoa Điện–Điện tử", details:"PLC S7‑1200, INVT GD20, Modbus RS‑485, mini‑SCADA." },
+  { title:"Đại học Công Nghệ – Kỹ Thuật Cần Thơ", when:"2019–2025", where:"Điện–Điện tử", details:"Chuyên ngành Tự động hóa, IoT và Năng lượng tái tạo." }
+];
 
-  ["fbLink","fbLink2"].forEach(id=>{
-    const a = document.getElementById(id);
-    if (a && YOUR_FACEBOOK) { a.href = YOUR_FACEBOOK; a.textContent = YOUR_FACEBOOK; }
+/* ============== DOM Helpers ============== */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+/* ============== Renderers ============== */
+function setLang(lang){
+  localStorage.setItem("lang", lang);
+  const t = I18N[lang];
+  // nav
+  $$("[data-i18n^='nav.']").forEach(el=>{
+    const key = el.getAttribute("data-i18n").split(".")[1];
+    el.textContent = t.nav[key];
   });
-  const yourEmailSpan = document.getElementById("yourEmail");
-  if (yourEmailSpan && YOUR_EMAIL) yourEmailSpan.textContent = YOUR_EMAIL;
+  // hero
+  $("[data-i18n='hero.greeting']").textContent = t.hero.greeting;
+  $("[data-i18n='hero.name']").textContent = t.hero.name;
+  $("[data-i18n='hero.sub']").textContent = t.hero.sub;
+  $("[data-i18n='hero.cta1']").textContent = t.hero.cta1;
+  $("[data-i18n='hero.cta2']").textContent = t.hero.cta2;
+  // profile
+  $("[data-i18n='profile.role']").textContent = t.profile.role;
+  // section headings
+  $$("[data-i18n^='sections.']").forEach(el=>{
+    const [_, sec, key] = el.getAttribute("data-i18n").split(".");
+    if(key){ el.textContent = t.sections[sec][key]; }
+  });
+  $("#contactNote").textContent = t.contact.note;
+  $$("[data-i18n='contact.email']").forEach(el=> el.textContent = t.contact.email);
+  $$("[data-i18n='contact.call']").forEach(el=> el.textContent = t.contact.call);
 
-  /* ============ Gmail compose ============ */
-  function openGmail(to, subject, body){
-    const url =
-      `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject||"")}&body=${encodeURIComponent(body||"")}`;
-    const go = () => window.open(url, "_blank", "noopener");
-    if (navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(to).then(go).catch(go);
-    } else {
-      const t = document.createElement("input"); t.value = to; document.body.appendChild(t);
-      t.select(); try { document.execCommand("copy"); } catch(e) {}
-      document.body.removeChild(t); go();
-    }
-  }
+  // about bullets
+  const list = $("#aboutList"); list.innerHTML = "";
+  t.aboutBullets.forEach(x=>{
+    const li = document.createElement("li"); li.textContent = x; list.appendChild(li);
+  });
 
-  /* ============ Attach events (sau khi DOM đã sẵn sàng) ============ */
-  // 1) Ngôn ngữ
-  let currentLang = (typeof localStorage !== "undefined" && localStorage.getItem("lang")) || "vi";
-  applyLang(currentLang);
-  const langBtn = document.getElementById("langBtn");
-  if (langBtn){
-    langBtn.addEventListener("click", ()=>{
-      currentLang = (currentLang === "vi") ? "en" : "vi";
-      applyLang(currentLang);
+  // focus cards
+  const fg = $("#focusGrid"); fg.innerHTML = "";
+  t.focus.forEach(f=>{
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML = `<h4 style="margin:0">${f.title}</h4><p class="muted" style="margin:.25rem 0 0">${f.text}</p>`;
+    fg.appendChild(card);
+  });
+
+  // Label
+  $("#langLabel").textContent = lang.toUpperCase();
+}
+
+function setTheme(theme){
+  if(theme === "dark"){ document.body.classList.add("dark"); }
+  else { document.body.classList.remove("dark"); }
+  localStorage.setItem("theme", theme);
+  $("#iconTheme use").setAttribute("href", theme === "dark" ? "#icon-sun" : "#icon-moon");
+}
+
+function renderProjects(){
+  const grid = $("#projectsGrid"); grid.innerHTML = "";
+  PROJECTS.forEach(p=>{
+    const card = document.createElement("article");
+    card.className = "card project";
+    card.innerHTML = `
+      <div class="thumb"></div>
+      <h4 style="margin:.2rem 0">${p.title}</h4>
+      <p class="muted">${p.desc}</p>
+      <div class="badges">${p.tags.map(t=>`<span class="badge">${t}</span>`).join("")}</div>
+      <p style="margin:.5rem 0 0"><a href="${p.link}" target="_blank" rel="noreferrer">Demo <svg class="icon" style="vertical-align:-3px"><use href="#icon-external"/></svg></a></p>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderSkills(){
+  const grid = $("#skillsGrid"); grid.innerHTML = "";
+  SKILLS.forEach(s=>{
+    const el = document.createElement("div");
+    el.className = "skill";
+    el.innerHTML = `
+      <div class="row">
+        <strong>${s.name}</strong>
+        <span class="muted">${s.level}%</span>
+      </div>
+      <div class="bar"><span style="width: ${s.level}%"></span></div>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+function renderTimeline(){
+  const root = $("#timelineList"); root.innerHTML = "";
+  TIMELINE.forEach(item=>{
+    const el = document.createElement("div");
+    el.className = "timeline-item";
+    el.innerHTML = `
+      <h4>${item.title}</h4>
+      <div class="when">${item.when} · ${item.where}</div>
+      <p class="muted">${item.details}</p>
+    `;
+    root.appendChild(el);
+  });
+}
+
+function wireLinks(){
+  const emailHref = `mailto:${CONFIG.EMAIL}`;
+  const phoneHref = `tel:${CONFIG.PHONE.replace(/\s/g,'')}`;
+  const cvHref = CONFIG.CV_URL;
+
+  // Social across places
+  ["#githubLink","#githubLink2","#githubLinkSide"].forEach(sel=> $(sel).setAttribute("href", CONFIG.GITHUB));
+  ["#linkedinLink","#linkedinLink2","#linkedinLinkSide"].forEach(sel=> $(sel).setAttribute("href", CONFIG.LINKEDIN));
+  ["#emailLink","#emailLink2"].forEach(sel=> $(sel).setAttribute("href", emailHref));
+
+  // CTAs
+  $("#cvBtn").setAttribute("href", cvHref);
+  $("#profileCV").setAttribute("href", cvHref);
+  ["#profileEmail","#emailBtn"].forEach(sel => $(sel).setAttribute("href", emailHref));
+  ["#callBtn"].forEach(sel => $(sel).setAttribute("href", phoneHref));
+}
+
+/* ============== Init ============== */
+function init(){
+  $("#year").textContent = new Date().getFullYear();
+  renderProjects();
+  renderSkills();
+  renderTimeline();
+  wireLinks();
+
+  // theme
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  setTheme(savedTheme);
+  $("#themeBtn").addEventListener("click", () => {
+    const next = document.body.classList.contains("dark") ? "light" : "dark";
+    setTheme(next);
+  });
+
+  // language
+  const savedLang = localStorage.getItem("lang") || "vi";
+  setLang(savedLang);
+  $("#langBtn").addEventListener("click", () => {
+    const next = (localStorage.getItem("lang") || "vi") === "vi" ? "en" : "vi";
+    setLang(next);
+  });
+
+  // smooth anchors
+  document.querySelectorAll("a[href^='#']").forEach(a=>{
+    a.addEventListener("click", e=>{
+      const id = a.getAttribute("href").slice(1);
+      const target = document.getElementById(id);
+      if(target){ e.preventDefault(); target.scrollIntoView({behavior:"smooth", block:"start"}); }
     });
-  }
-
-  // 2) Sáng/Tối
-  const savedMode = (typeof localStorage !== "undefined") ? localStorage.getItem("mode") : null;
-  if (savedMode) setMode(savedMode);
-  const modeBtn = document.getElementById("modeBtn");
-  if (modeBtn){
-    modeBtn.addEventListener("click", ()=>{
-      const next = root.classList.contains("light") ? "dark" : "light";
-      setMode(next);
-    });
-  }
-
-  // 3) Nút Gửi email
-  const emailBtn = document.getElementById("openGmailBtn");
-  if (emailBtn){
-    emailBtn.addEventListener("click", (e)=>{
-      e.preventDefault();
-      if (!YOUR_EMAIL.includes("@")){
-        alert("Bạn chưa đặt email của mình trong script.js (YOUR_EMAIL).");
-        return;
-      }
-      const subj = (currentLang === "en") ? I18N.en.btnEmailSubject : I18N.vi.btnEmailSubject;
-      openGmail(YOUR_EMAIL, subj, "");
-    });
-  }
-
-  // 4) Footer year
-  const y = document.getElementById("y");
-  if (y) y.textContent = new Date().getFullYear();
-
-}); // DOMContentLoaded
+  });
+}
+document.addEventListener("DOMContentLoaded", init);
