@@ -60,7 +60,7 @@ body{
 /* cụm toggle + language: ghim góc phải và ngang hàng với nav */
 .header-actions{
   position:absolute;
-  right:20px;
+  right:50px;
   top:50%;
   transform:translateY(-50%);
   display:flex; align-items:center; gap:14px;
