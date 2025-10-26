@@ -1,4 +1,6 @@
+/* ================== THEME TOKENS ================== */
 :root{
+  --container: 1100px;          /* nhớ khớp với .container max-width */
   --bg:#0e1b2f;
   --surface:#13223a;
   --text:#e8eef7;
@@ -6,7 +8,7 @@
   --pill:#e4e8f0;
   --accent:#56A6FF;
   --shadow:#9aa3b3;
-  --headline:#ffffff;          /* tiêu đề PORTFOLIO ở dark */
+  --headline:#ffffff;           /* tiêu đề PORTFOLIO ở dark */
   --border: rgba(255,255,255,.08);
 }
 body.light{
@@ -17,10 +19,11 @@ body.light{
   --pill:#e4e8f0;
   --accent:#2f6ae2;
   --shadow:#c4c9d3;
-  --headline:#0e1b2f;          /* tiêu đề PORTFOLIO ở light */
+  --headline:#0e1b2f;           /* tiêu đề PORTFOLIO ở light */
   --border: rgba(0,0,0,.08);
 }
 
+/* ================== BASE ================== */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -29,25 +32,25 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-.container{max-width:1100px; margin:0 auto; padding:0 20px}
+.container{max-width:var(--container); margin:0 auto; padding:0 20px}
 .center{text-align:center}
 
-/* ================= Header ================= */
+/* ================== HEADER ================== */
 .hero-header{position:sticky; top:0; z-index:50; padding:14px 0}
 .hero-header .container{position:relative}
 .header-row{
   display:flex;
-  justify-content:center;      /* nav ở giữa */
-  align-items:center;          /* cùng một đường thẳng theo trục dọc */
+  justify-content:center;      /* nav pill ở giữa */
+  align-items:center;          /* ngang hàng với cụm bên phải */
   min-height:60px;
 }
 
-/* nav pill */
+/* Nav pill (Trang chủ, Về tôi, ...) */
 .capsule{
   display:flex; gap:16px;
   background:var(--pill); color:#0e1b2f;
   padding:10px 18px; border-radius:999px; border:1px solid var(--border);
-  margin:0 auto;               /* giữ chính giữa */
+  margin:0 auto;
 }
 .cap-link{
   display:inline-flex; align-items:center; gap:8px;
@@ -57,13 +60,14 @@ body{
 .cap-link:hover{background-color:rgba(0,0,0,.06)}
 .cap-link .ico{width:16px; height:16px; fill:currentColor}
 
-/* cụm toggle + language: ghim góc phải và ngang hàng với nav */
+/* Toggle dark/light + nút ngôn ngữ: sát mép phải của CONTAINER */
 .header-actions{
   position:absolute;
-  right:50px;
   top:50%;
+  right:max(16px, calc((100vw - var(--container)) / 2)); /* dính mép phải container */
   transform:translateY(-50%);
   display:flex; align-items:center; gap:14px;
+  z-index:70;
 }
 .seg{display:flex; align-items:center; background:var(--pill); border-radius:999px; padding:4px; border:1px solid var(--border); height:44px}
 .seg-btn{border:0; background:transparent; color:#0e1b2f; padding:8px 14px; border-radius:999px; cursor:pointer}
@@ -76,7 +80,7 @@ body{
 .bubble .ico{width:18px; height:18px; fill:#0e1b2f}
 .bubble .chat{position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9}
 
-/* ================= Hero ================= */
+/* ================== HERO ================== */
 .hero{padding:30px 0 10px}
 .mega{
   font-size: clamp(52px, 10vw, 120px);
@@ -115,7 +119,7 @@ body{
 .chevrons{display:flex; flex-direction:column; gap:8px; align-items:center; margin:18px 0 4px}
 .chev{width:36px; height:36px; stroke:var(--muted); stroke-width:2.6; fill:none}
 
-/* ================= Shell layout ================= */
+/* ================== LAYOUT BÊN DƯỚI ================== */
 .shell{display:grid; grid-template-columns:300px 1fr; gap:22px; padding:24px 0 60px}
 .profile{position:sticky; top:100px; align-self:start; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px}
 .profile h3{margin:6px 0 0; font-size:1.25rem}
@@ -134,44 +138,30 @@ body{
 .muted{color:var(--muted)}
 .list{margin:0; padding-left:20px}
 
-/* ================= Skills ================= */
+/* ================== SKILLS ================== */
 .skills{display:grid; grid-template-columns:1fr 1fr; gap:12px}
 .skill{border:1px solid var(--border); border-radius:12px; padding:12px}
 .skill .top{display:flex; justify-content:space-between; align-items:center}
 .bar{height:10px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; margin-top:10px}
 .bar span{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--accent), #fff); transition:width .8s ease}
 
-/* ================= Projects ================= */
+/* ================== PROJECTS ================== */
 .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:12px}
 .card{border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
 .card .thumb{aspect-ratio:16/9; border-radius:10px; background:radial-gradient(60% 100% at 50% 0, rgba(255,255,255,.2), rgba(0,0,0,.02)); margin-bottom:10px}
 .badges{display:flex; gap:8px; flex-wrap:wrap}
 .badge{border:1px solid var(--border); border-radius:999px; padding:4px 10px; font-size:.8rem; color:var(--muted)}
 
-/* ================= Footer ================= */
+/* ================== FOOTER ================== */
 .site-footer.inner{background:transparent; border:0; padding:0; margin-top:6px}
 .footer-row{display:flex; align-items:center; justify-content:space-between}
 
-/* ================= Responsive ================= */
+/* ================== RESPONSIVE ================== */
 @media (max-width: 980px){
   .shell{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr 1fr}
   .skills{grid-template-columns:1fr}
   .capsule{flex-wrap:wrap; row-gap:8px}
-}
-/* Đẩy cụm toggle + language sang sát mép phải màn hình, ngang hàng với nav */
-.header-actions{
-  position: fixed !important;    /* thay vì absolute trong .container */
-  top: 16px !important;          /* cao thấp của cụm; chỉnh 12–20px tùy ý */
-  right: 20px !important;        /* khoảng cách tới mép phải; chỉnh theo ý */
-  transform: none !important;    /* bỏ translateY(-50%) cũ */
-  z-index: 90;
-}
-
-/* Giữ nav pill ở giữa như cũ */
-.header-row{
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-height: 60px;
-}
+  /* Trên mobile, dính cụm actions vào mép phải màn hình cho gọn */
+  .header-actions{
+    position: fixed;
