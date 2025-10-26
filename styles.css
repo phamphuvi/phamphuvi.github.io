@@ -1,6 +1,6 @@
 /* ================== THEME TOKENS ================== */
 :root{
-  --container: 1100px;          /* nhớ khớp với .container max-width */
+  --container: 1100px;          /* khớp với .container max-width */
   --bg:#0e1b2f;
   --surface:#13223a;
   --text:#e8eef7;
@@ -35,22 +35,23 @@ body{
 .container{max-width:var(--container); margin:0 auto; padding:0 20px}
 .center{text-align:center}
 
-/* ================== HEADER ================== */
+/* ================== HEADER (Grid: 1fr | NAV | 1fr) ================== */
 .hero-header{position:sticky; top:0; z-index:50; padding:14px 0}
 .hero-header .container{position:relative}
 .header-row{
-  display:flex;
-  justify-content:center;      /* nav pill ở giữa */
-  align-items:center;          /* ngang hàng với cụm bên phải */
+  display:grid;
+  grid-template-columns: 1fr auto 1fr; /* trái | NAV | phải */
+  align-items:center;
   min-height:60px;
 }
 
-/* Nav pill (Trang chủ, Về tôi, ...) */
+/* NAV pill luôn ở giữa */
 .capsule{
+  grid-column:2;
+  justify-self:center;
   display:flex; gap:16px;
   background:var(--pill); color:#0e1b2f;
   padding:10px 18px; border-radius:999px; border:1px solid var(--border);
-  margin:0 auto;
 }
 .cap-link{
   display:inline-flex; align-items:center; gap:8px;
@@ -60,15 +61,14 @@ body{
 .cap-link:hover{background-color:rgba(0,0,0,.06)}
 .cap-link .ico{width:16px; height:16px; fill:currentColor}
 
-/* Toggle dark/light + nút ngôn ngữ: sát mép phải của CONTAINER */
+/* Cụm Dark/Light + Ngôn ngữ ở cột phải, KHÔNG absolute/fixed */
 .header-actions{
-  fixed:absolute;
-  top:50%;
-  right: 20px; top: 16px; transform: none; /* dính mép phải container */
-  transform:translateY(-50%);
+  grid-column:3;
+  justify-self:end;
   display:flex; align-items:center; gap:14px;
-  z-index:70;
 }
+
+/* Nút toggle & bubble */
 .seg{display:flex; align-items:center; background:var(--pill); border-radius:999px; padding:4px; border:1px solid var(--border); height:44px}
 .seg-btn{border:0; background:transparent; color:#0e1b2f; padding:8px 14px; border-radius:999px; cursor:pointer}
 .seg-btn .ico{width:18px; height:18px}
@@ -102,7 +102,7 @@ body{
   width:min(56vw, 520px);
   aspect-ratio:1 / 1;
   border-radius:50%;
-  background:transparent;      /* bỏ “đĩa xanh” ngoài */
+  background:transparent;           /* bỏ “đĩa xanh” ngoài */
   border:0; outline:0; overflow:hidden;
 }
 .avatar-frame::before,
@@ -110,8 +110,8 @@ body{
 .avatar-img{
   position:absolute; inset:0;
   width:100%; height:100%;
-  object-fit:contain;          /* không méo ảnh */
-  padding:0;                   /* ảnh chạm khung */
+  object-fit:contain;               /* không méo ảnh */
+  padding:0;                        /* ảnh chạm khung */
   filter:drop-shadow(0 2px 0 rgba(0,0,0,.05));
 }
 
@@ -121,47 +121,4 @@ body{
 
 /* ================== LAYOUT BÊN DƯỚI ================== */
 .shell{display:grid; grid-template-columns:300px 1fr; gap:22px; padding:24px 0 60px}
-.profile{position:sticky; top:100px; align-self:start; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px}
-.profile h3{margin:6px 0 0; font-size:1.25rem}
-.profile .muted{color:var(--muted)}
-.chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-.chip{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:transparent; color:var(--text); font-size:.85rem}
-.row{display:flex; gap:10px; flex-wrap:wrap}
-.btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:14px; text-decoration:none; cursor:pointer}
-.btn.solid{background:#0e1b2f; color:#fff; border:1px solid var(--border)}
-.btn.outline{background:transparent; color:var(--text); border:1px solid var(--border)}
-.btn .ico{width:18px; height:18px; fill:currentColor}
-
-.content{min-width:0}
-.block{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:16px}
-.block h4{margin:0 0 8px 0; font-size:1.1rem}
-.muted{color:var(--muted)}
-.list{margin:0; padding-left:20px}
-
-/* ================== SKILLS ================== */
-.skills{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.skill{border:1px solid var(--border); border-radius:12px; padding:12px}
-.skill .top{display:flex; justify-content:space-between; align-items:center}
-.bar{height:10px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; margin-top:10px}
-.bar span{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--accent), #fff); transition:width .8s ease}
-
-/* ================== PROJECTS ================== */
-.grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:12px}
-.card{border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
-.card .thumb{aspect-ratio:16/9; border-radius:10px; background:radial-gradient(60% 100% at 50% 0, rgba(255,255,255,.2), rgba(0,0,0,.02)); margin-bottom:10px}
-.badges{display:flex; gap:8px; flex-wrap:wrap}
-.badge{border:1px solid var(--border); border-radius:999px; padding:4px 10px; font-size:.8rem; color:var(--muted)}
-
-/* ================== FOOTER ================== */
-.site-footer.inner{background:transparent; border:0; padding:0; margin-top:6px}
-.footer-row{display:flex; align-items:center; justify-content:space-between}
-
-/* ================== RESPONSIVE ================== */
-@media (max-width: 980px){
-  .shell{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr 1fr}
-  .skills{grid-template-columns:1fr}
-  .capsule{flex-wrap:wrap; row-gap:8px}
-  /* Trên mobile, dính cụm actions vào mép phải màn hình cho gọn */
-  .header-actions{
-    position: fixed;
+.profile{position:sticky; top:100px; align
