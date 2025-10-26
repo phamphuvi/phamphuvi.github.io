@@ -34,12 +34,14 @@ body{margin:0; font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Ar
 /* ================== HEADER (Grid: 1fr | NAV | 1fr) ================== */
 .hero-header{position:sticky; top:0; z-index:50; padding:14px 0}
 .hero-header .container{
-  position:relative;
-  padding-right: max(20px, var(--actions-slot)); /* chừa chỗ cho nhóm actions bên phải */
+  padding-right: 20px;      /* dòng ~62: bỏ phần “chừa chỗ” làm nav lệch */
 }
+
 .header-row{
-  display:grid; grid-template-columns:1fr auto 1fr;
-  align-items:center; min-height:var(--header-h);
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;
+  min-height:60px;
 }
 
 /* NAV pill giữa */
@@ -76,7 +78,7 @@ body{margin:0; font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Ar
   text-shadow:0.02em 0.02em 0 var(--shadow), 0.04em 0.04em 0 var(--shadow), 0.06em 0.06em 0 var(--shadow);
 }
 .avatar-wrap{display:flex; align-items:center; justify-content:center; margin:12px 0}
-.avatar-frame{position:relative; width:min(25vw,252px); aspect-ratio:1/1; border-radius:50%; background:transparent; border:0; outline:0; overflow:hidden}
+.avatar-frame{position:relative; width:min(40vw,420px); aspect-ratio:1/1; border-radius:50%; background:transparent; border:0; outline:0; overflow:hidden}
 .avatar-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:0; filter:drop-shadow(0 2px 0 rgba(0,0,0,.05))}
 .hero-sub{max-width:820px; margin:6px auto 0; font-size:1rem; font-weight:800}
 .chevrons{display:flex; flex-direction:column; gap:8px; align-items:center; margin:8px 0 0}
