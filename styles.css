@@ -132,7 +132,7 @@ body{
 .bubble .chat{ position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9 }
 
 /* ================== HERO (TIÊU ĐỀ + AVATAR) ================== */
-.hero{ padding:10px 0 0 }       /* Khoảng cách trên hero */
+.hero{ padding:6px 0 0 }       /* Khoảng cách trên hero */
 
 /* Tiêu đề lớn “PORTFOLIO”
    - Tăng/giảm max (giá trị 3) để điều chỉnh trần kích thước.
