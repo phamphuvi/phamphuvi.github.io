@@ -62,9 +62,9 @@ body{
 
 /* Toggle dark/light + nút ngôn ngữ: sát mép phải của CONTAINER */
 .header-actions{
-  position:absolute;
+  fixed:absolute;
   top:50%;
-  right:max(16px, calc((100vw - var(--container)) / 2)); /* dính mép phải container */
+  right: 20px; top: 16px; transform: none; /* dính mép phải container */
   transform:translateY(-50%);
   display:flex; align-items:center; gap:14px;
   z-index:70;
