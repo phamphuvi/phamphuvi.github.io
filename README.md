@@ -1,26 +1,14 @@
-# Portfolio tĩnh (V2) — Giữ nguyên trang đầu, layout mới phần còn lại
+# Portfolio tĩnh (V3) — Hero theo ảnh mẫu
 
-Phần **hero đầu trang giữ nguyên**, các phần phía dưới lấy cảm hứng từ mẫu: hhlitval/simple-portfolio-template (layout 2 cột: trái là thẻ hồ sơ cố định, phải là nội dung).
-
-## Cấu trúc
-```
-index.html
-styles.css
-script.js
-cv.pdf     (tùy chọn)
-```
+- Thanh **menu dạng pill** giữa đầu trang (biểu tượng + nhãn).
+- **Dark/Light toggle** kiểu segmented, nút ngôn ngữ dạng **bubble** (globe + chat).
+- Tiêu đề **PORTFOLIO** chữ trắng đổ bóng 3D nhẹ.
+- **Avatar tròn** phong cách flat + lời chào + 3 chevrons.
+- Cấu trúc bên dưới: thẻ hồ sơ dính (trái) + nội dung (phải): About, Skills, Works, Contact.
 
 ## Sửa nhanh
-Trong `script.js` → `CONFIG`:
-- `CV_URL`, `EMAIL`, `PHONE`, `GITHUB`, `LINKEDIN`.
+- `script.js` → chỉnh `CONFIG` (CV_URL/EMAIL/PHONE/GITHUB), `ABOUT`, `SKILLS`, `PROJECTS`.
+- Có thể thay SVG avatar bằng ảnh cá nhân: thay toàn bộ `<svg class="avatar">...</svg>` bằng `<img class="avatar" src="assets/me.jpg" alt="Phạm Phú Vĩ">`.
 
-Cập nhật nội dung:
-- `PROJECTS`, `SKILLS`, `TIMELINE`.
-- Đa ngôn ngữ VI/EN: `I18N`.
-
-## Deploy GitHub Pages
-1. Tạo repo → upload 3 file + `cv.pdf` (nếu có).
-2. Settings → Pages → Deploy from a branch → `main` / root.
-3. Lấy URL `https://<username>.github.io/<repo>/`.
-
-> Gợi ý: Thay ảnh avatar (CSS `.avatar`) bằng `<img>` hoặc nền ảnh tròn; chỉnh màu trong `:root`.
+## Deploy
+Upload `index.html`, `styles.css`, `script.js`, `cv.pdf` lên repo GitHub → **Settings → Pages** → `Deploy from a branch`.
