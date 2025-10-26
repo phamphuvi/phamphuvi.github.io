@@ -148,7 +148,7 @@ body{
     0.06em 0.06em 0 var(--shadow);
 }
 
-.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:12px 0 }
+.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:6px 0 }
 
 /* AVATAR:
    - Đổi KÍCH THƯỚC tại thuộc tính width dưới đây.
@@ -165,7 +165,7 @@ body{
   padding:0; filter:drop-shadow(0 2px 0 rgba(0,0,0,.05));
 }
 
-.hero-sub{ max-width:820px; margin:6px auto 0; font-size:1rem; font-weight:800 }
+.hero-sub{ max-width:820px; margin:4px auto 0; font-size:1rem; font-weight:800 }
 .chevrons{ display:flex; flex-direction:column; gap:8px; align-items:center; margin:8px 0 0 }
 .chev{ width:32px; height:32px; stroke:var(--muted); stroke-width:2.4; fill:none }
 
