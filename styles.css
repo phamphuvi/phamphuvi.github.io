@@ -140,7 +140,7 @@ body{
 .mega{
   font-size: clamp(34px, 5.9vw, 67px);
   letter-spacing:.02em; font-weight:900; line-height:1;
-  margin:4px 0 6px;
+  margin:0 0 2px;
   color:var(--headline);          /* Tự đổi theo theme */
   text-shadow:
     0.02em 0.02em 0 var(--shadow),
@@ -148,14 +148,14 @@ body{
     0.06em 0.06em 0 var(--shadow);
 }
 
-.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:2px 0 }
+.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin: 0 }
 
 /* AVATAR:
    - Đổi KÍCH THƯỚC tại thuộc tính width dưới đây.
    - Responsive: min(40vw, 420px) → lấy nhỏ hơn giữa 40% bề rộng viewport & 420px.
    - Muốn cố định: dùng width: 380px; (ví dụ). */
 .avatar-frame{
-  position:relative; width:min(50vw, 520px);
+  position:relative; width:min(58vw, 580px);
   aspect-ratio:1/1; border-radius:50%;
   background:transparent; border:0; outline:0; overflow:hidden;
 }
