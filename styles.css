@@ -175,7 +175,7 @@ body{
 
 .hero-sub{
   max-width:820px;
-  margin:-30px auto 0 !important;  /* số âm = kéo lên gần avatar */
+  margin:-40px auto 0 !important;  /* số âm = kéo lên gần avatar */
   font-size:1rem;
   font-weight:800;
 }
