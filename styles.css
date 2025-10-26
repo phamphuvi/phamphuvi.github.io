@@ -1,132 +1,237 @@
-/* ================== THEME TOKENS ================== */
+/* =========================================================
+   PORTFOLIO THEME — BẢN HỢP NHẤT + CHÚ THÍCH CHI TIẾT
+   MẸO SỬA NHANH:
+   - Đổi kích thước header/nav/toggle:    --header-h
+   - Đổi cỡ chữ & icon của menu:          --nav-font, --nav-ico
+   - Đổi kích thước nút tròn ngôn ngữ:     --ctrl-size
+   - Đổi kích thước avatar:                .avatar-frame > width
+   - Đổi bề rộng tối đa vùng nội dung:     --container
+   ========================================================= */
+
+/* =============== BIẾN TOÀN CỤC (THEME TOKENS) =============== */
 :root{
-  --container: 1100px;          /* khớp .container max-width */
-  --bg:#0e1b2f; --surface:#13223a; --text:#e8eef7; --muted:#b8c5d9;
-  --pill:#e4e8f0; --accent:#56A6FF; --shadow:#9aa3b3; --border:rgba(255,255,255,.08);
-  --headline:#ffffff;           /* tiêu đề PORTFOLIO ở dark */
+  --container: 1100px;          /* Bề rộng tối đa của .container */
 
-  /* Kích thước (đã giảm ~30% cho 125%) */
-  --header-h: 32px;             /* chiều cao nav/toggle */
-  --nav-font: 10.5px;
-  --nav-ico: 10px;
-  --ctrl-size: 28px;            /* nút tròn ngôn ngữ */
+  /* Bảng màu (Dark) */
+  --bg:#0e1b2f;                 /* Nền trang */
+  --surface:#13223a;            /* Nền khối (card) */
+  --text:#e8eef7;               /* Chữ chính */
+  --muted:#b8c5d9;              /* Chữ mờ/phụ */
+  --pill:#e4e8f0;               /* Nền nav pill & toggle */
+  --accent:#56A6FF;             /* Màu nhấn (skills, v.v.) */
+  --shadow:#9aa3b3;             /* Đổ bóng tiêu đề lớn */
+  --border:rgba(255,255,255,.08);/* Viền mảnh */
+  --headline:#ffffff;           /* Màu chữ “PORTFOLIO” ở Dark */
 
-  /* Vị trí nhóm actions (Method B: fixed theo màn hình) */
-  --actions-top: 8px;
-  --actions-right: 12px;
-
-  /* Chừa slot bên phải để nav không bị đè (container padding-right) */
-  --actions-slot: calc(var(--ctrl-size) + var(--header-h) + 24px);
+  /* ====== NÚT CHỈNH KÍCH THƯỚC ====== */
+  --header-h: 32px;             /* Chiều cao chung cho NAV & toggle (36–48px nếu muốn to hơn) */
+  --nav-font: 10.5px;           /* Cỡ chữ mục NAV */
+  --nav-ico: 10px;              /* Cỡ icon mục NAV */
+  --ctrl-size: var(--header-h); /* ĐK nút tròn ngôn ngữ (mặc định = header-h) */
 }
+
+/* Biến cho chế độ Sáng (Light). Chỉ đổi màu, không đổi layout. */
 body.light{
   --bg:#f5f7fb; --surface:#ffffff; --text:#0e1b2f; --muted:#4b5b73;
   --pill:#e4e8f0; --accent:#2f6ae2; --shadow:#c4c9d3; --border:rgba(0,0,0,.08);
-  --headline:#0e1b2f;
+  --headline:#0e1b2f;           /* “PORTFOLIO” đổi màu theo nền sáng */
 }
 
-/* ================== BASE ================== */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0; font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text)}
-.container{max-width:var(--container); margin:0 auto; padding:0 20px}
-.center{text-align:center}
+/* ================== CÀI ĐẶT CƠ BẢN ================== */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:var(--container);   /* Đổi để trang rộng/hẹp hơn */
+  margin:0 auto;
+  padding:0 20px;               /* Đệm 2 bên */
+}
+.center{ text-align:center }
 
-/* ================== HEADER (Grid: 1fr | NAV | 1fr) ================== */
-.hero-header{position:sticky; top:0; z-index:50; padding:14px 0}
+/* ================== HEADER (GRID 3 CỘT) ==================
+   Sơ đồ: [1fr] | [auto (NAV pill)] | [1fr (actions bên phải)]
+   → Nav luôn GIỮA, nhóm actions luôn NGANG HÀNG với nav. */
+.hero-header{
+  position:sticky; top:0; z-index:50;
+  padding:14px 0;              /* Đệm trên/dưới vùng header */
+}
 .hero-header .container{
-  padding-right: 20px;      /* dòng ~62: bỏ phần “chừa chỗ” làm nav lệch */
+  padding-right: 20px;         /* Giữ 20px để mép phải thoáng */
 }
 
 .header-row{
   display:grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items:center;
-  min-height:60px;
+  grid-template-columns: 1fr auto 1fr; /* Trái | NAV | Phải */
+  align-items:center;                   /* Căn giữa theo trục dọc */
+  min-height: var(--header-h);          /* Chiều cao tối thiểu theo header */
 }
 
-/* NAV pill giữa */
+/* ================== NAV “VIÊN THUỐC” ==================
+   Chỉnh kích thước/nav bằng: --header-h, --nav-font, --nav-ico, padding & gap. */
 .capsule{
-  grid-column:2; justify-self:center;
-  display:flex; gap:8px; align-items:center;
-  height:var(--header-h); padding:0 10px;
+  grid-column:2;                 /* Đặt nav vào cột giữa */
+  justify-self:center;           /* Giữa tuyệt đối trong cột giữa */
+  display:flex; gap:8px;         /* Khoảng cách giữa các mục (giảm để gọn) */
+  align-items:center;
+  height:var(--header-h);        /* Cao = header */
+  padding:0 10px;                /* Đệm ngang của viên thuốc */
   background:var(--pill); color:#0e1b2f;
   border:1px solid var(--border); border-radius:999px;
 }
-.cap-link{display:inline-flex; align-items:center; gap:6px; padding:4px 6px; line-height:1; font-size:var(--nav-font); color:#0e1b2f; font-weight:600; text-decoration:none}
-.cap-link:hover{background-color:rgba(0,0,0,.06)}
-.cap-link .ico{width:var(--nav-ico); height:var(--nav-ico); fill:currentColor}
+.cap-link{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 6px;               /* Đệm từng mục trong nav */
+  line-height:1;
+  font-size:var(--nav-font);
+  color:#0e1b2f; font-weight:600;
+  text-decoration:none;
+}
+.cap-link:hover{ background-color:rgba(0,0,0,.06) }
+.cap-link .ico{ width:var(--nav-ico); height:var(--nav-ico); fill:currentColor }
 
-/* Group actions: GHIM PHẢI MÀN HÌNH (Method B) */
+/* ================== NHÓM ACTIONS (SÁNG/TỐI + NGÔN NGỮ) ==================
+   Đặt trong cột 3 của header grid → luôn cùng “đường ngang” với nav.
+   Muốn sát mép container hơn: thêm margin-right âm nhỏ (-6px/-8px). */
 .header-actions{
-  position:fixed; top:var(--actions-top); right:var(--actions-right);
-  transform:none; display:flex; align-items:center; gap:14px; z-index:1000;
+  position: static;              /* KHÔNG fixed/absolute để tránh lệch */
+  grid-column: 3;                /* Cột phải của grid */
+  justify-self: end;             /* Dính mép phải của .container */
+  align-self: center;            /* Cùng độ cao với nav */
+  display: flex; align-items: center; gap: 14px;
 }
-.seg{height:var(--header-h); display:flex; align-items:center; padding:2px; background:var(--pill); border-radius:999px; border:1px solid var(--border)}
-.seg-btn{border:0; background:transparent; color:#0e1b2f; padding:4px 8px; border-radius:999px; cursor:pointer}
-.seg-btn .ico{width:var(--nav-ico); height:var(--nav-ico)}
-.seg-btn.active{background:#0e1b2f; color:#fff}
-.bubble{width:var(--ctrl-size); height:var(--ctrl-size); border-radius:999px; background:var(--pill); border:1px solid var(--border); display:inline-flex; align-items:center; justify-content:center; position:relative}
-.bubble .ico{width:var(--nav-ico); height:var(--nav-ico); fill:#0e1b2f}
-.bubble .chat{position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9}
 
-/* ================== HERO ================== */
-.hero{padding:10px 0 0}
+/* Toggle Dark/Light */
+.seg{
+  height:var(--header-h);        /* Cao bằng nav */
+  display:flex; align-items:center;
+  padding:2px;                   /* Đệm trong khung toggle */
+  background:var(--pill);
+  border-radius:999px; border:1px solid var(--border);
+}
+.seg-btn{
+  border:0; background:transparent; color:#0e1b2f;
+  padding:4px 8px; border-radius:999px; cursor:pointer;
+}
+.seg-btn .ico{ width:var(--nav-ico); height:var(--nav-ico) }
+.seg-btn.active{ background:#0e1b2f; color:#fff } /* Nút đang bật */
+
+/* Nút tròn ngôn ngữ (globe) — chỉnh cỡ bằng --ctrl-size */
+.bubble{
+  width:var(--ctrl-size); height:var(--ctrl-size);
+  border-radius:999px; background:var(--pill);
+  border:1px solid var(--border);
+  display:inline-flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.bubble .ico{ width:var(--nav-ico); height:var(--nav-ico); fill:#0e1b2f }
+.bubble .chat{ position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9 }
+
+/* ================== HERO (TIÊU ĐỀ + AVATAR) ================== */
+.hero{ padding:10px 0 0 }       /* Khoảng cách trên hero */
+
+/* Tiêu đề lớn “PORTFOLIO”
+   - Tăng/giảm max (giá trị 3) để điều chỉnh trần kích thước.
+   - Tăng/giảm 5.9vw (giá trị 2) để nhạy theo bề ngang màn hình. */
 .mega{
-  font-size:clamp(34px,5.9vw,67px);
-  letter-spacing:.02em; font-weight:900; line-height:1; margin:4px 0 8px;
-  color:var(--headline);
-  text-shadow:0.02em 0.02em 0 var(--shadow), 0.04em 0.04em 0 var(--shadow), 0.06em 0.06em 0 var(--shadow);
+  font-size: clamp(34px, 5.9vw, 67px);
+  letter-spacing:.02em; font-weight:900; line-height:1;
+  margin:4px 0 8px;
+  color:var(--headline);          /* Tự đổi theo theme */
+  text-shadow:
+    0.02em 0.02em 0 var(--shadow),
+    0.04em 0.04em 0 var(--shadow),
+    0.06em 0.06em 0 var(--shadow);
 }
-.avatar-wrap{display:flex; align-items:center; justify-content:center; margin:12px 0}
-.avatar-frame{position:relative; width:min(40vw,420px); aspect-ratio:1/1; border-radius:50%; background:transparent; border:0; outline:0; overflow:hidden}
-.avatar-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:0; filter:drop-shadow(0 2px 0 rgba(0,0,0,.05))}
-.hero-sub{max-width:820px; margin:6px auto 0; font-size:1rem; font-weight:800}
-.chevrons{display:flex; flex-direction:column; gap:8px; align-items:center; margin:8px 0 0}
-.chev{width:32px; height:32px; stroke:var(--muted); stroke-width:2.4; fill:none}
 
-/* ================== LAYOUT BÊN DƯỚI ================== */
-.shell{display:grid; grid-template-columns:300px 1fr; gap:22px; padding:24px 0 60px}
-.profile{position:sticky; top:100px; align-self:start; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px}
-.profile h3{margin:6px 0 0; font-size:1.1rem}
-.profile .muted{color:var(--muted)}
-.chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-.chip{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:transparent; color:var(--text); font-size:.85rem}
-.row{display:flex; gap:10px; flex-wrap:wrap}
-.btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:14px; text-decoration:none; cursor:pointer}
-.btn.solid{background:#0e1b2f; color:#fff; border:1px solid var(--border)}
-.btn.outline{background:transparent; color:var(--text); border:1px solid var(--border)}
-.btn .ico{width:18px; height:18px; fill:currentColor}
-.content{min-width:0}
-.block{background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:16px}
-.block h4{margin:0 0 8px 0; font-size:1.05rem}
-.muted{color:var(--muted)}
-.list{margin:0; padding-left:20px}
+.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:12px 0 }
 
-/* ================== SKILLS ================== */
-.skills{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.skill{border:1px solid var(--border); border-radius:12px; padding:12px}
-.skill .top{display:flex; justify-content:space-between; align-items:center}
-.bar{height:10px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; margin-top:10px}
-.bar span{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--accent), #fff); transition:width .8s ease}
+/* AVATAR:
+   - Đổi KÍCH THƯỚC tại thuộc tính width dưới đây.
+   - Responsive: min(40vw, 420px) → lấy nhỏ hơn giữa 40% bề rộng viewport & 420px.
+   - Muốn cố định: dùng width: 380px; (ví dụ). */
+.avatar-frame{
+  position:relative; width:min(40vw, 420px);
+  aspect-ratio:1/1; border-radius:50%;
+  background:transparent; border:0; outline:0; overflow:hidden;
+}
+.avatar-img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:contain;            /* Không méo ảnh */
+  padding:0; filter:drop-shadow(0 2px 0 rgba(0,0,0,.05));
+}
 
-/* ================== PROJECTS ================== */
-.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-.card{border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
-.card .thumb{aspect-ratio:16/9; border-radius:10px; background:radial-gradient(60% 100% at 50% 0, rgba(255,255,255,.2), rgba(0,0,0,.02)); margin-bottom:10px}
-.badges{display:flex; gap:8px; flex-wrap:wrap}
-.badge{border:1px solid var(--border); border-radius:999px; padding:4px 10px; font-size:.8rem; color:var(--muted)}
+.hero-sub{ max-width:820px; margin:6px auto 0; font-size:1rem; font-weight:800 }
+.chevrons{ display:flex; flex-direction:column; gap:8px; align-items:center; margin:8px 0 0 }
+.chev{ width:32px; height:32px; stroke:var(--muted); stroke-width:2.4; fill:none }
+
+/* ================== LAYOUT DƯỚI (PROFILE + CONTENT) ================== */
+.shell{
+  display:grid; grid-template-columns:300px 1fr; /* Trái = profile 300px */
+  gap:22px; padding:24px 0 60px;
+}
+.profile{
+  position:sticky; top:100px;   /* Dính tương đối khi cuộn */
+  align-self:start;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; padding:16px;
+}
+.profile h3{ margin:6px 0 0; font-size:1.1rem }
+.profile .muted{ color:var(--muted) }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 }
+.chip{ padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:transparent; color:var(--text); font-size:.85rem }
+.row{ display:flex; gap:10px; flex-wrap:wrap }
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:14px; text-decoration:none; cursor:pointer }
+.btn.solid{ background:#0e1b2f; color:#fff; border:1px solid var(--border) }
+.btn.outline{ background:transparent; color:var(--text); border:1px solid var(--border) }
+.btn .ico{ width:18px; height:18px; fill:currentColor }
+
+.content{ min-width:0 }
+.block{ background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:16px }
+.block h4{ margin:0 0 8px 0; font-size:1.05rem }
+.muted{ color:var(--muted) }
+.list{ margin:0; padding-left:20px }
+
+/* ================== KỸ NĂNG ================== */
+.skills{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.skill{ border:1px solid var(--border); border-radius:12px; padding:12px }
+.skill .top{ display:flex; justify-content:space-between; align-items:center }
+.bar{ height:10px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; margin-top:10px }
+.bar span{ display:block; height:100%; width:0; background:linear-gradient(90deg, var(--accent), #fff); transition:width .8s ease }
+
+/* ================== DỰ ÁN ================== */
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px }
+.card{ border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(255,255,255,.02) }
+.card .thumb{ aspect-ratio:16/9; border-radius:10px; background:radial-gradient(60% 100% at 50% 0, rgba(255,255,255,.2), rgba(0,0,0,.02)); margin-bottom:10px }
+.badges{ display:flex; gap:8px; flex-wrap:wrap }
+.badge{ border:1px solid var(--border); border-radius:999px; padding:4px 10px; font-size:.8rem; color:var(--muted) }
 
 /* ================== FOOTER ================== */
-.site-footer.inner{background:transparent; border:0; padding:0; margin-top:6px}
-.footer-row{display:flex; align-items:center; justify-content:space-between}
+.site-footer.inner{ background:transparent; border:0; padding:0; margin-top:6px }
+.footer-row{ display:flex; align-items:center; justify-content:space-between }
 
 /* ================== RESPONSIVE ================== */
 @media (max-width:980px){
-  .shell{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr 1fr}
-  .skills{grid-template-columns:1fr}
-  .capsule{flex-wrap:wrap; row-gap:8px}
-  /* thu nhỏ & canh nhóm actions gọn hơn trên mobile */
-  :root{ --actions-top:10px; --actions-right:10px; }
-  .hero-header .container{ padding-right: max(12px, var(--actions-slot)); }
+  .shell{ grid-template-columns:1fr }     /* Profile trên, content dưới */
+  .grid{ grid-template-columns:1fr 1fr }  /* Dự án: 2 cột */
+  .skills{ grid-template-columns:1fr }    /* Kỹ năng: 1 cột */
+  .capsule{ flex-wrap:wrap; row-gap:8px } /* Nav dài thì xuống hàng */
 }
+
+/* ================== PHỤ LỤC — “NÚT CHỈNH NHANH” ==================
+   1) Nav & Actions cùng hàng, cao/thấp: đổi --header-h trong :root.
+   2) Chữ & icon nav: đổi --nav-font, --nav-ico.
+   3) Nút ngôn ngữ to/nhỏ: đổi --ctrl-size (mặc định = --header-h).
+   4) Avatar to/nhỏ: sửa width trong .avatar-frame (vd 420px → 360px).
+   5) “PORTFOLIO” to/nhỏ: sửa clamp(...) trong .mega (đặc biệt là giá trị 3 — max).
+   6) Container rộng/hẹp: đổi --container.
+   7) Nếu MUỐN ghim actions sát góc phải màn hình (không khuyến nghị khi cần bằng hàng):
+        .header-actions{
+          position: fixed; top:16px; right:16px; transform:none;
+        }
+      (Lúc đó actions có thể lệch hàng khi bạn đổi --header-h.)
+   =============================================================== */
