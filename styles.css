@@ -148,7 +148,7 @@ body{
     0.06em 0.06em 0 var(--shadow);
 }
 
-.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:6px 0 }
+.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:2px 0 }
 
 /* AVATAR:
    - Đổi KÍCH THƯỚC tại thuộc tính width dưới đây.
