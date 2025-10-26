@@ -148,7 +148,12 @@ body{
     0.06em 0.06em 0 var(--shadow);
 }
 
-.avatar-wrap{ display:flex; align-items:center; justify-content:center; margin:-3.5cm 0 0 }
+.avatar-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -58px 0 0 !important;  /* ~1.5cm ≈ 57–58px ở màn hình 96dpi */
+}
 
 /* AVATAR:
    - Đổi KÍCH THƯỚC tại thuộc tính width dưới đây.
