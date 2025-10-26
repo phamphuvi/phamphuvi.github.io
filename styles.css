@@ -235,3 +235,66 @@ body{
     --actions-right: 14px;
   }
 }
+/* ===== Size tuning cho màn hình zoom ~125% ===== */
+:root{
+  /* Chiều cao chuẩn của header/menu */
+  --header-h: 46px;          /* thử 44–50 nếu muốn */
+  --nav-font: 15px;          /* cỡ chữ mục menu */
+  --nav-ico: 14px;           /* icon trong menu */
+  --ctrl-size: 40px;         /* kích thước nút tròn (globe) */
+  /* Nếu bạn đang dùng Cách 2 (header-actions fixed), chỉnh vị trí cụm này ở đây: */
+  --actions-top: 12px;       /* hạ thấp chút để thẳng hàng với nav */
+  --actions-right: 18px;     /* khoảng cách mép phải màn hình */
+}
+
+/* HERO nhỏ gọn hơn */
+.hero{ padding: 16px 0 0 !important; }
+.mega{
+  font-size: clamp(48px, 8.4vw, 96px) !important; /* trước max 120px */
+  margin: 6px 0 8px !important;
+  text-shadow:
+    0.02em 0.02em 0 var(--shadow),
+    0.04em 0.04em 0 var(--shadow),
+    0.06em 0.06em 0 var(--shadow) !important;
+}
+.avatar-frame{
+  width: min(36vw, 360px) !important;  /* trước 56vw/520px */
+}
+.hero-sub{ font-size: 1.125rem !important; margin-top: 8px !important; }
+.chevrons{ margin: 12px 0 0 !important; }
+
+/* NAV pill gọn lại */
+.capsule{
+  height: var(--header-h) !important;
+  padding: 0 14px !important;        /* giảm padding ngang */
+  gap: 12px !important;
+  align-items: center !important;
+}
+.cap-link{
+  font-size: var(--nav-font) !important;
+  padding: 6px 8px !important;
+  line-height: 1 !important;
+}
+.cap-link .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
+
+/* Cụm Dark/Light + Ngôn ngữ gọn lại */
+.seg{
+  height: var(--header-h) !important;
+  padding: 3px !important;
+  align-items: center !important;
+}
+.seg-btn{ padding: 6px 12px !important; }
+.seg-btn .ico{ width: var(--nav-ico) !important; height: var(--nav-ico) !important; }
+.bubble{
+  width: var(--ctrl-size) !important;
+  height: var(--ctrl-size) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Nếu bạn đã áp dụng Cách 2 (header-actions fixed), cập nhật vị trí bằng biến trên */
+.header-actions{
+  top: var(--actions-top) !important;
+  right: var(--actions-right) !important;
+}
