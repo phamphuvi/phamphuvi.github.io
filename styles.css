@@ -159,3 +159,19 @@ body{
   .skills{grid-template-columns:1fr}
   .capsule{flex-wrap:wrap; row-gap:8px}
 }
+/* Đẩy cụm toggle + language sang sát mép phải màn hình, ngang hàng với nav */
+.header-actions{
+  position: fixed !important;    /* thay vì absolute trong .container */
+  top: 16px !important;          /* cao thấp của cụm; chỉnh 12–20px tùy ý */
+  right: 20px !important;        /* khoảng cách tới mép phải; chỉnh theo ý */
+  transform: none !important;    /* bỏ translateY(-50%) cũ */
+  z-index: 90;
+}
+
+/* Giữ nav pill ở giữa như cũ */
+.header-row{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 60px;
+}
