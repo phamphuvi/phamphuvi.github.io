@@ -167,3 +167,37 @@ body{margin:0; font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Robo
   .avatar-frame{ width: min(70vw, 360px); }
   .avatar-img{ transform: scale(1.15); }
 }
+/* === AVATAR: bỏ khung tròn ngoài & phóng to theo khung ảnh === */
+.avatar-frame{
+  background: transparent !important;  /* bỏ đĩa xanh ngoài */
+  border: 0 !important;                 /* bỏ viền */
+  outline: 0 !important;                /* bỏ outline */
+  width: min(56vw, 520px) !important;   /* to hơn; chỉnh con số tùy ý */
+}
+.avatar-frame::before,
+.avatar-frame::after{ display: none !important; } /* bỏ 2 vòng mờ */
+.avatar-img{
+  padding: 0 !important;                /* ảnh chạm khung */
+  width: 100%; height: 100%;
+  object-fit: contain;                  /* không méo ảnh */
+  transform: none !important;           /* bỏ scale 1.25 cũ */
+}
+
+/* === HEADER: menu ở GIỮA, toggle + language ghim GÓC PHẢI === */
+.hero-header .container{ position: relative !important; }
+.header-row{ 
+  display: flex !important; 
+  justify-content: center !important;   /* căn giữa nav */
+}
+.capsule{ margin: 0 auto !important; }  /* đảm bảo giữa */
+.header-actions{
+  position: absolute !important;
+  top: 10px; 
+  right: 20px; 
+  z-index: 70;
+}
+
+/* (tuỳ chọn) Giữ menu hiển thị cả trên mobile */
+@media (max-width: 980px){
+  .capsule{ display: flex !important; }
+}
