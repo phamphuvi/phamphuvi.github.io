@@ -163,3 +163,45 @@ body{
   .skills{grid-template-columns:1fr}
   .capsule{flex-wrap:wrap; row-gap:8px}
 }
+/* ==== Fix lệch dọc header: đồng bộ chiều cao & canh giữa ==== */
+:root{ --header-h: 52px; }           /* bạn có thể chỉnh 48–56px theo mắt */
+
+.header-row{
+  align-items: center !important;
+  min-height: var(--header-h) !important;
+}
+
+/* NAV pill ở giữa với chiều cao cố định */
+.capsule{
+  height: var(--header-h) !important;
+  padding: 0 18px !important;        /* bỏ padding dọc để không đội chiều cao */
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+}
+.cap-link{ line-height: 1 !important; }
+
+/* Cụm toggle + ngôn ngữ: cùng chiều cao và canh giữa */
+.header-actions{
+  align-self: center !important;     /* bảo đảm cùng trục dọc với nav */
+  justify-self: end !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+.seg{
+  height: var(--header-h) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.bubble{
+  width: var(--header-h) !important;
+  height: var(--header-h) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Nếu vẫn cảm giác cao/ thấp hơn 1–2px, tinh chỉnh nhẹ ở đây: */
+/* .header-actions{ margin-top: 1px; } */
+/* .capsule{ margin-top: -1px; } */
