@@ -155,7 +155,7 @@ body{
    - Responsive: min(40vw, 420px) → lấy nhỏ hơn giữa 40% bề rộng viewport & 420px.
    - Muốn cố định: dùng width: 380px; (ví dụ). */
 .avatar-frame{
-  position:relative; width:min(40vw, 420px);
+  position:relative; width:min(50vw, 520px);
   aspect-ratio:1/1; border-radius:50%;
   background:transparent; border:0; outline:0; overflow:hidden;
 }
