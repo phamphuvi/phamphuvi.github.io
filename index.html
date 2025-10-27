@@ -51,14 +51,19 @@
   <!-- HERO -->
   <main id="home">
     <section class="hero container center">
-      <h1 class="mega">PORTFOLIO</h1>
+      <!-- THÊM id để gắn hiệu ứng chữ rời -->
+      <h1 class="mega" id="megaTitle">PORTFOLIO</h1>
+
       <div class="avatar-wrap">
         <!-- Use your real image here -->
         <div class="avatar-frame">
           <img src="assets/avatar.png" alt="Phạm Phú Vĩ" class="avatar-img">
         </div>
       </div>
-      <p class="hero-sub">Xin chào, mình là Vĩ—rất hân hạnh được đón bạn tại trang thông tin của mình!</p>
+
+      <!-- Gõ chữ: thay nội dung bằng span #heroType để script điều khiển -->
+      <p class="hero-sub"><span id="heroType"></span></p>
+
       <div class="chevrons" aria-hidden="true">
         <svg class="chev"><use href="#ico-chevron"/></svg>
         <svg class="chev"><use href="#ico-chevron"/></svg>
@@ -70,10 +75,11 @@
     <section class="shell container">
       <!-- sticky profile card (left) -->
       <aside class="profile">
-        <h3>Phạm Phú Vĩ</h3>
+        <!-- THÊM class sf để áp ScrollFloat -->
+        <h3 class="sf">Phạm Phú Vĩ</h3>
         <p class="muted">Automation • IoT • Năng lượng tái tạo</p>
         <div class="chips">
-          <span class="chip">PLC</span><span class="chip">SCADA</span><span class="chip">PVsyst</span><span class="chip">Modbus RS‑485</span>
+          <span class="chip">PLC</span><span class="chip">SCADA</span><span class="chip">PVsyst</span><span class="chip">Modbus RS-485</span>
         </div>
         <div class="row">
           <a id="btnEmailSide" class="btn outline"><svg class="ico"><use href="#ico-mail"/></svg> Email</a>
@@ -84,22 +90,26 @@
       <!-- right column -->
       <section class="content">
         <section id="about" class="block">
-          <h4>Về tôi</h4>
+          <!-- THÊM class sf -->
+          <h4 class="sf">Về tôi</h4>
           <ul id="aboutList" class="list"></ul>
         </section>
 
         <section id="skills" class="block">
-          <h4>Kỹ năng</h4>
+          <!-- THÊM class sf -->
+          <h4 class="sf">Kỹ năng</h4>
           <div id="skillsGrid" class="skills"></div>
         </section>
 
         <section id="works" class="block">
-          <h4>Dự án</h4>
+          <!-- THÊM class sf -->
+          <h4 class="sf">Dự án</h4>
           <div id="projectsGrid" class="grid"></div>
         </section>
 
         <section id="contact" class="block">
-          <h4>Liên hệ</h4>
+          <!-- THÊM class sf -->
+          <h4 class="sf">Liên hệ</h4>
           <p id="contactNote" class="muted">Mở cơ hội thực tập/toàn thời gian. Mình sẵn sàng học hỏi để phù hợp với yêu cầu công việc.</p>
           <div class="row">
             <a id="btnEmail" class="btn solid"><svg class="ico"><use href="#ico-mail"/></svg> Gửi email</a>
@@ -118,6 +128,10 @@
       </section>
     </section>
   </main>
+
+  <!-- GSAP + ScrollTrigger qua CDN (đặt TRƯỚC script.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
   <script src="script.js"></script>
 </body>
