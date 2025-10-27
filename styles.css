@@ -267,3 +267,11 @@ body{
         }
       (Lúc đó actions có thể lệch hàng khi bạn đổi --header-h.)
    =============================================================== */
+
+/* ====== BỔ SUNG NHẸ CHO HIỆU ỨNG CHỮ (GSAP) ====== */
+.mega .char,
+.sf .char{ display:inline-block; will-change: transform, opacity }
+
+/* Con trỏ nháy cho hiệu ứng gõ chữ */
+@keyframes cursorBlink{0%,100%{opacity:0}50%{opacity:1}}
+.type-cursor{ margin-left:.25rem; display:inline-block; animation:cursorBlink .8s steps(1) infinite }
