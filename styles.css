@@ -29,8 +29,8 @@
   --nav-ico: 10px;              /* Cỡ icon mục NAV */
   --ctrl-size: var(--header-h); /* ĐK nút tròn ngôn ngữ (mặc định = header-h) */
 
-  /* THÊM: chiều cao tổng thể header để bù khoảng trống khi dùng fixed */
-  --header-outer: calc(var(--header-h) + 28px); /* 28px = padding 14px trên + 14px dưới */
+  /* (Giữ sẵn, không dùng khi chỉ ghim viên thuốc) */
+  --header-outer: calc(var(--header-h) + 28px);
 }
 
 /* Biến cho chế độ Sáng (Light). Chỉ đổi màu, không đổi layout. */
@@ -48,11 +48,8 @@ body{
   font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background:var(--bg);
   color:var(--text);
-  padding-top: var(--header-outer); /* THÊM: đẩy nội dung xuống dưới header cố định */
+  /* SỬA: bỏ padding-top bù header cố định, vì chỉ ghim viên thuốc */
 }
-/* Khi cuộn tới anchor (vd #ve-toi) không bị header che mất */
-[id]{ scroll-margin-top: var(--header-outer); }
-
 .container{
   max-width:var(--container);   /* Đổi để trang rộng/hẹp hơn */
   margin:0 auto;
@@ -60,16 +57,17 @@ body{
 }
 .center{ text-align:center }
 
+/* Khi cuộn tới anchor (#ve-toi, #du-an...) tránh bị viên thuốc đè nhẹ */
+[id]{ scroll-margin-top: calc(var(--header-h) + 16px); }
+
 /* ================== HEADER (GRID 3 CỘT) ==================
    Sơ đồ: [1fr] | [auto (NAV pill)] | [1fr (actions bên phải)]
-   → Nav luôn GIỮA, nhóm actions luôn NGANG HÀNG với nav. */
+   → Nav luôn GIỮA (nhưng sẽ được ghim riêng ở dưới), actions nằm phải và cuộn theo trang. */
 .hero-header{
-  /* SỬA: sticky → fixed để GHIM NAV LUÔN TRÊN CÙNG */
-  position: fixed; top:0; left:0; right:0;
-  z-index: 999;
+  /* SỬA: trả về trạng thái nhẹ, không tạo một khung full-width */
+  position: relative; z-index:50;
   padding:14px 0;              /* Đệm trên/dưới vùng header */
-  background: var(--bg);       /* nền header khi đè lên nội dung */
-  box-shadow: 0 2px 10px rgba(0,0,0,.12); /* nhẹ cho cảm giác nổi khối */
+  /* KHÔNG đặt background/box-shadow để không thành “khung” */
 }
 .hero-header .container{
   padding-right: 20px;         /* Giữ 20px để mép phải thoáng */
@@ -83,16 +81,24 @@ body{
 }
 
 /* ================== NAV “VIÊN THUỐC” ==================
-   Chỉnh kích thước/nav bằng: --header-h, --nav-font, --nav-ico, padding & gap. */
+   Chỉ GHIM VIÊN THUỐC — không ghim cả khung header. */
 .capsule{
-  grid-column:2;                 /* Đặt nav vào cột giữa */
-  justify-self:center;           /* Giữa tuyệt đối trong cột giữa */
-  display:flex; gap:8px;         /* Khoảng cách giữa các mục (giảm để gọn) */
-  align-items:center;
-  height:var(--header-h);        /* Cao = header */
-  padding:0 10px;                /* Đệm ngang của viên thuốc */
+  /* GHIM viên thuốc: luôn nổi ở giữa trên màn hình */
+  position: fixed;               /* THÊM */
+  top: 14px;                     /* cao từ mép trên (khớp padding header) */
+  left: 50%; transform: translateX(-50%);
+  z-index: 1000;
+
+  grid-column:2;                 /* vẫn để cho layout ban đầu không vỡ */
+  justify-self:center;
+  display:flex; gap:8px; align-items:center;
+  height:var(--header-h);
+  padding:0 10px;
   background:var(--pill); color:#0e1b2f;
   border:1px solid var(--border); border-radius:999px;
+
+  /* Nhẹ nhàng để “viên thuốc” nổi mà không thành cả khung */
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
 }
 .cap-link{
   display:inline-flex; align-items:center; gap:6px;
@@ -106,21 +112,20 @@ body{
 .cap-link .ico{ width:var(--nav-ico); height:var(--nav-ico); fill:currentColor }
 
 /* ================== NHÓM ACTIONS (SÁNG/TỐI + NGÔN NGỮ) ==================
-   Đặt trong cột 3 của header grid → luôn cùng “đường ngang” với nav.
-   Muốn sát mép container hơn: thêm margin-right âm nhỏ (-6px/-8px). */
+   Actions (toggle & ngôn ngữ) vẫn cuộn theo trang, không ghim. */
 .header-actions{
-  position: static;              /* KHÔNG fixed/absolute để tránh lệch */
-  grid-column: 3;                /* Cột phải của grid */
-  justify-self: end;             /* Dính mép phải của .container */
-  align-self: center;            /* Cùng độ cao với nav */
+  position: static;
+  grid-column: 3;
+  justify-self: end;
+  align-self: center;
   display: flex; align-items: center; gap: 14px;
 }
 
 /* Toggle Dark/Light */
 .seg{
-  height:var(--header-h);        /* Cao bằng nav */
+  height:var(--header-h);
   display:flex; align-items:center;
-  padding:2px;                   /* Đệm trong khung toggle */
+  padding:2px;
   background:var(--pill);
   border-radius:999px; border:1px solid var(--border);
 }
@@ -129,7 +134,7 @@ body{
   padding:4px 8px; border-radius:999px; cursor:pointer;
 }
 .seg-btn .ico{ width:var(--nav-ico); height:var(--nav-ico) }
-.seg-btn.active{ background:#0e1b2f; color:#fff } /* Nút đang bật */
+.seg-btn.active{ background:#0e1b2f; color:#fff }
 
 /* Nút tròn ngôn ngữ (globe) — chỉnh cỡ bằng --ctrl-size */
 .bubble{
@@ -246,7 +251,7 @@ body{
   .shell{ grid-template-columns:1fr }     /* Profile trên, content dưới */
   .grid{ grid-template-columns:1fr 1fr }  /* Dự án: 2 cột */
   .skills{ grid-template-columns:1fr }    /* Kỹ năng: 1 cột */
-  .capsule{ flex-wrap:wrap; row-gap:8px } /* Nav dài thì xuống hàng */
+  .capsule{ flex-wrap:wrap; row-gap:8px } /* Nav dài thì xuống hàng; vẫn fixed ở giữa */
 }
 
 /* ================== PHỤ LỤC — “NÚT CHỈNH NHANH” ==================
