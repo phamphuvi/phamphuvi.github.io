@@ -144,7 +144,15 @@ body{
   display:inline-flex; align-items:center; justify-content:center;
   position:relative;
 }
-.bubble .ico{ width:var(--nav-ico); height:var(--nav-ico); fill:#0e1b2f }
+/* Icon trong nút ngôn ngữ dùng nét vẽ (stroke) thay vì fill */
+.bubble{ color:#0e1b2f; } /* currentColor cho stroke bên dưới */
+.bubble .ico{
+  width:var(--nav-ico);
+  height:var(--nav-ico);
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+}
 .bubble .chat{ position:absolute; right:-6px; bottom:-6px; width:16px; height:16px; opacity:.9 }
 
 /* ================== HERO (TIÊU ĐỀ + AVATAR) ================== */
