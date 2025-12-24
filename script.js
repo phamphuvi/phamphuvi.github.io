@@ -1,128 +1,135 @@
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === CẤU HÌNH THÔNG TIN CỦA BẠN ===
-  const YOUR_EMAIL = "phamphuvi9@gmail.com"; 
-  const YOUR_FACEBOOK = "https://www.facebook.com/PhamVi1209";
-
-  // === DỮ LIỆU ĐA NGÔN NGỮ (Sửa nội dung trực tiếp ở đây) ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (VI/EN) ===
   const I18N = {
     vi: {
-      navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
-      kicker: "Portfolio cá nhân",
-      heroHelloPrefix: "Xin chào, tôi là",
-      heroLead: "Sinh viên trường Đại học Công Nghệ - Kỹ Thuật Cần Thơ. Quan tâm đến công nghệ, tự động hoá, IoT, năng lượng, và các dự án thực tiễn.",
-      ctaCV: "Tải CV / Resume", ctaContact: "Liên hệ ngay",
+      roleText: "Sinh viên Kỹ thuật & IoT",
+      navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
+      ctaCV: "Tải CV / Resume",
+      
+      titleAbout: "Về tôi",
+      aboutText: "Xin chào! Tôi là sinh viên năm cuối Đại học Công Nghệ - Kỹ Thuật Cần Thơ. Tôi đam mê xây dựng các hệ thống tự động hoá thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.",
+      labelSchool: "Trường", labelLocation: "Nơi sống",
       
       titleProjects: "Dự án tiêu biểu",
       p1Title: "Mô hình mức nước",
-      p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
+      p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
       p2Title: "Giám sát IoT",
-      p2Text: "Xây dựng hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
+      p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá.",
       p3Title: "Tối ưu hoá PVsyst",
-      // ĐÃ SỬA ĐOẠN NÀY CHO BẠN:
-      p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời có dàn chân điều hướng 1 trục hoặc 2 trục bằng phần mềm PVsyst để hỗ trợ tính toán hiệu suất tối ưu trước khi quyết định đầu tư cho hộ gia đình.",
+      p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời để hỗ trợ ra quyết định đầu tư.",
 
       titleSkills: "Kỹ năng",
-      skTech: "Kỹ thuật", skTools: "Công cụ", skOther: "Khác",
-      skTechItem1: "Lập trình cơ bản, điện - điện tử",
-      skTechItem2: "Thiết kế mô hình thử nghiệm",
-      skToolsItem1: "Matlab/Simulink, PVsyst, AutoCAD",
-      skToolsItem2: "GitHub Pages, bộ công cụ văn phòng",
-      skOtherItem1: "Làm việc nhóm, báo cáo",
-      skOtherItem2: "Tư duy logic, tự học",
+      skTech: "Kỹ thuật", skTools: "Công cụ",
+      skTechItem1: "Điện - Điện tử, Mạch nguyên lý",
+      skTechItem2: "Lập trình C/C++, Arduino, Python cơ bản",
+      skToolsItem1: "Matlab/Simulink, AutoCAD, Altium",
+      skToolsItem2: "PVsyst, GitHub, MS Office",
 
       titleContact: "Liên hệ",
-      contactHint: "Kết nối với tôi qua email hoặc mạng xã hội:",
-      btnEmailText: "Gửi Email",
-      emailLabel: "Email:",
+      contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
+      
+      // Text nút bấm
+      langBtnText: "VI"
     },
     en: {
-      navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
-      kicker: "Personal Portfolio",
-      heroHelloPrefix: "Hello, I'm",
-      heroLead: "Student at Can Tho University of Technology and Engineering. Interested in Automation, IoT, and Renewable Energy.",
-      ctaCV: "Download CV", ctaContact: "Contact Me",
+      roleText: "IoT & Automation Student",
+      navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
+      ctaCV: "Download CV",
+      
+      titleAbout: "About Me",
+      aboutText: "Hello! I am a final-year student at Can Tho University of Technology. I am passionate about building smart automation systems, IoT, and researching optimal energy solutions.",
+      labelSchool: "University", labelLocation: "Location",
       
       titleProjects: "Featured Projects",
       p1Title: "Water Level Control",
-      p1Text: "Designed and operated a water tank model with level sensors and PID control.",
+      p1Text: "Designed and operated a water tank model: level sensors, PID control/inverter, status display.",
       p2Title: "IoT Monitoring",
-      p2Text: "Built a dashboard for data collection and alerts for greenhouse farming.",
+      p2Text: "Dashboard system for collecting data, alerting for greenhouse farming, and visualization.",
       p3Title: "PVsyst Optimization",
-      p3Text: "Researched & simulated solar tracking systems using PVsyst to support investment decisions for households.",
+      p3Text: "Research & simulation of solar power systems to support investment decisions.",
 
       titleSkills: "Skills",
-      skTech: "Technical", skTools: "Tools", skOther: "Other",
-      skTechItem1: "Basic Programming, Electronics",
-      skTechItem2: "Prototype Design",
-      skToolsItem1: "Matlab/Simulink, PVsyst, AutoCAD",
-      skToolsItem2: "GitHub Pages, MS Office",
-      skOtherItem1: "Teamwork, Reporting",
-      skOtherItem2: "Logical Thinking, Self-learning",
+      skTech: "Technical", skTools: "Tools",
+      skTechItem1: "Electronics, Circuit Design",
+      skTechItem2: "C/C++, Arduino, Python Basic",
+      skToolsItem1: "Matlab/Simulink, AutoCAD, Altium",
+      skToolsItem2: "PVsyst, GitHub, MS Office",
 
       titleContact: "Contact",
-      contactHint: "Connect with me via email or social media:",
-      btnEmailText: "Send Email",
-      emailLabel: "Email:",
+      contactHint: "Feel free to contact me via:",
+
+      langBtnText: "EN"
     }
   };
 
-  // === LOGIC XỬ LÝ (KHÔNG CẦN SỬA) ===
-  
-  // 1. Cập nhật Link Facebook & Email hiển thị
-  const fbBtn = document.getElementById("fbLink");
-  if(fbBtn) fbBtn.href = YOUR_FACEBOOK;
-  
-  const emailDisplay = document.getElementById("yourEmail");
-  if(emailDisplay) emailDisplay.textContent = YOUR_EMAIL;
-
-  // 2. Xử lý nút Gửi Email (Mở Gmail hoặc Copy)
-  const mailBtn = document.getElementById("openGmailBtn");
-  if(mailBtn) {
-    mailBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`;
-      window.open(url, '_blank');
-    });
-  }
-
-  // 3. Xử lý Đa ngôn ngữ (I18N)
-  const TEXT_IDS = Object.keys(I18N.vi);
+  // === 2. XỬ LÝ CHUYỂN ĐỔI NGÔN NGỮ ===
   let currentLang = localStorage.getItem("lang") || "vi";
   
   function applyLang(lang) {
     const data = I18N[lang];
-    TEXT_IDS.forEach(id => {
+    // Duyệt qua tất cả các ID trong data và gán text
+    for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
-      if (el) el.textContent = data[id];
-    });
-    document.getElementById("langBtn").textContent = lang.toUpperCase();
+      if (el) el.textContent = text;
+    }
+    
+    // Cập nhật nút ngôn ngữ
+    const btnText = document.querySelector("#langBtn .btn-text");
+    const btnIcon = document.querySelector("#langBtn .btn-icon");
+    if(btnText) btnText.textContent = data.langBtnText;
+    if(btnIcon) btnIcon.textContent = lang === "vi" ? "🇻🇳" : "🇺🇸";
+    
     localStorage.setItem("lang", lang);
   }
   
+  // Khởi chạy lần đầu
   applyLang(currentLang);
+
+  // Sự kiện click nút đổi ngôn ngữ
   document.getElementById("langBtn").addEventListener("click", () => {
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
   });
 
-  // 4. Xử lý Dark/Light Mode
-  const root = document.documentElement;
-  let currentMode = localStorage.getItem("mode") || "dark"; // Mặc định Dark
+  // === 3. XỬ LÝ GIAO DIỆN SÁNG / TỐI ===
+  const root = document.body; // Gán class vào body
+  const modeBtn = document.getElementById("modeBtn");
+  const modeIcon = modeBtn.querySelector(".btn-icon");
   
+  let currentMode = localStorage.getItem("mode") || "dark";
+
   function applyMode(mode) {
-    if (mode === "light") root.classList.add("light");
-    else root.classList.remove("light");
+    if (mode === "light") {
+      root.classList.add("light");
+      modeIcon.textContent = "☀️"; // Mặt trời
+    } else {
+      root.classList.remove("light");
+      modeIcon.textContent = "🌙"; // Mặt trăng
+    }
     localStorage.setItem("mode", mode);
   }
 
   applyMode(currentMode);
-  document.getElementById("modeBtn").addEventListener("click", () => {
-    currentMode = root.classList.contains("light") ? "dark" : "light";
+
+  modeBtn.addEventListener("click", () => {
+    currentMode = currentMode === "dark" ? "light" : "dark";
     applyMode(currentMode);
   });
 
-  // 5. Cập nhật năm Footer
-  const y = document.getElementById("y");
-  if (y) y.textContent = new Date().getFullYear();
+  // === 4. XỬ LÝ CÁC LIÊN KẾT KHÁC ===
+  // Cập nhật năm footer
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Nút Email (Mở Gmail)
+  const YOUR_EMAIL = "phamphuvi9@gmail.com";
+  document.getElementById("openGmailBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`;
+    window.open(url, '_blank');
+  });
+
+  // Link Facebook
+  const YOUR_FB = "https://www.facebook.com/PhamVi1209";
+  document.getElementById("fbLink").href = YOUR_FB;
 });
