@@ -4,91 +4,167 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Phạm Phú Vĩ - Portfolio</title>
+  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Kỹ sư IoT & Tự động hoá tương lai.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
 
   <aside class="sidebar">
-    <img class="avatar" src="img/avatar.jpg" alt="Phạm Phú Vĩ">
-    <h1 class="name">Phạm Phú Vĩ</h1>
-    <p class="role">IoT & Automation Engineer</p>
+    <div class="profile">
+      <div class="avatar-container">
+        <img class="avatar" src="img/avatar.jpg" alt="Phạm Phú Vĩ" onerror="this.src='https://via.placeholder.com/150'">
+        <div class="status-dot" title="Đang tìm việc / Sẵn sàng làm việc"></div>
+      </div>
+      <h1 class="name">Phạm Phú Vĩ</h1>
+      <p class="role" id="roleText">Sinh viên Kỹ thuật & IoT</p>
+    </div>
 
     <nav class="nav-links">
-      <a href="#about">👋 Về tôi</a>
-      <a href="#projects">🚀 Dự án</a>
-      <a href="#skills">🛠️ Kỹ năng</a>
-      <a href="#contact">📬 Liên hệ</a>
+      <a href="#about" class="nav-item">
+        <span class="icon">👋</span> <span id="navAbout">Về tôi</span>
+      </a>
+      <a href="#projects" class="nav-item">
+        <span class="icon">🚀</span> <span id="navProjects">Dự án</span>
+      </a>
+      <a href="#skills" class="nav-item">
+        <span class="icon">⚡</span> <span id="navSkills">Kỹ năng</span>
+      </a>
+      <a href="#contact" class="nav-item">
+        <span class="icon">📬</span> <span id="navContact">Liên hệ</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
-      <a href="cv/PhamPhuVi-CV.pdf?v=2025" target="_blank" class="btn btn-primary">📄 Tải CV của tôi</a>
+      <div class="controls">
+        <button id="langBtn" class="control-btn" title="Đổi ngôn ngữ">
+          <span class="btn-icon">🇻🇳</span> <span class="btn-text">VI</span>
+        </button>
+        <button id="modeBtn" class="control-btn" title="Giao diện Sáng/Tối">
+          <span class="btn-icon">🌙</span>
+        </button>
+      </div>
+      <a id="ctaCV" href="cv/PhamPhuVi-CV.pdf?v=2025" target="_blank" class="btn btn-primary">
+        Tải CV / Resume
+      </a>
     </div>
   </aside>
 
   <main class="main-content">
     
-    <section id="about">
-      <h2>Về tôi</h2>
-      <p style="font-size: 1.1rem; color: #a0a0a0;">
-        Xin chào! Tôi là sinh viên năm cuối <b>Đại học Công Nghệ - Kỹ Thuật Cần Thơ</b>. <br>
-        Tôi đam mê xây dựng các hệ thống tự động hoá thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.
-      </p>
-    </section>
-
-    <section id="projects">
-      <h2>Dự án tiêu biểu</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>1. Mô hình mức nước</h3>
-          <p>Thiết kế và vận hành mô hình bồn nước thực tế: sử dụng cảm biến mức, giải thuật điều khiển PID và biến tần để ổn định hệ thống.</p>
-        </div>
-        <div class="card">
-          <h3>2. Giám sát IoT</h3>
-          <p>Dashboard thông minh thu thập dữ liệu cảm biến (nhiệt độ, độ ẩm) cho nhà kính và gửi cảnh báo thời gian thực.</p>
-        </div>
-        <div class="card">
-          <h3>3. Tối ưu hoá PVsyst</h3>
-          <p>Mô phỏng hệ thống pin mặt trời (Tracking 1 trục/2 trục) trên phần mềm PVsyst để tính toán hiệu suất đầu tư.</p>
+    <section id="about" class="section">
+      <div class="section-header">
+        <h2 id="titleAbout">Về tôi</h2>
+        <div class="line"></div>
+      </div>
+      <div class="glass-card intro-card">
+        <p id="aboutText" class="lead-text">
+          Xin chào! Tôi là sinh viên năm cuối <b>Đại học Công Nghệ - Kỹ Thuật Cần Thơ</b>. 
+          Tôi đam mê xây dựng các hệ thống tự động hoá thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.
+        </p>
+        <div class="stats">
+          <div class="stat-item">
+            <b id="labelSchool">Trường</b>
+            <span>ĐH CN-KT Cần Thơ</span>
+          </div>
+          <div class="stat-item">
+            <b id="labelLocation">Nơi sống</b>
+            <span>Cần Thơ, Việt Nam</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="skills">
-      <h2>Kỹ năng</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Kỹ thuật</h3>
+    <section id="projects" class="section">
+      <div class="section-header">
+        <h2 id="titleProjects">Dự án tiêu biểu</h2>
+        <div class="line"></div>
+      </div>
+      <div class="grid-3">
+        <article class="glass-card project-card">
+          <div class="card-badge">01</div>
+          <h3 id="p1Title">Mô hình mức nước</h3>
+          <p id="p1Text" class="muted-text">Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.</p>
+          <div class="tags">
+            <span>PLC</span><span>PID</span><span>Sensor</span>
+          </div>
+        </article>
+        
+        <article class="glass-card project-card">
+          <div class="card-badge">02</div>
+          <h3 id="p2Title">Giám sát IoT</h3>
+          <p id="p2Text" class="muted-text">Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá.</p>
+          <div class="tags">
+            <span>IoT</span><span>ESP32</span><span>Web</span>
+          </div>
+        </article>
+        
+        <article class="glass-card project-card">
+          <div class="card-badge">03</div>
+          <h3 id="p3Title">Tối ưu hoá PVsyst</h3>
+          <p id="p3Text" class="muted-text">Nghiên cứu & mô phỏng hệ thống pin mặt trời để hỗ trợ ra quyết định đầu tư.</p>
+          <div class="tags">
+            <span>Solar</span><span>PVsyst</span><span>Simulation</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="section-header">
+        <h2 id="titleSkills">Kỹ năng</h2>
+        <div class="line"></div>
+      </div>
+      <div class="grid-2">
+        <div class="glass-card">
+          <h3 id="skTech">Kỹ thuật</h3>
           <ul class="skill-list">
-            <li>Điện - Điện tử căn bản</li>
-            <li>Lập trình C/C++, Arduino</li>
-            <li>Thiết kế mạch nguyên lý</li>
+            <li id="skTechItem1">Điện - Điện tử, Mạch nguyên lý</li>
+            <li id="skTechItem2">Lập trình C/C++, Arduino, Python cơ bản</li>
+            <li>Vi xử lý: ESP32, STM32, PLC</li>
           </ul>
         </div>
-        <div class="card">
-          <h3>Công cụ</h3>
+        <div class="glass-card">
+          <h3 id="skTools">Công cụ</h3>
           <ul class="skill-list">
-            <li>Matlab / Simulink</li>
-            <li>AutoCAD / PVsyst</li>
-            <li>Git / GitHub Pages</li>
+            <li id="skToolsItem1">Matlab/Simulink, AutoCAD, Altium</li>
+            <li id="skToolsItem2">PVsyst, GitHub, MS Office</li>
+            <li>VS Code, Keil C</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <section id="contact">
-      <h2>Liên hệ</h2>
-      <div class="card">
-        <p>Email: <b>phamphuvi9@gmail.com</b></p>
-        <p>SĐT: <b>0984810120</b></p>
-        <p>Địa chỉ: Cần Thơ, Việt Nam</p>
-        <br>
-        <a href="https://www.facebook.com/PhamVi1209" style="color:#2f81f7">Facebook: Phạm Phú Vĩ</a>
+    <section id="contact" class="section">
+      <div class="section-header">
+        <h2 id="titleContact">Liên hệ</h2>
+        <div class="line"></div>
+      </div>
+      <div class="glass-card contact-card">
+        <p id="contactHint" class="muted-text">Đừng ngần ngại liên hệ với tôi qua:</p>
+        <div class="contact-grid">
+          <a href="tel:0984810120" class="contact-btn">
+            <span>📞</span> 0984 810 120
+          </a>
+          <a id="openGmailBtn" href="#" class="contact-btn">
+            <span>📧</span> <span id="yourEmail">phamphuvi9@gmail.com</span>
+          </a>
+          <a id="fbLink" href="#" target="_blank" class="contact-btn">
+            <span>🔵</span> Facebook
+          </a>
+        </div>
       </div>
     </section>
+
+    <footer class="site-footer">
+      © <span id="year">2025</span> Phạm Phú Vĩ.
+    </footer>
 
   </main>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
