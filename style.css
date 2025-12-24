@@ -234,3 +234,23 @@ h3 { font-size: 1.4rem; margin-bottom: 12px; }
   75% { transform: scale3d(1.05, 0.95, 1); }
   100% { transform: scale3d(1, 1, 1); }
 }
+
+/* ===== TYPEWRITER EFFECT (Hiệu ứng gõ chữ) ===== */
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 100;
+  color: var(--primary);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+#typewriter-text {
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.8;
+}
