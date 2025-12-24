@@ -1,14 +1,19 @@
-# Portfolio tĩnh (V3) — Hero theo ảnh mẫu
+# Portfolio 1 trang – Phạm Phú Vĩ
 
-- Thanh **menu dạng pill** giữa đầu trang (biểu tượng + nhãn).
-- **Dark/Light toggle** kiểu segmented, nút ngôn ngữ dạng **bubble** (globe + chat).
-- Tiêu đề **PORTFOLIO** chữ trắng đổ bóng 3D nhẹ.
-- **Avatar tròn** phong cách flat + lời chào + 3 chevrons.
-- Cấu trúc bên dưới: thẻ hồ sơ dính (trái) + nội dung (phải): About, Skills, Works, Contact.
+Trang web tĩnh (HTML/CSS/JS), sẵn sàng dùng trên **GitHub Pages**.
 
-## Sửa nhanh
-- `script.js` → chỉnh `CONFIG` (CV_URL/EMAIL/PHONE/GITHUB), `ABOUT`, `SKILLS`, `PROJECTS`.
-- Có thể thay SVG avatar bằng ảnh cá nhân: thay toàn bộ `<svg class="avatar">...</svg>` bằng `<img class="avatar" src="assets/me.jpg" alt="Phạm Phú Vĩ">`.
+## Chỉnh nhanh
+- Mở `script.js` và điền:
+  - `YOUR_EMAIL = "…"`, nếu muốn form gửi qua mailto.
+  - `YOUR_FACEBOOK = "https://facebook.com/…"`.
+- Nếu cần, sửa nội dung các mục trong `index.html`.
 
-## Deploy
-Upload `index.html`, `styles.css`, `script.js`, `cv.pdf` lên repo GitHub → **Settings → Pages** → `Deploy from a branch`.
+## Deploy GitHub Pages
+1) Tạo repository tên **`<username>.github.io`** (ví dụ: `phamvi1209.github.io`).  
+2) Upload các file: `index.html`, `style.css`, `script.js`, `README.md`.  
+3) Vào **Settings → Pages → Build and deployment**: chọn **Deploy from a branch**, `main`, folder `/ (root)`.  
+4) Mở `https://<username>.github.io` sau khi workflow Pages báo **Success**.
+
+## Gợi ý
+- Thêm ảnh vào thư mục `img/` (tự tạo) và dùng `<img loading="lazy" alt="">`.  
+- Không muốn dùng mailto? Hãy dùng Formspree/Netlify Forms.
