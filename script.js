@@ -31,10 +31,10 @@ window.addEventListener("DOMContentLoaded", function () {
         "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
       p2Title: "Giám sát từ xa qua IoT",
       p2Text:
-        "Xây dựng dashboard thu thập dữ liệu, cảnh báo và trực quan hoá theo thời gian.",
+        "Xây dựng hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá theo thời gian.",
       p3Title: "Tối ưu hoá hệ PV bằng PVsyst",
       p3Text:
-        "Nghiên cứu & mô phỏng để hỗ trợ ra quyết định đầu tư cho hộ gia đình.",
+        "Nghiên cứu & mô phỏng hệ thống pin mặt trời có dàn chân điều hướng 1 trục hoặc 2 trục bằng phần mềm PVsys để hỗ trợ tính toán hiệu suất tối ưu trước khi quyết định đầu tư cho hộ gia đình.",
 
       titleSkills: "Kỹ năng",
       skTech: "Kỹ thuật",
