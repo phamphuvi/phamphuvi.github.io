@@ -14,7 +14,6 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   // === 2. DỮ LIỆU ĐA NGÔN NGỮ ===
-  // Lưu ý: Đã bỏ aboutText ở đây để không bị xung đột với hiệu ứng gõ chữ
   const I18N = {
     vi: {
       roleText: "Sinh viên Kỹ thuật & IoT",
@@ -106,51 +105,31 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 6. HIỆU ỨNG GÕ CHỮ (TYPEWRITER) ===
+  // === 6. HIỆU ỨNG GÕ CHỮ (CHẠY 1 LẦN RỒI DỪNG) ===
   const typeWriterElement = document.getElementById('typewriter-text');
   
-  // Chia đoạn văn dài thành các câu nhỏ để hiệu ứng đẹp hơn
-  const textArray = [
-    "Xin chào! Tôi là sinh viên Đại Học Kỹ Thuật-Công Nghệ Cần Thơ.",
-    "Tôi đam mê xây dựng các hệ thống tự động hóa thông minh, IoT.",
-    "Và nghiên cứu giải pháp năng lượng tối ưu."
-  ];
+  // Đoạn văn bản đầy đủ bạn muốn hiển thị
+  const fullText = "Xin chào! Tôi là sinh viên Đại Học Kỹ Thuật - Công Nghệ Cần Thơ. Tôi đam mê xây dựng các hệ thống tự động hóa thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.";
 
-  const typingSpeed = 50;    // Tốc độ gõ
-  const deletingSpeed = 30;  // Tốc độ xóa
-  const pauseDuration = 2000; // Thời gian dừng
+  const typingSpeed = 40; // Tốc độ gõ (ms) - Số càng nhỏ gõ càng nhanh
 
-  let textIndex = 0;
   let charIndex = 0;
-  let isDeleting = false;
 
   function typeEffect() {
     if (!typeWriterElement) return;
 
-    const currentText = textArray[textIndex];
-    
-    if (isDeleting) {
-      typeWriterElement.textContent = currentText.substring(0, charIndex - 1);
-      charIndex--;
-    } else {
-      typeWriterElement.textContent = currentText.substring(0, charIndex + 1);
-      charIndex++;
-    }
+    // Gõ thêm 1 ký tự vào màn hình
+    typeWriterElement.textContent = fullText.substring(0, charIndex + 1);
+    charIndex++;
 
-    let typeSpeed = isDeleting ? deletingSpeed : typingSpeed;
-
-    if (!isDeleting && charIndex === currentText.length) {
-      typeSpeed = pauseDuration; // Dừng lại đọc
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      textIndex = (textIndex + 1) % textArray.length; // Chuyển câu tiếp theo
-      typeSpeed = 500;
-    }
-
-    setTimeout(typeEffect, typeSpeed);
+    // Kiểm tra xem đã gõ hết chưa
+    if (charIndex <= fullText.length) {
+      // Nếu chưa hết, đợi 40ms rồi gõ tiếp ký tự sau
+      setTimeout(typeEffect, typingSpeed);
+    } 
+    // Nếu gõ hết rồi thì hàm sẽ tự kết thúc tại đây (không xóa, không lặp lại)
   }
 
-  // Chạy hiệu ứng
+  // Bắt đầu chạy hiệu ứng
   typeEffect();
 });
