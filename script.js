@@ -1,15 +1,12 @@
 window.addEventListener("DOMContentLoaded", function () {
   
   // === 1. HÀM TẠO HIỆU ỨNG RUNG (JELLO) ===
-  // Hàm này sẽ thêm class animation, đợi 900ms rồi gỡ bỏ
   function triggerAnimation(elementId) {
     const el = document.getElementById(elementId);
     if (el) {
-      el.classList.remove("jello-horizontal"); // Reset trước cho chắc
-      void el.offsetWidth; // Hack nhỏ để trình duyệt nhận diện lại animation
+      el.classList.remove("jello-horizontal");
+      void el.offsetWidth;
       el.classList.add("jello-horizontal");
-      
-      // Xóa class sau khi chạy xong (0.9s = 900ms)
       setTimeout(() => {
         el.classList.remove("jello-horizontal");
       }, 900);
@@ -17,13 +14,13 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   // === 2. DỮ LIỆU ĐA NGÔN NGỮ ===
+  // Lưu ý: Đã bỏ aboutText ở đây để không bị xung đột với hiệu ứng gõ chữ
   const I18N = {
     vi: {
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCV: "Tải CV / Resume",
       titleAbout: "Về tôi",
-      aboutText: "Xin chào! Tôi là sinh viên Đại Học Kỹ Thuật-Công Nghệ Cần Thơ tôi đam mê xây dựng các hệ thống tự động hóa thông minh,Iot và nghiên cứu giải pháp năng lượng tối ưu.",
       labelSchool: "Trường", labelLocation: "Nơi sống",
       titleProjects: "Dự án tiêu biểu",
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
@@ -40,7 +37,6 @@ window.addEventListener("DOMContentLoaded", function () {
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
       ctaCV: "Download CV",
       titleAbout: "About Me",
-      aboutText: "Hello! I am a final-year student at Can Tho University of Technology. I am passionate about building smart automation systems, IoT, and researching optimal energy solutions.",
       labelSchool: "University", labelLocation: "Location",
       titleProjects: "Featured Projects",
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control/inverter, status display.",
@@ -71,9 +67,8 @@ window.addEventListener("DOMContentLoaded", function () {
   }
   applyLang(currentLang);
 
-  // SỰ KIỆN NÚT ĐỔI NGÔN NGỮ (Kèm hiệu ứng rung)
   document.getElementById("langBtn").addEventListener("click", () => {
-    triggerAnimation("langBtn"); // <--- Kích hoạt hiệu ứng Jello
+    triggerAnimation("langBtn");
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
   });
@@ -96,9 +91,8 @@ window.addEventListener("DOMContentLoaded", function () {
   }
   applyMode(currentMode);
 
-  // SỰ KIỆN NÚT ĐỔI GIAO DIỆN (Kèm hiệu ứng rung)
   modeBtn.addEventListener("click", () => {
-    triggerAnimation("modeBtn"); // <--- Kích hoạt hiệu ứng Jello
+    triggerAnimation("modeBtn");
     currentMode = currentMode === "dark" ? "light" : "dark";
     applyMode(currentMode);
   });
@@ -111,4 +105,52 @@ window.addEventListener("DOMContentLoaded", function () {
     window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`, '_blank');
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
+
+  // === 6. HIỆU ỨNG GÕ CHỮ (TYPEWRITER) ===
+  const typeWriterElement = document.getElementById('typewriter-text');
+  
+  // Chia đoạn văn dài thành các câu nhỏ để hiệu ứng đẹp hơn
+  const textArray = [
+    "Xin chào! Tôi là sinh viên Đại Học Kỹ Thuật-Công Nghệ Cần Thơ.",
+    "Tôi đam mê xây dựng các hệ thống tự động hóa thông minh, IoT.",
+    "Và nghiên cứu giải pháp năng lượng tối ưu."
+  ];
+
+  const typingSpeed = 50;    // Tốc độ gõ
+  const deletingSpeed = 30;  // Tốc độ xóa
+  const pauseDuration = 2000; // Thời gian dừng
+
+  let textIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function typeEffect() {
+    if (!typeWriterElement) return;
+
+    const currentText = textArray[textIndex];
+    
+    if (isDeleting) {
+      typeWriterElement.textContent = currentText.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      typeWriterElement.textContent = currentText.substring(0, charIndex + 1);
+      charIndex++;
+    }
+
+    let typeSpeed = isDeleting ? deletingSpeed : typingSpeed;
+
+    if (!isDeleting && charIndex === currentText.length) {
+      typeSpeed = pauseDuration; // Dừng lại đọc
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      textIndex = (textIndex + 1) % textArray.length; // Chuyển câu tiếp theo
+      typeSpeed = 500;
+    }
+
+    setTimeout(typeEffect, typeSpeed);
+  }
+
+  // Chạy hiệu ứng
+  typeEffect();
 });
