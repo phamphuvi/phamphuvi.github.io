@@ -1,4 +1,4 @@
-/* ===== STYLE.CSS - DASHBOARD PRO ===== */
+/* ===== STYLE.CSS - DASHBOARD PRO (Update Button Uiverse) ===== */
 :root {
   /* DARK MODE (Mặc định) */
   --bg: #09090b;
@@ -84,17 +84,52 @@ ul { list-style: none; }
 .nav-item:hover { background: var(--card-hover); color: var(--text); transform: translateX(5px); }
 .nav-item .icon { font-size: 1.2rem; }
 
-/* Footer & Controls */
+/* ===== FOOTER & CONTROLS (NÚT BẤM MỚI) ===== */
 .sidebar-footer { margin-top: 20px; }
-.controls { display: flex; gap: 10px; margin-bottom: 16px; }
-.control-btn {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-  background: var(--card); border: 1px solid var(--border);
-  padding: 10px; border-radius: 8px; cursor: pointer;
-  color: var(--text); font-weight: 600; transition: 0.2s;
-}
-.control-btn:hover { background: var(--card-hover); border-color: var(--text-muted); }
 
+.controls { 
+  display: flex; 
+  gap: 12px; /* Khoảng cách giữa 2 nút */
+  margin-bottom: 20px; 
+  justify-content: center;
+}
+
+/* ÁP DỤNG STYLE TỪ UIVERSE (Đã chỉnh padding cho vừa sidebar) */
+.control-btn {
+  padding: 1.3em 1.5em; /* Giảm padding ngang từ 3em -> 1.5em để vừa hàng ngang */
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px; /* Giảm nhẹ spacing */
+  font-weight: 700; /* Tăng độ đậm */
+  color: #000;
+  background-color: #fff;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  
+  /* Flex để căn giữa nội dung nút */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1; /* Chia đều không gian nút */
+}
+
+.control-btn:hover {
+  background-color: #23c483;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.control-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Nút tải CV (Giữ nguyên style cũ cho khác biệt) */
 .btn-primary {
   display: block; text-align: center;
   background: var(--primary); color: white;
@@ -184,14 +219,12 @@ h3 { font-size: 1.4rem; margin-bottom: 12px; }
   .controls { justify-content: center; }
   .btn-primary { width: 100%; }
 }
-/* ===== Thêm vào cuối file style.css ===== */
 
-/* Class kích hoạt hiệu ứng */
+/* ===== ANIMATION: JELLO (Rung rinh) ===== */
 .jello-horizontal {
   animation: jello-horizontal 0.9s both;
 }
 
-/* Định nghĩa chuyển động */
 @keyframes jello-horizontal {
   0% { transform: scale3d(1, 1, 1); }
   30% { transform: scale3d(1.25, 0.75, 1); }
