@@ -23,7 +23,7 @@ window.addEventListener("DOMContentLoaded", function () {
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCV: "Tải CV / Resume",
       titleAbout: "Về tôi",
-      aboutText: "Đi cf nè Kim ơi",
+      aboutText: "Xin chào! Tôi là sinh viên năm cuối Đại học Công Nghệ - Kỹ Thuật Cần Thơ. Tôi đam mê xây dựng các hệ thống tự động hoá thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.",
       labelSchool: "Trường", labelLocation: "Nơi sống",
       titleProjects: "Dự án tiêu biểu",
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
