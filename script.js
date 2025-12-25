@@ -109,7 +109,7 @@ window.addEventListener("DOMContentLoaded", function () {
   const typeWriterElement = document.getElementById('typewriter-text');
   
   // Đoạn văn bản đầy đủ bạn muốn hiển thị
-  const fullText = "Xin chào! Tôi là sinh viên Đại Học Kỹ Thuật - Công Nghệ Cần Thơ. Tôi đam mê xây dựng các hệ thống tự động hóa thông minh, IoT và nghiên cứu giải pháp năng lượng tối ưu.";
+  const fullText = "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT. Với tư duy kỹ thuật nhạy bén, tôi luôn nỗ lực nghiên cứu và kiến tạo các giải pháp tối ưu hóa năng lượng, hướng đến việc xây dựng những hệ thống thông minh và bền vững cho tương lai.";
 
   const typingSpeed = 40; // Tốc độ gõ (ms) - Số càng nhỏ gõ càng nhanh
 
