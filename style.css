@@ -1,12 +1,12 @@
-/* ===== STYLE.CSS - JACK GROSS INSPIRED STYLE ===== */
+/* ===== STYLE.CSS - MAIN ===== */
 :root {
     /* LIGHT MODE DEFAULT */
-    --bg: #FFF0F5;              /* Hồng phấn nhạt */
-    --surface: #FFFFFF;         /* Trắng */
-    --primary: #5138EE;         /* Tím đậm chủ đạo */
+    --bg: #FFF0F5;              
+    --surface: #FFFFFF;         
+    --primary: #5138EE;         
     --primary-hover: #402BC4;
-    --text-main: #1A1A1A;       /* Đen hiển thị chữ chính */
-    --text-muted: #666666;      /* Xám chữ phụ */
+    --text-main: #1A1A1A;       
+    --text-muted: #666666;      
     --border: rgba(0, 0, 0, 0.05);
     --shadow: 0 20px 40px rgba(81, 56, 238, 0.1);
     --radius-l: 30px;
@@ -53,6 +53,7 @@ ul { list-style: none; }
     position: fixed; top: 0; left: 0; width: 100%;
     padding: 1.5rem 5%;
     background: rgba(var(--bg), 0.8);
+    background: var(--bg);
     background: color-mix(in srgb, var(--bg), transparent 20%);
     backdrop-filter: blur(10px);
     z-index: 1000;
@@ -98,7 +99,6 @@ ul { list-style: none; }
     margin-bottom: 20px; text-transform: uppercase;
 }
 
-/* HERO TITLE */
 .hero-title {
     font-size: 3.5rem;
     line-height: 1.05;
@@ -106,6 +106,7 @@ ul { list-style: none; }
     margin-bottom: 20px;
     letter-spacing: -1px;
     color: var(--text-main);
+    background: none; 
     max-width: 800px;
 }
 
@@ -139,6 +140,173 @@ ul { list-style: none; }
     animation: scrollMouse 2s infinite;
 }
 @keyframes scrollMouse { 0% { top: 6px; opacity: 1; } 100% { top: 20px; opacity: 0; } }
+
+/* ===== VISUAL SECTION (PROFILE CARD) ===== */
+.hero-visual {
+    flex: 1; height: 500px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    perspective: 1000px;
+}
+
+/* --- Ported from React ProfileCard.css --- */
+.pc-card-wrapper {
+  /* Các biến được JS cập nhật */
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-from-center: 0;
+  --pointer-from-left: 0.5;
+  --pointer-from-top: 0.5;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --background-x: 50%;
+  --background-y: 50%;
+  
+  /* Cấu hình màu sắc */
+  --card-radius: 30px;
+  --sunpillar-1: hsl(2, 100%, 73%);
+  --sunpillar-2: hsl(53, 100%, 69%);
+  --sunpillar-3: hsl(93, 100%, 69%);
+  --sunpillar-4: hsl(176, 100%, 76%);
+  --sunpillar-5: hsl(228, 100%, 74%);
+  --sunpillar-6: hsl(283, 100%, 73%);
+  
+  width: 300px;
+  height: 420px;
+  position: relative;
+  z-index: 10;
+  touch-action: none;
+}
+
+.pc-card-shell {
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+}
+
+.pc-card {
+  width: 100%; height: 100%;
+  border-radius: var(--card-radius);
+  position: relative;
+  /* Bóng đổ động theo vị trí chuột */
+  box-shadow: rgba(0, 0, 0, 0.6) 
+      calc((var(--pointer-from-left) * 20px) - 10px) 
+      calc((var(--pointer-from-top) * 20px) - 10px) 
+      30px -5px;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y));
+  background: rgba(0,0,0,0.8);
+  will-change: transform;
+}
+/* Trả về vị trí cũ khi chuột rời đi */
+.pc-card-wrapper:not(:hover) .pc-card {
+    transition: transform 0.5s ease-out;
+}
+
+.pc-inside {
+  position: absolute; inset: 0;
+  /* Gradient nền tím đậm như trong React code */
+  background: linear-gradient(145deg, #60496e8c 0%, #2a2a40 100%);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transform: translateZ(1px);
+}
+
+/* HIỆU ỨNG SHINE (Cầu vồng) */
+.pc-shine {
+  position: absolute; inset: 0; z-index: 2;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+}
+.pc-shine::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(
+    45deg, var(--sunpillar-4), var(--sunpillar-5), var(--sunpillar-6),
+    var(--sunpillar-1), var(--sunpillar-2), var(--sunpillar-3)
+  );
+  background-size: 200% 200%;
+  background-position: var(--pointer-x) var(--pointer-y);
+  filter: blur(25px); opacity: 0.4;
+}
+.pc-shine::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255,255,255,0.4) 0%, transparent 60%);
+  mix-blend-mode: screen;
+}
+
+/* HIỆU ỨNG GLARE (Phản chiếu kính) */
+.pc-glare {
+  position: absolute; inset: 0; z-index: 3;
+  background-image: radial-gradient(
+    farthest-corner circle at var(--pointer-x) var(--pointer-y),
+    rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 80%
+  );
+  mix-blend-mode: overlay; opacity: 0.8;
+}
+
+/* Content Layer */
+.pc-content {
+  position: relative; z-index: 5;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.pc-avatar-content {
+  display: flex; flex-direction: column; justify-content: flex-end;
+  transform: translateZ(20px);
+}
+
+.avatar {
+  position: absolute;
+  width: 105%; height: auto;
+  bottom: 0; left: -2.5%;
+  object-fit: cover;
+  /* Hiệu ứng Parallax cho Avatar */
+  transform: translateX(calc((var(--pointer-from-left) - 0.5) * 12px)) scale(1.02);
+}
+
+/* User Info Box (Thẻ kính mờ) */
+.pc-user-info {
+  position: absolute; bottom: 20px; left: 15px; right: 15px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  pointer-events: auto;
+  transform: translateZ(40px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.pc-user-details { display: flex; align-items: center; gap: 10px; }
+.pc-mini-avatar img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; }
+.pc-handle { color: #fff; font-weight: 700; font-size: 0.85rem; line-height: 1.2; }
+.pc-status { color: #4ade80; font-size: 0.7rem; font-weight: 600; }
+
+.pc-contact-btn {
+  background: #fff; color: #000; border: none;
+  padding: 6px 14px; border-radius: 8px;
+  font-weight: 700; font-size: 0.75rem; cursor: pointer;
+  transition: 0.2s;
+}
+.pc-contact-btn:hover { transform: scale(1.05); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+/* Tên và Chức danh nổi phía trên */
+.pc-details {
+  position: absolute; top: 40px; left: 0; right: 0; text-align: center;
+  transform: translateZ(50px) 
+             translateX(calc((var(--pointer-from-left) - 0.5) * -10px))
+             translateY(calc((var(--pointer-from-top) - 0.5) * -10px));
+}
+.pc-details h3 {
+  font-size: 2rem; margin: 0; font-weight: 800;
+  background: linear-gradient(to bottom, #fff, #a5b4fc);
+  -webkit-background-clip: text; color: transparent;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.pc-details p {
+  color: #c7d2fe; font-weight: 600; font-size: 0.9rem; margin-top: -5px;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
 
 /* ===== SECTIONS ===== */
 .content-section {
@@ -210,6 +378,9 @@ ul { list-style: none; }
     .hero-stats { justify-content: center; }
     .nav-links-desktop { display: none; }
     .footer-cta h2 { font-size: 2.5rem; }
+    /* Profile Card Mobile */
+    .pc-card-wrapper { width: 280px; height: 380px; }
+    .pc-details h3 { font-size: 1.6rem; }
 }
 
 .cursor { animation: blink 1s infinite; font-weight: 100; }
@@ -231,182 +402,4 @@ ul { list-style: none; }
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
-}
-
-/* =========================================
-   NEW PROFILE CARD STYLES (3D TILT)
-   ========================================= */
-
-.hero-visual {
-    flex: 1;
-    height: 500px;
-    position: relative;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    perspective: 1000px;
-    overflow: visible;
-}
-
-.pc-card-wrapper {
-    /* Biến CSS cho hiệu ứng nghiêng, sẽ được cập nhật bởi JS */
-    --pointer-x: 50%;
-    --pointer-y: 50%;
-    --rotate-x: 0deg;
-    --rotate-y: 0deg;
-    
-    width: 320px;
-    height: 420px;
-    position: relative;
-    z-index: 10;
-}
-
-.pc-card-shell {
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y));
-    transition: transform 0.1s cubic-bezier(0.2, 0.4, 0.6, 1);
-    will-change: transform;
-}
-
-.pc-card {
-    width: 100%;
-    height: 100%;
-    border-radius: 24px;
-    /* Nền kính mờ */
-    background: rgba(255, 255, 255, 0.08); 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1);
-    overflow: hidden;
-    position: relative;
-    transform-style: preserve-3d;
-}
-
-/* Hiệu ứng Shine (bóng sáng di chuyển theo chuột) */
-.pc-shine {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-        circle at var(--pointer-x) var(--pointer-y),
-        rgba(255, 255, 255, 0.25) 0%,
-        transparent 60%
-    );
-    z-index: 2;
-    pointer-events: none;
-    mix-blend-mode: soft-light;
-}
-
-/* Hiệu ứng Glare (phản chiếu bề mặt chéo) */
-.pc-glare {
-    position: absolute;
-    inset: -50%;
-    background: linear-gradient(
-        125deg,
-        rgba(255,255,255,0) 30%,
-        rgba(255,255,255,0.4) 45%, /* Điểm sáng nhất */
-        rgba(255,255,255,0) 60%
-    );
-    transform: translateX(calc((var(--pointer-x) - 50%) * 2));
-    opacity: 0.3;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.pc-content {
-    position: relative;
-    z-index: 5;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #fff; /* Nội dung thẻ luôn màu trắng để nổi bật */
-    transform: translateZ(40px); /* Đẩy nội dung nổi lên bề mặt 3D */
-}
-
-/* Avatar chính */
-.pc-avatar-big {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 4px solid rgba(255,255,255,0.9);
-    object-fit: cover;
-    margin-bottom: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-}
-
-/* Thông tin user (Hàng dưới avatar) */
-.pc-user-info {
-    width: 100%;
-    background: rgba(0,0,0,0.3);
-    border-radius: 16px;
-    padding: 10px 12px;
-    border: 1px solid rgba(255,255,255,0.15);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(5px);
-}
-
-.pc-user-details {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.pc-mini-avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    object-fit: cover;
-}
-
-.pc-user-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 0.8rem;
-    line-height: 1.2;
-}
-
-.pc-handle { font-weight: 700; color: #fff; }
-.pc-status { color: #4ade80; font-size: 0.7rem; font-weight: 600; }
-
-.pc-contact-btn {
-    background: #fff;
-    color: var(--primary); /* Lấy màu tím chủ đạo */
-    border: none;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.pc-contact-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
-.pc-bottom-details {
-    margin-top: auto;
-    width: 100%;
-    text-align: left;
-    transform: translateZ(20px);
-}
-.pc-bottom-details h3 { font-size: 1.6rem; margin: 0; text-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-.pc-bottom-details p { opacity: 0.9; font-size: 0.95rem; font-weight: 500; }
-
-/* Light Mode Override cho Card (Để đảm bảo nhìn thấy được trên nền sáng) */
-body.light .pc-card {
-    background: rgba(255, 255, 255, 0.2); /* Sáng hơn 1 chút */
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 20px 50px rgba(81, 56, 238, 0.15);
-}
-body.light .pc-content { color: #fff; } /* Vẫn giữ chữ trắng vì nền card tối do ảnh hưởng của màu nền body */
-/* Nếu thẻ bị chìm trong nền sáng, ta thêm lớp phủ tối nhẹ bên trong thẻ */
-body.light .pc-inside::before {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, rgba(81, 56, 238, 0.3), rgba(0,0,0,0.1));
-    z-index: 1; pointer-events: none; border-radius: 24px;
 }
