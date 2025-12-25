@@ -1,201 +1,43 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Phạm Phú Vĩ - Portfolio</title>
-  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Kỹ sư IoT & Tự động hoá tương lai.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-</head>
-<body>
-
-  <nav class="top-nav">
-    <div class="nav-container">
-      <div class="logo">
-        <span class="logo-emoji">⚡</span> PHAM PHU VI
-      </div>
-      
-      <div class="nav-links-desktop">
-        <a href="#about" id="navAbout">Về tôi</a>
-        <a href="#projects" id="navProjects">Dự án</a>
-        <a href="#skills" id="navSkills">Kỹ năng</a>
-        <a href="#contact" id="navContact">Liên hệ</a>
-      </div>
-
-      <div class="nav-controls">
-        <button id="langBtn" class="control-btn-small" title="Đổi ngôn ngữ">
-          <span class="btn-text">VI</span>
-        </button>
-        <button id="modeBtn" class="control-btn-small" title="Giao diện Sáng/Tối">
-          <span class="btn-icon">🌙</span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <main class="main-wrapper">
-    
-    <section class="hero-section" id="about">
-      <div class="hero-content">
-        <span class="badge-role" id="roleText">Sinh viên Kỹ thuật & IoT</span>
-        
-        <h1 class="hero-title" id="heroTitle"></h1>
-        
-        <div class="typewriter-container">
-          <p class="lead-text">
-            <span id="typewriter-text"></span><span class="cursor">|</span>
-          </p>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-box">
-            <b id="labelSchool">Trường</b>
-            <span id="valSchool">Đại Học Công Nghệ-Kỹ Thuật Cần Thơ</span>
-          </div>
-          <div class="stat-box">
-            <b id="labelLocation">Nơi sống</b>
-            <span id="valLocation">Cần Thơ, Việt Nam</span>
-          </div>
-        </div>
-
-        <div class="scroll-indicator">
-          <div class="mouse"></div>
-          <span>Scroll down</span>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <div class="pc-card-wrapper" id="profileCardWrapper">
-          <div class="pc-card-shell">
-            <section class="pc-card">
-              <div class="pc-inside">
-                <div class="pc-shine"></div>
-                <div class="pc-glare"></div>
-                
-                <div class="pc-content pc-avatar-content">
-                  <img src="img/avatar.jpg" alt="Phạm Phú Vĩ" class="pc-avatar-big" onerror="this.src='https://via.placeholder.com/150'"/>
-                  
-                  <div class="pc-user-info">
-                    <div class="pc-user-details">
-                      <div class="pc-mini-avatar">
-                        <img src="img/avatar.jpg" alt="Mini Avatar" onerror="this.src='https://via.placeholder.com/150'"/>
-                      </div>
-                      <div class="pc-user-text">
-                        <div class="pc-handle">@phamphuvi</div>
-                        <div class="pc-status">Online</div>
-                      </div>
-                    </div>
-                    <button class="pc-contact-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
-                      Contact Me
-                    </button>
-                  </div>
+<div class="hero-visual">
+  <div class="pc-card-wrapper" id="profileCardWrapper">
+    <div class="pc-card-shell">
+      <div class="pc-card">
+        <div class="pc-inside">
+          <div class="pc-shine"></div>
+          <div class="pc-glare"></div>
+          
+          <div class="pc-content pc-avatar-content">
+            <img 
+              src="img/avatar.jpg" 
+              alt="Avatar" 
+              class="avatar"
+              onerror="this.src='https://via.placeholder.com/300'"
+            />
+            
+            <div class="pc-user-info">
+              <div class="pc-user-details">
+                <div class="pc-mini-avatar">
+                  <img src="img/avatar.jpg" alt="Mini Avatar" onerror="this.src='https://via.placeholder.com/50'"/>
                 </div>
-                
-                <div class="pc-content pc-bottom-details">
-                  <div class="pc-details">
-                    <h3>Phạm Phú Vĩ</h3>
-                    <p>IoT & Automation Engineer</p>
-                  </div>
+                <div class="pc-user-text">
+                  <div class="pc-handle">@phamphuvi</div>
+                  <div class="pc-status">Online</div>
                 </div>
               </div>
-            </section>
+              <button class="pc-contact-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
+                Contact Me
+              </button>
+            </div>
+          </div>
+          
+          <div class="pc-content">
+            <div class="pc-details">
+              <h3>Phạm Phú Vĩ</h3>
+              <p>IoT & Automation Engineer</p>
+            </div>
           </div>
         </div>
       </div>
-      </section>
-
-    <section id="projects" class="content-section">
-      <div class="section-header">
-        <span class="section-tag" id="titleProjects">Dự án tiêu biểu</span>
-        <h2 id="sloganProjects">Think. Make. Solve.</h2>
-      </div>
-      
-      <div class="cards-grid">
-        <article class="feature-card color-1">
-          <div class="card-icon">💧</div>
-          <h3 id="p1Title">Mô hình mức nước</h3>
-          <p id="p1Text">Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.</p>
-          <div class="tags">
-            <span>PLC</span><span>PID</span>
-          </div>
-        </article>
-        
-        <article class="feature-card color-2">
-          <div class="card-icon">🌱</div>
-          <h3 id="p2Title">Giám sát IoT</h3>
-          <p id="p2Text">Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.</p>
-          <div class="tags">
-            <span>IoT</span><span>ESP32</span>
-          </div>
-        </article>
-        
-        <article class="feature-card color-3">
-          <div class="card-icon">☀️</div>
-          <h3 id="p3Title">Tối ưu hoá PVsyst</h3>
-          <p id="p3Text">Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.</p>
-          <div class="tags">
-            <span>Solar</span><span>PVsyst</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="skills" class="content-section">
-      <div class="section-header">
-        <span class="section-tag" id="titleSkills">Kỹ năng</span>
-      </div>
-      <div class="skills-container">
-        <div class="skill-card">
-          <h3 id="skTech">Kỹ thuật</h3>
-          <ul class="clean-list">
-            <li id="skTechItem1">Điện - Điện tử, Mạch nguyên lý</li>
-            <li id="skTechItem2">Lập trình C/C++, Arduino, Python cơ bản</li>
-            <li>Vi xử lý: ESP32, STM32, PLC</li>
-          </ul>
-        </div>
-        <div class="skill-card">
-          <h3 id="skTools">Công cụ</h3>
-          <ul class="clean-list">
-            <li id="skToolsItem1">Matlab/Simulink, AutoCAD, Altium</li>
-            <li id="skToolsItem2">PVsyst, GitHub, MS Office</li>
-            <li>VS Code, Keil C</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="footer-cta">
-      <div class="cta-content">
-        <span class="cta-tag" id="contactHint">Đừng ngần ngại liên hệ với tôi qua:</span>
-        <h2 id="titleContact">Liên hệ</h2>
-        
-        <div class="contact-buttons">
-            <a href="tel:0984810120" class="btn-pill white">
-                📞 0984 810 120
-            </a>
-            <a id="openGmailBtn" href="#" class="btn-pill white">
-                📧 <span id="yourEmail">phamphuvi9@gmail.com</span>
-            </a>
-            <a id="fbLink" href="#" target="_blank" class="btn-pill white">
-                🔵 Facebook
-            </a>
-            <a id="ctaCV" href="cv/Phạm Phú Vĩ.pdf" target="_blank" class="btn-pill outline">
-                📄 <span id="ctaCVText">Tải CV / Resume</span>
-            </a>
-        </div>
-        
-        <footer class="real-footer">
-            © <span id="year">2025</span> Phạm Phú Vĩ.
-        </footer>
-      </div>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
+    </div>
+  </div>
+</div>
