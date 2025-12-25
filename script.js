@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", function () {
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
       titleProjects: "Dự án tiêu biểu",
-      sloganProjects: "Suy Nghĩ. Sáng tạo. Giải quyết.",
+      sloganProjects: "Tư duy. Thực hiện. Giải quyết.",
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
