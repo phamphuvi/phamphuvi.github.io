@@ -21,6 +21,10 @@ window.addEventListener("DOMContentLoaded", function () {
       ctaCV: "Tải CV / Resume",
       titleAbout: "Về tôi",
       labelSchool: "Trường", labelLocation: "Nơi sống",
+      // --- ĐÃ THÊM DỮ LIỆU TIẾNG VIỆT ---
+      valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
+      valLocation: "Cần Thơ, Việt Nam",
+
       titleProjects: "Dự án tiêu biểu",
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá.",
@@ -31,7 +35,6 @@ window.addEventListener("DOMContentLoaded", function () {
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
       
-      // --- ĐÃ THÊM PHẦN NÀY ĐỂ FIX LỖI ---
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT. Với tư duy kỹ thuật nhạy bén, tôi luôn nỗ lực nghiên cứu và kiến tạo các giải pháp tối ưu hóa năng lượng, hướng đến việc xây dựng những hệ thống thông minh và bền vững cho tương lai."
     },
     en: {
@@ -40,6 +43,10 @@ window.addEventListener("DOMContentLoaded", function () {
       ctaCV: "Download CV",
       titleAbout: "About Me",
       labelSchool: "University", labelLocation: "Location",
+      // --- ĐÃ THÊM DỮ LIỆU TIẾNG ANH ---
+      valSchool: "Can Tho University of Technology",
+      valLocation: "Can Tho, Vietnam",
+
       titleProjects: "Featured Projects",
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control/inverter, status display.",
       p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming, and visualization.",
@@ -50,7 +57,6 @@ window.addEventListener("DOMContentLoaded", function () {
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
 
-      // --- ĐÃ THÊM BẢN DỊCH TIẾNG ANH ---
       "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT. With a sharp technical mindset, I constantly strive to research and create energy-optimized solutions, aiming to build smart and sustainable systems for the future."
     }
   };
@@ -78,6 +84,20 @@ window.addEventListener("DOMContentLoaded", function () {
     triggerAnimation("langBtn");
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
+    
+    // Reset hiệu ứng gõ chữ khi đổi ngôn ngữ
+    if(typeWriterElement) {
+        // Cập nhật text mới
+        const newText = I18N[currentLang]["typewriter-text"];
+        // Nếu muốn chạy lại hiệu ứng từ đầu:
+        charIndex = 0;
+        typeWriterElement.textContent = "";
+        // Gọi lại hàm gõ chữ (cần cẩn thận để không bị chồng chéo timeout, nhưng đơn giản nhất là để nó tự chạy tiếp hoặc reload)
+        // Cách tốt nhất đơn giản cho code này là reload trang hoặc gán thẳng text nếu không muốn phức tạp logic gõ chữ
+        // Ở đây tôi chọn cách reload nhẹ hoặc gán thẳng text để tránh lỗi hiển thị
+        // typeWriterElement.textContent = newText; // Bỏ comment dòng này nếu muốn hiện luôn không gõ lại
+        window.location.reload(); // Reload để hiệu ứng gõ chữ mượt mà nhất với ngôn ngữ mới
+    }
   });
 
   // === 4. XỬ LÝ GIAO DIỆN SÁNG/TỐI ===
@@ -113,19 +133,15 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 6. HIỆU ỨNG GÕ CHỮ (CHỈ CHẠY KHI RELOAD TRANG - DÙNG TIẾNG VIỆT MẶC ĐỊNH HOẶC THEO STORAGE) ===
+  // === 6. HIỆU ỨNG GÕ CHỮ ===
   const typeWriterElement = document.getElementById('typewriter-text');
-  
-  // Lấy nội dung từ I18N dựa trên ngôn ngữ đang chọn lúc load trang
+  // Lấy nội dung từ I18N
   const fullText = I18N[currentLang]["typewriter-text"]; 
-
   const typingSpeed = 40; 
   let charIndex = 0;
 
   function typeEffect() {
     if (!typeWriterElement) return;
-
-    // Chỉ chạy hiệu ứng gõ nếu nội dung chưa hiển thị hết (để tránh xung đột khi đổi ngôn ngữ)
     if (charIndex < fullText.length) {
        typeWriterElement.textContent = fullText.substring(0, charIndex + 1);
        charIndex++;
@@ -133,8 +149,6 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Bắt đầu chạy hiệu ứng
-  // Reset text về rỗng trước khi gõ để tạo hiệu ứng
   if(typeWriterElement) {
       typeWriterElement.textContent = ""; 
       typeEffect();
