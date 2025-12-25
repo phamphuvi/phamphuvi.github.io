@@ -12,6 +12,7 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
+
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
       p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
@@ -20,10 +21,12 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
+      
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
       heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
+
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
       ctaCVText: "Download CV", 
@@ -32,6 +35,7 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "University", labelLocation: "Location",
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
+
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control.",
       p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming.",
       p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment.",
@@ -40,6 +44,7 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
+
       "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
     }
   };
@@ -63,6 +68,7 @@ window.addEventListener("DOMContentLoaded", function () {
         initBlurText("heroTitle", 100);
     }, 50);
   }
+  
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
@@ -109,6 +115,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if (!el) return;
     
     el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
+
     const childNodes = Array.from(el.childNodes);
     el.innerHTML = ''; 
 
@@ -189,7 +196,7 @@ window.addEventListener("DOMContentLoaded", function () {
     observer.observe(el);
   });
 
-  // === 6. PROFILE CARD TILT ENGINE (NEW ADDITION) ===
+  // === 6. PROFILE CARD TILT ENGINE (Đã chuyển đổi từ React sang JS thuần) ===
   function initProfileCard() {
     const wrap = document.getElementById('profileCardWrapper');
     if (!wrap) return;
@@ -202,24 +209,35 @@ window.addEventListener("DOMContentLoaded", function () {
     let currentY = height / 2;
     let rafId = null;
 
+    // Giới hạn giá trị min/max
     const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
-    
+
+    // Cập nhật biến CSS để tạo hiệu ứng 3D
     function updateCSS(x, y) {
         const percentX = clamp((100 / width) * x, 0, 100);
         const percentY = clamp((100 / height) * y, 0, 100);
         
-        // Góc xoay: Chia cho 3 để xoay vừa phải
-        const rotateX = (50 - percentY) / 3; 
+        // Tính toán các thông số vị trí cho ánh sáng và bóng đổ
+        const pointerFromLeft = x / width;
+        const pointerFromTop = y / height;
+        const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
+
+        // Góc xoay (Chia số càng lớn thì xoay càng nhẹ)
+        const rotateX = -((percentY - 50) / 3.5); 
         const rotateY = (percentX - 50) / 3;
 
         wrap.style.setProperty('--pointer-x', `${percentX}%`);
         wrap.style.setProperty('--pointer-y', `${percentY}%`);
+        wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
+        wrap.style.setProperty('--pointer-from-top', pointerFromTop);
+        wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
         wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
         wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
     }
 
+    // Animation loop (Lerp - Linear Interpolation) để chuyển động mượt mà
     function animate() {
-        const k = 0.08; // Độ mượt (0.01 -> 1)
+        const k = 0.1; // Độ trễ (0.1 = mượt, 1 = nhanh)
         currentX += (targetX - currentX) * k;
         currentY += (targetY - currentY) * k;
 
@@ -237,6 +255,7 @@ window.addEventListener("DOMContentLoaded", function () {
         if (!rafId) rafId = requestAnimationFrame(animate);
     }
 
+    // Sự kiện chuột
     wrap.addEventListener('mousemove', (e) => {
         const rect = wrap.getBoundingClientRect();
         targetX = e.clientX - rect.left;
@@ -255,10 +274,11 @@ window.addEventListener("DOMContentLoaded", function () {
         height = wrap.clientHeight;
     });
     
-    updateCSS(width/2, height/2);
+    // Khởi tạo trạng thái ban đầu
+    updateCSS(width / 2, height / 2);
   }
 
-  // Gọi hàm khởi tạo
+  // Kích hoạt Profile Card
   initProfileCard();
 
 });
