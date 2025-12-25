@@ -1,22 +1,25 @@
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (TEXT ĐÃ TỐI ƯU HÓA) ===
   const I18N = {
     vi: {
+      // Dòng này đã được làm đẹp với thẻ <br> và <span highlight>
+      heroTitle: "Xin chào, tôi là <span class='text-highlight'>Vĩ</span>.<br>Tôi kiến tạo<br>Hệ thống thông minh.",
+      
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
       titleProjects: "Dự án tiêu biểu",
-      sloganProjects: "Think. Make. Solve.", // Thêm Slogan tiếng Việt (nếu muốn dịch)
+      sloganProjects: "Think. Make. Solve.",
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
 
-      p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
-      p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá.",
-      p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời để hỗ trợ ra quyết định đầu tư.",
+      p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
+      p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
+      p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
       titleSkills: "Kỹ năng", skTech: "Kỹ thuật", skTools: "Công cụ",
-      skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python cơ bản",
+      skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python",
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
@@ -24,6 +27,9 @@ window.addEventListener("DOMContentLoaded", function () {
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
+      // ENGLISH VERSION
+      heroTitle: "Hello, I'm <span class='text-highlight'>Vi</span>.<br>I Build Smart<br>Systems.",
+
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
       ctaCVText: "Download CV", 
@@ -33,9 +39,9 @@ window.addEventListener("DOMContentLoaded", function () {
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
 
-      p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control/inverter, status display.",
-      p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming, and visualization.",
-      p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment decisions.",
+      p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control.",
+      p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming.",
+      p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment.",
       titleSkills: "Skills", skTech: "Technical", skTools: "Tools",
       skTechItem1: "Electronics, Circuit Design", skTechItem2: "C/C++, Arduino, Python Basic",
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
@@ -53,11 +59,19 @@ window.addEventListener("DOMContentLoaded", function () {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
-      if (el) el.textContent = text;
+      if (el) {
+          // --- QUAN TRỌNG: Dùng innerHTML để hiển thị màu sắc ---
+          el.innerHTML = text; 
+      }
     }
     const btnText = document.querySelector("#langBtn .btn-text");
     if(btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
+
+    // Reset animation
+    setTimeout(() => {
+        initBlurText("heroTitle", 100);
+    }, 50);
   }
   
   applyLang(currentLang);
@@ -68,12 +82,10 @@ window.addEventListener("DOMContentLoaded", function () {
     window.location.reload(); 
   });
 
-  // === 3. XỬ LÝ GIAO DIỆN SÁNG/TỐI ===
+  // === 3. DARK MODE ===
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
-  
-  // Mặc định là Light theo giao diện mới
   let currentMode = localStorage.getItem("mode") || "light"; 
 
   function applyMode(mode) {
@@ -93,7 +105,7 @@ window.addEventListener("DOMContentLoaded", function () {
     applyMode(currentMode);
   });
 
-  // === 4. LINK LIÊN KẾT ===
+  // === 4. LINKS ===
   document.getElementById("year").textContent = new Date().getFullYear();
   const YOUR_EMAIL = "phamphuvi9@gmail.com";
   document.getElementById("openGmailBtn").addEventListener("click", (e) => {
@@ -102,50 +114,14 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 5. HIỆU ỨNG GÕ CHỮ (TYPEWRITER) ===
-  const typeWriterElement = document.getElementById('typewriter-text');
-  const fullText = I18N[currentLang]["typewriter-text"]; 
-  const typingSpeed = 40; 
-  let charIndex = 0;
-
-  function typeEffect() {
-    if (!typeWriterElement) return;
-    if (charIndex < fullText.length) {
-       typeWriterElement.textContent = fullText.substring(0, charIndex + 1);
-       charIndex++;
-       setTimeout(typeEffect, typingSpeed);
-    }
-  }
-
-  if(typeWriterElement) {
-      typeWriterElement.textContent = ""; 
-      typeEffect();
-  }
-
-  // === 6. ANIMATION CUỘN TRANG (CARD FADE IN) ===
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-      }
-    });
-  }, { threshold: 0.1 });
-
-  const animatedElements = document.querySelectorAll('.feature-card, .skill-card, .hero-content');
-  animatedElements.forEach(el => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(30px)";
-    el.style.transition = "all 0.8s ease-out";
-    observer.observe(el);
-  });
-
-  // === 7. HIỆU ỨNG BLUR TEXT (MỚI THÊM) ===
+  // === 5. BLUR TEXT ANIMATION (FIXED FOR SPAN) ===
   function initBlurText(elementId, delay = 150) {
     const el = document.getElementById(elementId);
     if (!el) return;
+    
+    // Lấy nội dung gốc để tránh lỗi khi chạy lại
+    el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
 
-    // Tách nội dung thành các từ, giữ nguyên thẻ <br>
     const childNodes = Array.from(el.childNodes);
     el.innerHTML = ''; 
 
@@ -161,10 +137,14 @@ window.addEventListener("DOMContentLoaded", function () {
                     el.appendChild(document.createTextNode(' ')); 
                 }
             });
-        } else if (node.tagName === 'BR') {
-            el.appendChild(node);
         } else {
-             el.appendChild(node);
+             // Giữ nguyên thẻ Highlight hoặc BR
+             const clone = node.cloneNode(true);
+             if (clone.tagName !== 'BR' && !clone.classList.contains('blur-word')) {
+                 clone.classList.add('blur-word');
+             }
+             el.appendChild(clone);
+             if (clone.tagName !== 'BR') el.appendChild(document.createTextNode(' '));
         }
     });
 
@@ -185,11 +165,42 @@ window.addEventListener("DOMContentLoaded", function () {
     textObserver.observe(el);
   }
 
-  // KÍCH HOẠT HIỆU ỨNG CHO 3 VỊ TRÍ
+  // === RUN ANIMATION ===
   setTimeout(() => {
-      initBlurText("heroTitle", 100);       // "Hello, I'm Vĩ..."
-      initBlurText("sloganProjects", 150);  // "Think. Make. Solve."
-      initBlurText("titleContact", 150);    // "Liên hệ"
+      initBlurText("heroTitle", 100);       
+      initBlurText("sloganProjects", 150);  
+      initBlurText("titleContact", 150);  
+      
+      // Typewriter Effect
+      const typeWriterElement = document.getElementById('typewriter-text');
+      const fullText = I18N[currentLang]["typewriter-text"]; 
+      let charIndex = 0;
+      if(typeWriterElement) {
+        typeWriterElement.textContent = "";
+        function type() {
+            if (charIndex < fullText.length) {
+                typeWriterElement.textContent += fullText.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 40);
+            }
+        }
+        type();
+      }
   }, 100);
 
+  // === SCROLL FADE IN ===
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feature-card, .skill-card, .hero-content').forEach(el => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(30px)";
+    el.style.transition = "all 0.8s ease-out";
+    observer.observe(el);
+  });
 });
