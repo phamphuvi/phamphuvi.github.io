@@ -1,31 +1,16 @@
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === 1. HÀM TẠO HIỆU ỨNG RUNG (JELLO) ===
-  function triggerAnimation(elementId) {
-    const el = document.getElementById(elementId);
-    if (el) {
-      el.classList.remove("jello-horizontal");
-      void el.offsetWidth;
-      el.classList.add("jello-horizontal");
-      setTimeout(() => {
-        el.classList.remove("jello-horizontal");
-      }, 900);
-    }
-  }
-
-  // === 2. DỮ LIỆU ĐA NGÔN NGỮ ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (GIỮ NGUYÊN NỘI DUNG CỦA BẠN) ===
   const I18N = {
     vi: {
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
-      ctaCV: "Tải CV / Resume",
-      titleAbout: "Về tôi",
+      ctaCVText: "Tải CV / Resume", // Updated ID for new layout
+      titleProjects: "Dự án tiêu biểu",
       labelSchool: "Trường", labelLocation: "Nơi sống",
-      // --- ĐÃ THÊM DỮ LIỆU TIẾNG VIỆT ---
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
 
-      titleProjects: "Dự án tiêu biểu",
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần, hiển thị trạng thái.",
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính và trực quan hoá.",
       p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời để hỗ trợ ra quyết định đầu tư.",
@@ -35,19 +20,17 @@ window.addEventListener("DOMContentLoaded", function () {
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
       
-      "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT. Với tư duy kỹ thuật nhạy bén, tôi luôn nỗ lực nghiên cứu và kiến tạo các giải pháp tối ưu hóa năng lượng, hướng đến việc xây dựng những hệ thống thông minh và bền vững cho tương lai."
+      "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
-      ctaCV: "Download CV",
-      titleAbout: "About Me",
+      ctaCVText: "Download CV", // Updated ID
+      titleProjects: "Featured Projects",
       labelSchool: "University", labelLocation: "Location",
-      // --- ĐÃ THÊM DỮ LIỆU TIẾNG ANH ---
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
 
-      titleProjects: "Featured Projects",
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control/inverter, status display.",
       p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming, and visualization.",
       p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment decisions.",
@@ -57,11 +40,11 @@ window.addEventListener("DOMContentLoaded", function () {
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
 
-      "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT. With a sharp technical mindset, I constantly strive to research and create energy-optimized solutions, aiming to build smart and sustainable systems for the future."
+      "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
     }
   };
 
-  // === 3. XỬ LÝ NGÔN NGỮ ===
+  // === 2. XỬ LÝ NGÔN NGỮ ===
   let currentLang = localStorage.getItem("lang") || "vi";
   
   function applyLang(lang) {
@@ -71,60 +54,47 @@ window.addEventListener("DOMContentLoaded", function () {
       if (el) el.textContent = text;
     }
     const btnText = document.querySelector("#langBtn .btn-text");
-    const btnIcon = document.querySelector("#langBtn .btn-icon");
     if(btnText) btnText.textContent = data.langBtnText;
-    if(btnIcon) btnIcon.textContent = lang === "vi" ? "🇻🇳" : "🇺🇸";
     localStorage.setItem("lang", lang);
   }
   
-  // Chạy lần đầu
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
-    triggerAnimation("langBtn");
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
-    
-    // Reset hiệu ứng gõ chữ khi đổi ngôn ngữ
-    if(typeWriterElement) {
-        // Cập nhật text mới
-        const newText = I18N[currentLang]["typewriter-text"];
-        // Nếu muốn chạy lại hiệu ứng từ đầu:
-        charIndex = 0;
-        typeWriterElement.textContent = "";
-        // Gọi lại hàm gõ chữ (cần cẩn thận để không bị chồng chéo timeout, nhưng đơn giản nhất là để nó tự chạy tiếp hoặc reload)
-        // Cách tốt nhất đơn giản cho code này là reload trang hoặc gán thẳng text nếu không muốn phức tạp logic gõ chữ
-        // Ở đây tôi chọn cách reload nhẹ hoặc gán thẳng text để tránh lỗi hiển thị
-        // typeWriterElement.textContent = newText; // Bỏ comment dòng này nếu muốn hiện luôn không gõ lại
-        window.location.reload(); // Reload để hiệu ứng gõ chữ mượt mà nhất với ngôn ngữ mới
-    }
+    window.location.reload(); 
   });
 
-  // === 4. XỬ LÝ GIAO DIỆN SÁNG/TỐI ===
+  // === 3. XỬ LÝ GIAO DIỆN SÁNG/TỐI (LOGIC MỚI CHO GIAO DIỆN HỒNG) ===
+  // Mặc định giao diện này là Light (Hồng), Dark là (Tím đen)
+  // Logic cũ: Dark là default. 
+  // Để khớp với code CSS mới: body.light -> Màu Hồng. 
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
-  let currentMode = localStorage.getItem("mode") || "dark";
+  
+  // Set mặc định là Light cho giống video
+  let currentMode = localStorage.getItem("mode") || "light"; 
 
   function applyMode(mode) {
     if (mode === "light") {
       root.classList.add("light");
-      modeIcon.textContent = "☀️";
+      modeIcon.textContent = "☀️"; // Icon mặt trời cho mode sáng
     } else {
       root.classList.remove("light");
-      modeIcon.textContent = "🌙";
+      modeIcon.textContent = "🌙"; // Icon trăng cho mode tối
     }
     localStorage.setItem("mode", mode);
   }
   applyMode(currentMode);
 
   modeBtn.addEventListener("click", () => {
-    triggerAnimation("modeBtn");
-    currentMode = currentMode === "dark" ? "light" : "dark";
+    currentMode = currentMode === "light" ? "dark" : "light";
     applyMode(currentMode);
   });
 
-  // === 5. CÁC TÁC VỤ KHÁC ===
+  // === 4. LINK LIÊN KẾT ===
   document.getElementById("year").textContent = new Date().getFullYear();
   const YOUR_EMAIL = "phamphuvi9@gmail.com";
   document.getElementById("openGmailBtn").addEventListener("click", (e) => {
@@ -133,9 +103,8 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 6. HIỆU ỨNG GÕ CHỮ ===
+  // === 5. HIỆU ỨNG GÕ CHỮ ===
   const typeWriterElement = document.getElementById('typewriter-text');
-  // Lấy nội dung từ I18N
   const fullText = I18N[currentLang]["typewriter-text"]; 
   const typingSpeed = 40; 
   let charIndex = 0;
@@ -153,4 +122,23 @@ window.addEventListener("DOMContentLoaded", function () {
       typeWriterElement.textContent = ""; 
       typeEffect();
   }
+
+  // === 6. ANIMATION KHI CUỘN TRANG (SCROLL REVEAL) ===
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+      }
+    });
+  }, { threshold: 0.1 });
+
+  // Chọn các phần tử cần animate
+  const animatedElements = document.querySelectorAll('.feature-card, .skill-card, .hero-content');
+  animatedElements.forEach(el => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(30px)";
+    el.style.transition = "all 0.8s ease-out";
+    observer.observe(el);
+  });
 });
