@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", function () {
     },
     en: {
       // ENGLISH VERSION
-      heroTitle: "Hello, I'm <span class='text-highlight'>Vi</span>.<br>Welcome to my<br>Personal Projects.",
+      heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
 
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
