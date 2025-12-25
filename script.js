@@ -29,7 +29,10 @@ window.addEventListener("DOMContentLoaded", function () {
       skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python cơ bản",
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
-      langBtnText: "VI"
+      langBtnText: "VI",
+      
+      // --- ĐÃ THÊM PHẦN NÀY ĐỂ FIX LỖI ---
+      "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT. Với tư duy kỹ thuật nhạy bén, tôi luôn nỗ lực nghiên cứu và kiến tạo các giải pháp tối ưu hóa năng lượng, hướng đến việc xây dựng những hệ thống thông minh và bền vững cho tương lai."
     },
     en: {
       roleText: "IoT & Automation Student",
@@ -45,7 +48,10 @@ window.addEventListener("DOMContentLoaded", function () {
       skTechItem1: "Electronics, Circuit Design", skTechItem2: "C/C++, Arduino, Python Basic",
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
-      langBtnText: "EN"
+      langBtnText: "EN",
+
+      // --- ĐÃ THÊM BẢN DỊCH TIẾNG ANH ---
+      "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT. With a sharp technical mindset, I constantly strive to research and create energy-optimized solutions, aiming to build smart and sustainable systems for the future."
     }
   };
 
@@ -64,6 +70,8 @@ window.addEventListener("DOMContentLoaded", function () {
     if(btnIcon) btnIcon.textContent = lang === "vi" ? "🇻🇳" : "🇺🇸";
     localStorage.setItem("lang", lang);
   }
+  
+  // Chạy lần đầu
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
@@ -105,31 +113,30 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 6. HIỆU ỨNG GÕ CHỮ (CHẠY 1 LẦN RỒI DỪNG) ===
+  // === 6. HIỆU ỨNG GÕ CHỮ (CHỈ CHẠY KHI RELOAD TRANG - DÙNG TIẾNG VIỆT MẶC ĐỊNH HOẶC THEO STORAGE) ===
   const typeWriterElement = document.getElementById('typewriter-text');
   
-  // Đoạn văn bản đầy đủ bạn muốn hiển thị
-  const fullText = "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT. Với tư duy kỹ thuật nhạy bén, tôi luôn nỗ lực nghiên cứu và kiến tạo các giải pháp tối ưu hóa năng lượng, hướng đến việc xây dựng những hệ thống thông minh và bền vững cho tương lai.";
+  // Lấy nội dung từ I18N dựa trên ngôn ngữ đang chọn lúc load trang
+  const fullText = I18N[currentLang]["typewriter-text"]; 
 
-  const typingSpeed = 40; // Tốc độ gõ (ms) - Số càng nhỏ gõ càng nhanh
-
+  const typingSpeed = 40; 
   let charIndex = 0;
 
   function typeEffect() {
     if (!typeWriterElement) return;
 
-    // Gõ thêm 1 ký tự vào màn hình
-    typeWriterElement.textContent = fullText.substring(0, charIndex + 1);
-    charIndex++;
-
-    // Kiểm tra xem đã gõ hết chưa
-    if (charIndex <= fullText.length) {
-      // Nếu chưa hết, đợi 40ms rồi gõ tiếp ký tự sau
-      setTimeout(typeEffect, typingSpeed);
-    } 
-    // Nếu gõ hết rồi thì hàm sẽ tự kết thúc tại đây (không xóa, không lặp lại)
+    // Chỉ chạy hiệu ứng gõ nếu nội dung chưa hiển thị hết (để tránh xung đột khi đổi ngôn ngữ)
+    if (charIndex < fullText.length) {
+       typeWriterElement.textContent = fullText.substring(0, charIndex + 1);
+       charIndex++;
+       setTimeout(typeEffect, typingSpeed);
+    }
   }
 
   // Bắt đầu chạy hiệu ứng
-  typeEffect();
+  // Reset text về rỗng trước khi gõ để tạo hiệu ứng
+  if(typeWriterElement) {
+      typeWriterElement.textContent = ""; 
+      typeEffect();
+  }
 });
