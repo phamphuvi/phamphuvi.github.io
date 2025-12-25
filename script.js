@@ -4,7 +4,7 @@ window.addEventListener("DOMContentLoaded", function () {
   const I18N = {
     vi: {
       // Dòng này đã được làm đẹp với thẻ <br> và <span highlight>
-      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ</span>. Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
+      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
       
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
