@@ -1,14 +1,12 @@
 /* ===== STYLE.CSS - JACK GROSS INSPIRED STYLE ===== */
 :root {
-    /* LIGHT MODE (Mặc định - Màu giống Video) */
+    /* LIGHT MODE DEFAULT */
     --bg: #FFF0F5;              /* Hồng phấn nhạt */
     --surface: #FFFFFF;         /* Trắng */
     --primary: #5138EE;         /* Tím đậm chủ đạo */
     --primary-hover: #402BC4;
     --text-main: #1A1A1A;       /* Đen hiển thị chữ chính */
     --text-muted: #666666;      /* Xám chữ phụ */
-    --accent-1: #FFD700;        /* Vàng (Quả cầu) */
-    --accent-2: #FF6B6B;        /* Hồng đậm */
     --border: rgba(0, 0, 0, 0.05);
     --shadow: 0 20px 40px rgba(81, 56, 238, 0.1);
     --radius-l: 30px;
@@ -16,27 +14,8 @@
     --font-main: 'Manrope', sans-serif;
 }
 
-/* DARK MODE (Tự động chuyển sang màu tối vẫn giữ phong cách tím) */
-.light { /* Lưu ý: Logic JS của bạn đang dùng class 'light' để đổi mode, 
-            nhưng vì giao diện mặc định này là Sáng, nên ta đảo ngược logic CSS một chút 
-            hoặc coi class .light là Dark mode nếu bạn muốn giữ code JS cũ.
-            Tuy nhiên, để khớp logic JS cũ (default dark), tôi sẽ set Default ở trên là Light style 
-            và dưới đây là Dark style */
-}
-
-/* Override lại logic cũ: Mặc định theme này là Sáng. 
-   Nếu JS xoá class .light (tức là về dark cũ) -> Ta hiển thị màu tối.
-   Nếu JS thêm class .light -> Ta hiển thị màu sáng.
-   
-   Để đơn giản: Tôi set mặc định ở :root là Sáng (như video).
-   Dưới đây là style cho Dark mode (khi không có class .light hoặc ngược lại tùy JS).
-   
-   Dựa trên JS cũ: Default là Dark. 
-   => Vậy tôi sẽ set biến cho body mặc định là Dark, .light là Sáng.
-*/
-
-:root {
-    /* DARK MODE DEFAULT (Cho khớp với logic JS cũ) */
+/* DARK MODE */
+body:not(.light) {
     --bg: #0f0c29;
     --surface: #1b1641;
     --primary: #7660ff;
@@ -45,7 +24,7 @@
     --shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* Khi có class .light (Mode Sáng - Giống Video) */
+/* Force light mode logic based on JS */
 body.light {
     --bg: #FFF0F5;
     --surface: #FFFFFF;
@@ -73,7 +52,9 @@ ul { list-style: none; }
 .top-nav {
     position: fixed; top: 0; left: 0; width: 100%;
     padding: 1.5rem 5%;
-    background: rgba(var(--bg), 0.8);
+    background: rgba(var(--bg), 0.8); /* Lỗi màu nền nếu var chưa define, fallback */
+    background: var(--bg); /* Override để chắc chắn */
+    background: color-mix(in srgb, var(--bg), transparent 20%);
     backdrop-filter: blur(10px);
     z-index: 1000;
     display: flex; justify-content: center;
@@ -264,10 +245,27 @@ ul { list-style: none; }
     .hero-visual { height: 300px; width: 100%; margin-bottom: 30px; }
     .hero-title { font-size: 2.5rem; }
     .hero-stats { justify-content: center; }
-    .nav-links-desktop { display: none; } /* Ẩn menu trên mobile cho gọn */
+    .nav-links-desktop { display: none; }
     .footer-cta h2 { font-size: 2.5rem; }
 }
 
-/* Typing Effect cursor */
 .cursor { animation: blink 1s infinite; font-weight: 100; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ===== BLUR TEXT EFFECT (NEW) ===== */
+.blur-word {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(-50px); /* Bay từ trên xuống */
+    transition: all 0.8s cubic-bezier(0.2, 0.65, 0.3, 0.9);
+    will-change: transform, filter, opacity;
+    margin-right: 0.25em;
+    white-space: nowrap;
+}
+
+.blur-word.is-visible {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+}
