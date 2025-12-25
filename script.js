@@ -1,12 +1,13 @@
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (GIỮ NGUYÊN NỘI DUNG CỦA BẠN) ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
   const I18N = {
     vi: {
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
-      ctaCVText: "Tải CV / Resume", // Updated ID for new layout
+      ctaCVText: "Tải CV / Resume", 
       titleProjects: "Dự án tiêu biểu",
+      sloganProjects: "Think. Make. Solve.", // Thêm Slogan tiếng Việt (nếu muốn dịch)
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
@@ -25,8 +26,9 @@ window.addEventListener("DOMContentLoaded", function () {
     en: {
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
-      ctaCVText: "Download CV", // Updated ID
+      ctaCVText: "Download CV", 
       titleProjects: "Featured Projects",
+      sloganProjects: "Think. Make. Solve.",
       labelSchool: "University", labelLocation: "Location",
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
@@ -66,24 +68,21 @@ window.addEventListener("DOMContentLoaded", function () {
     window.location.reload(); 
   });
 
-  // === 3. XỬ LÝ GIAO DIỆN SÁNG/TỐI (LOGIC MỚI CHO GIAO DIỆN HỒNG) ===
-  // Mặc định giao diện này là Light (Hồng), Dark là (Tím đen)
-  // Logic cũ: Dark là default. 
-  // Để khớp với code CSS mới: body.light -> Màu Hồng. 
+  // === 3. XỬ LÝ GIAO DIỆN SÁNG/TỐI ===
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
   
-  // Set mặc định là Light cho giống video
+  // Mặc định là Light theo giao diện mới
   let currentMode = localStorage.getItem("mode") || "light"; 
 
   function applyMode(mode) {
     if (mode === "light") {
       root.classList.add("light");
-      modeIcon.textContent = "☀️"; // Icon mặt trời cho mode sáng
+      modeIcon.textContent = "☀️"; 
     } else {
       root.classList.remove("light");
-      modeIcon.textContent = "🌙"; // Icon trăng cho mode tối
+      modeIcon.textContent = "🌙"; 
     }
     localStorage.setItem("mode", mode);
   }
@@ -103,7 +102,7 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 5. HIỆU ỨNG GÕ CHỮ ===
+  // === 5. HIỆU ỨNG GÕ CHỮ (TYPEWRITER) ===
   const typeWriterElement = document.getElementById('typewriter-text');
   const fullText = I18N[currentLang]["typewriter-text"]; 
   const typingSpeed = 40; 
@@ -123,7 +122,7 @@ window.addEventListener("DOMContentLoaded", function () {
       typeEffect();
   }
 
-  // === 6. ANIMATION KHI CUỘN TRANG (SCROLL REVEAL) ===
+  // === 6. ANIMATION CUỘN TRANG (CARD FADE IN) ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -133,7 +132,6 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   }, { threshold: 0.1 });
 
-  // Chọn các phần tử cần animate
   const animatedElements = document.querySelectorAll('.feature-card, .skill-card, .hero-content');
   animatedElements.forEach(el => {
     el.style.opacity = "0";
@@ -141,4 +139,57 @@ window.addEventListener("DOMContentLoaded", function () {
     el.style.transition = "all 0.8s ease-out";
     observer.observe(el);
   });
+
+  // === 7. HIỆU ỨNG BLUR TEXT (MỚI THÊM) ===
+  function initBlurText(elementId, delay = 150) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    // Tách nội dung thành các từ, giữ nguyên thẻ <br>
+    const childNodes = Array.from(el.childNodes);
+    el.innerHTML = ''; 
+
+    childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            const words = node.textContent.trim().split(/\s+/);
+            words.forEach(word => {
+                if (word) {
+                    const span = document.createElement('span');
+                    span.textContent = word;
+                    span.className = 'blur-word';
+                    el.appendChild(span);
+                    el.appendChild(document.createTextNode(' ')); 
+                }
+            });
+        } else if (node.tagName === 'BR') {
+            el.appendChild(node);
+        } else {
+             el.appendChild(node);
+        }
+    });
+
+    const textObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const words = entry.target.querySelectorAll('.blur-word');
+          words.forEach((word, index) => {
+            setTimeout(() => {
+              word.classList.add('is-visible');
+            }, index * delay); 
+          });
+          textObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    textObserver.observe(el);
+  }
+
+  // KÍCH HOẠT HIỆU ỨNG CHO 3 VỊ TRÍ
+  setTimeout(() => {
+      initBlurText("heroTitle", 100);       // "Hello, I'm Vĩ..."
+      initBlurText("sloganProjects", 150);  // "Think. Make. Solve."
+      initBlurText("titleContact", 150);    // "Liên hệ"
+  }, 100);
+
 });
