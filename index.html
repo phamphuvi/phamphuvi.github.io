@@ -10,6 +10,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  
+  <style>
+    /* Đảm bảo container hạt nằm dưới cùng nhưng vẫn hiển thị */
+    #particles-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* Thấp hơn nội dung */
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+    
+    /* Ẩn hạt khi ở chế độ Sáng (Light Mode) */
+    body.light #particles-container {
+        opacity: 0;
+    }
+
+    /* Đảm bảo visual có vị trí tương đối để chứa hạt */
+    .hero-visual {
+        position: relative;
+        overflow: hidden; /* Tránh thanh cuộn thừa */
+    }
+  </style>
 </head>
 <body>
 
@@ -108,7 +133,7 @@
           </div>
         </div>
       </div>
-      </section>
+    </section>
 
     <section id="projects" class="content-section">
       <div class="section-header">
@@ -202,12 +227,13 @@
   </main>
 
   <script type="module">
-    // Link thư viện OGL CHÍNH XÁC (v1.0.11)
-    import { Renderer, Camera, Geometry, Program, Mesh } from 'https://cdn.jsdelivr.net/npm/ogl@1.0.11/dist/ogl.mjs';
+    // Sử dụng link ESM.SH để đảm bảo tương thích module tốt nhất
+    import { Renderer, Camera, Geometry, Program, Mesh } from 'https://esm.sh/ogl@1.0.11';
 
+    // === PHẦN LOGIC CHÍNH ===
     window.addEventListener("DOMContentLoaded", function () {
       
-      // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
+      // 1. NGÔN NGỮ
       const I18N = {
         vi: {
           heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
@@ -251,9 +277,7 @@
         }
       };
 
-      // === 2. XỬ LÝ NGÔN NGỮ ===
       let currentLang = localStorage.getItem("lang") || "vi";
-      
       function applyLang(lang) {
         const data = I18N[lang];
         for (const [id, text] of Object.entries(data)) {
@@ -273,7 +297,7 @@
         window.location.reload(); 
       });
 
-      // === 3. DARK MODE ===
+      // 2. DARK MODE
       const root = document.body;
       const modeBtn = document.getElementById("modeBtn");
       const modeIcon = modeBtn.querySelector(".btn-icon");
@@ -296,7 +320,7 @@
         applyMode(currentMode);
       });
 
-      // === 4. LINKS ===
+      // 3. LINKS
       document.getElementById("year").textContent = new Date().getFullYear();
       document.getElementById("openGmailBtn").addEventListener("click", (e) => {
         e.preventDefault();
@@ -304,7 +328,7 @@
       });
       document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-      // === 5. ANIMATIONS ===
+      // 4. ANIMATION TEXT
       function initBlurText(elementId, delay = 150) {
         const el = document.getElementById(elementId);
         if (!el) return;
@@ -383,7 +407,7 @@
         observer.observe(el);
       });
 
-      // === 6. PROFILE CARD TILT ===
+      // 5. PROFILE CARD TILT
       function initProfileCard() {
         const wrap = document.getElementById('profileCardWrapper');
         if (!wrap) return;
@@ -442,7 +466,7 @@
         updateCSS(width / 2, height / 2);
       }
 
-      // === 7. PARTICLES EFFECT (Đã sửa link import) ===
+      // 6. PARTICLES EFFECT (ĐÃ SỬA VỚI OGL TỪ ESM.SH)
       function initParticles() {
           const container = document.getElementById('particles-container');
           if (!container) return;
@@ -454,7 +478,6 @@
           const sizeRandomness = 1;
           const moveParticlesOnHover = true;
 
-          // Render Setup
           const renderer = new Renderer({ alpha: true, depth: false });
           const gl = renderer.gl;
           container.appendChild(gl.canvas);
@@ -472,7 +495,6 @@
           window.addEventListener('resize', resize, false);
           resize();
 
-          // Mouse Tracking
           const mouse = { x: 0, y: 0 };
           if (moveParticlesOnHover) {
               container.addEventListener('mousemove', (e) => {
@@ -482,7 +504,6 @@
               });
           }
 
-          // Helper: Hex to RGB
           const hexToRgb = (hex) => {
               hex = hex.replace(/^#/, '');
               if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
@@ -490,7 +511,6 @@
               return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
           };
 
-          // Create Particles Data
           const count = particleCount;
           const positions = new Float32Array(count * 3);
           const randoms = new Float32Array(count * 4);
@@ -518,7 +538,6 @@
               color: { size: 3, data: colors }
           });
 
-          // Shaders
           const vertex = `
               attribute vec3 position;
               attribute vec4 random;
@@ -587,7 +606,6 @@
 
           const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
-          // Animation Loop
           let lastTime = performance.now();
           let elapsed = 0;
           function update(t) {
@@ -608,7 +626,7 @@
           requestAnimationFrame(update);
       }
 
-      // Khởi chạy các hiệu ứng
+      // Khởi động các hiệu ứng
       initProfileCard();
       initParticles();
 
