@@ -1,5 +1,7 @@
-// IMPORT THƯ VIỆN OGL TRỰC TIẾP (QUAN TRỌNG: Cần chạy trên Server để tránh lỗi CORS)
-import { Renderer, Camera, Geometry, Program, Mesh } from 'https://unpkg.com/ogl';
+/* FILE: script.js */
+
+// --- SỬA LỖI QUAN TRỌNG: Dùng đường dẫn .mjs để import được module ---
+import { Renderer, Camera, Geometry, Program, Mesh } from 'https://unpkg.com/ogl/dist/ogl.mjs';
 
 window.addEventListener("DOMContentLoaded", function () {
   
@@ -15,7 +17,6 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
-
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
       p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
@@ -24,12 +25,10 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
-      
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
       heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
-
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
       ctaCVText: "Download CV", 
@@ -38,7 +37,6 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "University", labelLocation: "Location",
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
-
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control.",
       p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming.",
       p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment.",
@@ -47,7 +45,6 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
-
       "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
     }
   };
@@ -59,19 +56,13 @@ window.addEventListener("DOMContentLoaded", function () {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
-      if (el) {
-          el.innerHTML = text; 
-      }
+      if (el) el.innerHTML = text; 
     }
     const btnText = document.querySelector("#langBtn .btn-text");
     if(btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
-
-    setTimeout(() => {
-        initBlurText("heroTitle", 100);
-    }, 50);
+    setTimeout(() => { initBlurText("heroTitle", 100); }, 50);
   }
-  
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
@@ -105,10 +96,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // === 4. LINKS ===
   document.getElementById("year").textContent = new Date().getFullYear();
-  const YOUR_EMAIL = "phamphuvi9@gmail.com";
   document.getElementById("openGmailBtn").addEventListener("click", (e) => {
     e.preventDefault();
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`, '_blank');
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=phamphuvi9@gmail.com`, '_blank');
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
@@ -116,12 +106,9 @@ window.addEventListener("DOMContentLoaded", function () {
   function initBlurText(elementId, delay = 150) {
     const el = document.getElementById(elementId);
     if (!el) return;
-    
     el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
-
     const childNodes = Array.from(el.childNodes);
     el.innerHTML = ''; 
-
     childNodes.forEach(node => {
         if (node.nodeType === Node.TEXT_NODE) {
             const words = node.textContent.trim().split(/\s+/);
@@ -143,7 +130,6 @@ window.addEventListener("DOMContentLoaded", function () {
              if (clone.tagName !== 'BR') el.appendChild(document.createTextNode(' '));
         }
     });
-
     const textObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -157,16 +143,13 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       });
     }, { threshold: 0.5 });
-
     textObserver.observe(el);
   }
 
-  // === RUN ANIMATION ===
   setTimeout(() => {
       initBlurText("heroTitle", 100);       
       initBlurText("sloganProjects", 150);  
       initBlurText("titleContact", 150);  
-      
       const typeWriterElement = document.getElementById('typewriter-text');
       const fullText = I18N[currentLang]["typewriter-text"]; 
       let charIndex = 0;
@@ -183,7 +166,6 @@ window.addEventListener("DOMContentLoaded", function () {
       }
   }, 100);
 
-  // === SCROLL FADE IN ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -203,7 +185,6 @@ window.addEventListener("DOMContentLoaded", function () {
   function initProfileCard() {
     const wrap = document.getElementById('profileCardWrapper');
     if (!wrap) return;
-
     let width = wrap.clientWidth;
     let height = wrap.clientHeight;
     let targetX = width / 2;
@@ -211,9 +192,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let currentX = width / 2;
     let currentY = height / 2;
     let rafId = null;
-
     const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
-
     function updateCSS(x, y) {
         const percentX = clamp((100 / width) * x, 0, 100);
         const percentY = clamp((100 / height) * y, 0, 100);
@@ -222,7 +201,6 @@ window.addEventListener("DOMContentLoaded", function () {
         const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
         const rotateX = -((percentY - 50) / 3.5); 
         const rotateY = (percentX - 50) / 3;
-
         wrap.style.setProperty('--pointer-x', `${percentX}%`);
         wrap.style.setProperty('--pointer-y', `${percentY}%`);
         wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
@@ -231,7 +209,6 @@ window.addEventListener("DOMContentLoaded", function () {
         wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
         wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
     }
-
     function animate() {
         const k = 0.1;
         currentX += (targetX - currentX) * k;
@@ -241,37 +218,32 @@ window.addEventListener("DOMContentLoaded", function () {
         if (dist > 0.1) rafId = requestAnimationFrame(animate);
         else rafId = null;
     }
-
     function startAnimation() {
         if (!rafId) rafId = requestAnimationFrame(animate);
     }
-
     wrap.addEventListener('mousemove', (e) => {
         const rect = wrap.getBoundingClientRect();
         targetX = e.clientX - rect.left;
         targetY = e.clientY - rect.top;
         startAnimation();
     });
-
     wrap.addEventListener('mouseleave', () => {
         targetX = width / 2;
         targetY = height / 2;
         startAnimation();
     });
-    
     window.addEventListener('resize', () => {
         width = wrap.clientWidth;
         height = wrap.clientHeight;
         updateCSS(width / 2, height / 2);
     });
-    
     updateCSS(width / 2, height / 2);
   }
 
-  // === 7. PARTICLES EFFECT (ĐÃ SỬA LẠI ĐỂ DÙNG IMPORT TRỰC TIẾP) ===
+  // === 7. PARTICLES EFFECT (Đã sửa import) ===
   function initParticles() {
       const container = document.getElementById('particles-container');
-      if (!container) return; // Nếu không tìm thấy div thì thoát
+      if (!container) return;
 
       const particleCount = 200;
       const particleSpread = 10;
@@ -280,7 +252,6 @@ window.addEventListener("DOMContentLoaded", function () {
       const sizeRandomness = 1;
       const moveParticlesOnHover = true;
 
-      // Render Setup
       const renderer = new Renderer({ alpha: true, depth: false });
       const gl = renderer.gl;
       container.appendChild(gl.canvas);
@@ -298,7 +269,6 @@ window.addEventListener("DOMContentLoaded", function () {
       window.addEventListener('resize', resize, false);
       resize();
 
-      // Mouse Tracking
       const mouse = { x: 0, y: 0 };
       if (moveParticlesOnHover) {
           container.addEventListener('mousemove', (e) => {
@@ -308,7 +278,6 @@ window.addEventListener("DOMContentLoaded", function () {
           });
       }
 
-      // Helper: Hex to RGB
       const hexToRgb = (hex) => {
           hex = hex.replace(/^#/, '');
           if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
@@ -316,7 +285,6 @@ window.addEventListener("DOMContentLoaded", function () {
           return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
       };
 
-      // Create Particles Data
       const count = particleCount;
       const positions = new Float32Array(count * 3);
       const randoms = new Float32Array(count * 4);
@@ -344,7 +312,6 @@ window.addEventListener("DOMContentLoaded", function () {
           color: { size: 3, data: colors }
       });
 
-      // Shaders
       const vertex = `
           attribute vec3 position;
           attribute vec4 random;
@@ -413,7 +380,6 @@ window.addEventListener("DOMContentLoaded", function () {
 
       const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
-      // Animation Loop
       let lastTime = performance.now();
       let elapsed = 0;
       function update(t) {
@@ -434,8 +400,6 @@ window.addEventListener("DOMContentLoaded", function () {
       requestAnimationFrame(update);
   }
 
-  // Khởi chạy các hiệu ứng
   initProfileCard();
   initParticles();
-
 });
