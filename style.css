@@ -404,23 +404,23 @@ ul { list-style: none; }
     transform: translateY(0);
 }
 
-/* ===== NEW PARTICLES CONTAINER STYLE ===== */
+/* ===== PHẦN MỚI: HIỆU ỨNG HẠT LẤP LÁNH ===== */
 #particles-container {
     position: absolute;
-    inset: 0; /* Full size của thẻ cha (.hero-visual) */
-    z-index: 1; /* Nằm dưới Card (z-index: 10) */
+    inset: 0; /* Phủ kín khung hình hero-visual */
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Để chuột xuyên qua */
+    z-index: 1; /* Nằm dưới Card (z-index 10) */
+    pointer-events: none; /* Chuột xuyên qua để click được card */
     transition: opacity 0.5s ease;
 }
 
-/* Quan trọng: Ẩn Particles khi đang ở chế độ Light */
+/* Ẩn hạt khi ở chế độ Light */
 body.light #particles-container {
     opacity: 0;
 }
 
-/* Hiện Particles khi ở chế độ Dark */
+/* Hiện hạt khi ở chế độ Dark (mặc định) */
 body:not(.light) #particles-container {
     opacity: 1;
 }
