@@ -1,284 +1,283 @@
-window.addEventListener("DOMContentLoaded", function () {
-  
-  // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
-  const I18N = {
-    vi: {
-      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
-      roleText: "Sinh viên Kỹ thuật & IoT",
-      navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
-      ctaCVText: "Tải CV / Resume", 
-      titleProjects: "Dự án tiêu biểu",
-      sloganProjects: "Tư duy. Thực hiện. Giải quyết.",
-      labelSchool: "Trường", labelLocation: "Nơi sống",
-      valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
-      valLocation: "Cần Thơ, Việt Nam",
+/* ===== STYLE.CSS - JACK GROSS INSPIRED STYLE ===== */
+:root {
+    /* LIGHT MODE DEFAULT */
+    --bg: #FFF0F5;              /* Hồng phấn nhạt */
+    --surface: #FFFFFF;         /* Trắng */
+    --primary: #5138EE;         /* Tím đậm chủ đạo */
+    --primary-hover: #402BC4;
+    --text-main: #1A1A1A;       /* Đen hiển thị chữ chính */
+    --text-muted: #666666;      /* Xám chữ phụ */
+    --border: rgba(0, 0, 0, 0.05);
+    --shadow: 0 20px 40px rgba(81, 56, 238, 0.1);
+    --radius-l: 30px;
+    --radius-m: 16px;
+    --font-main: 'Manrope', sans-serif;
+}
 
-      p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
-      p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
-      p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
-      titleSkills: "Kỹ năng", skTech: "Kỹ thuật", skTools: "Công cụ",
-      skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python",
-      skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
-      titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
-      langBtnText: "VI",
-      
-      "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
-    },
-    en: {
-      heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
+/* DARK MODE */
+body:not(.light) {
+    --bg: #0f0c29;
+    --surface: #1b1641;
+    --primary: #7660ff;
+    --text-main: #ffffff;
+    --text-muted: #b4b4c7;
+    --shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
 
-      roleText: "IoT & Automation Student",
-      navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
-      ctaCVText: "Download CV", 
-      titleProjects: "Featured Projects",
-      sloganProjects: "Think. Make. Solve.",
-      labelSchool: "University", labelLocation: "Location",
-      valSchool: "Can Tho University of Technology",
-      valLocation: "Can Tho, Vietnam",
+/* Force light mode logic based on JS */
+body.light {
+    --bg: #FFF0F5;
+    --surface: #FFFFFF;
+    --primary: #5138EE;
+    --text-main: #1A1A1A;
+    --text-muted: #666666;
+    --shadow: 0 20px 40px rgba(81, 56, 238, 0.1);
+}
 
-      p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control.",
-      p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming.",
-      p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment.",
-      titleSkills: "Skills", skTech: "Technical", skTools: "Tools",
-      skTechItem1: "Electronics, Circuit Design", skTechItem2: "C/C++, Arduino, Python Basic",
-      skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
-      titleContact: "Contact", contactHint: "Feel free to contact me via:",
-      langBtnText: "EN",
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-      "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
-    }
-  };
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg);
+    color: var(--text-main);
+    line-height: 1.05;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.5s ease;
+}
 
-  // === 2. XỬ LÝ NGÔN NGỮ ===
-  let currentLang = localStorage.getItem("lang") || "vi";
-  
-  function applyLang(lang) {
-    const data = I18N[lang];
-    for (const [id, text] of Object.entries(data)) {
-      const el = document.getElementById(id);
-      if (el) {
-          el.innerHTML = text; 
-      }
-    }
-    const btnText = document.querySelector("#langBtn .btn-text");
-    if(btnText) btnText.textContent = data.langBtnText;
-    localStorage.setItem("lang", lang);
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
 
-    setTimeout(() => {
-        initBlurText("heroTitle", 100);
-    }, 50);
-  }
-  
-  applyLang(currentLang);
+/* ===== NAVIGATION ===== */
+.top-nav {
+    position: fixed; top: 0; left: 0; width: 100%;
+    padding: 1.5rem 5%;
+    background: rgba(var(--bg), 0.8);
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg), transparent 20%);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex; justify-content: center;
+}
 
-  document.getElementById("langBtn").addEventListener("click", () => {
-    currentLang = currentLang === "vi" ? "en" : "vi";
-    applyLang(currentLang);
-    window.location.reload(); 
-  });
+.nav-container {
+    width: 100%; max-width: 1200px;
+    display: flex; justify-content: space-between; align-items: center;
+}
 
-  // === 3. DARK MODE ===
-  const root = document.body;
-  const modeBtn = document.getElementById("modeBtn");
-  const modeIcon = modeBtn.querySelector(".btn-icon");
-  let currentMode = localStorage.getItem("mode") || "light"; 
+.logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
 
-  function applyMode(mode) {
-    if (mode === "light") {
-      root.classList.add("light");
-      modeIcon.textContent = "☀️"; 
-    } else {
-      root.classList.remove("light");
-      modeIcon.textContent = "🌙"; 
-    }
-    localStorage.setItem("mode", mode);
-  }
-  applyMode(currentMode);
+.nav-links-desktop { display: flex; gap: 30px; }
+.nav-links-desktop a { font-weight: 600; color: var(--text-muted); font-size: 0.95rem; }
+.nav-links-desktop a:hover { color: var(--primary); }
 
-  modeBtn.addEventListener("click", () => {
-    currentMode = currentMode === "light" ? "dark" : "light";
-    applyMode(currentMode);
-  });
+.nav-controls { display: flex; gap: 10px; }
+.control-btn-small {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: none; background: var(--surface); color: var(--text-main);
+    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; transition: 0.3s;
+}
+.control-btn-small:hover { transform: translateY(-3px); color: var(--primary); }
 
-  // === 4. LINKS ===
-  document.getElementById("year").textContent = new Date().getFullYear();
-  const YOUR_EMAIL = "phamphuvi9@gmail.com";
-  document.getElementById("openGmailBtn").addEventListener("click", (e) => {
-    e.preventDefault();
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`, '_blank');
-  });
-  document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
+/* ===== HERO SECTION ===== */
+.hero-section {
+    min-height: 100vh;
+    padding: 120px 5% 50px;
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center;
+    gap: 50px;
+}
 
-  // === 5. BLUR TEXT ANIMATION ===
-  function initBlurText(elementId, delay = 150) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    
-    el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
+.hero-content { flex: 1; z-index: 2; }
 
-    const childNodes = Array.from(el.childNodes);
-    el.innerHTML = ''; 
+.badge-role {
+    display: inline-block; padding: 6px 16px;
+    background: rgba(81, 56, 238, 0.1); color: var(--primary);
+    border-radius: 20px; font-weight: 700; font-size: 0.85rem;
+    margin-bottom: 20px; text-transform: uppercase;
+}
 
-    childNodes.forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const words = node.textContent.trim().split(/\s+/);
-            words.forEach(word => {
-                if (word) {
-                    const span = document.createElement('span');
-                    span.textContent = word;
-                    span.className = 'blur-word';
-                    el.appendChild(span);
-                    el.appendChild(document.createTextNode(' ')); 
-                }
-            });
-        } else {
-             const clone = node.cloneNode(true);
-             if (clone.tagName !== 'BR' && !clone.classList.contains('blur-word')) {
-                 clone.classList.add('blur-word');
-             }
-             el.appendChild(clone);
-             if (clone.tagName !== 'BR') el.appendChild(document.createTextNode(' '));
-        }
-    });
+/* --- UPDATED HERO TITLE STYLE --- */
+.hero-title {
+    font-size: 3.5rem;
+    line-height: 1.05;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+    color: var(--text-main);
+    background: none; /* Đảm bảo không có nền xanh */
+    max-width: 800px;
+}
 
-    const textObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const words = entry.target.querySelectorAll('.blur-word');
-          words.forEach((word, index) => {
-            setTimeout(() => {
-              word.classList.add('is-visible');
-            }, index * delay); 
-          });
-          textObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
+/* Gradient Text Highlight */
+.text-highlight {
+    background: linear-gradient(45deg, var(--primary), #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
 
-    textObserver.observe(el);
-  }
+.typewriter-container { min-height: 80px; margin-bottom: 30px; }
+.lead-text { font-size: 1.1rem; color: var(--text-muted); }
 
-  // === RUN ANIMATION ===
-  setTimeout(() => {
-      initBlurText("heroTitle", 100);       
-      initBlurText("sloganProjects", 150);  
-      initBlurText("titleContact", 150);  
-      
-      const typeWriterElement = document.getElementById('typewriter-text');
-      const fullText = I18N[currentLang]["typewriter-text"]; 
-      let charIndex = 0;
-      if(typeWriterElement) {
-        typeWriterElement.textContent = "";
-        function type() {
-            if (charIndex < fullText.length) {
-                typeWriterElement.textContent += fullText.charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 40);
-            }
-        }
-        type();
-      }
-  }, 100);
+.hero-stats {
+    display: flex; gap: 40px; margin-bottom: 40px;
+    padding-top: 20px; border-top: 1px solid var(--border);
+}
+.stat-box { display: flex; flex-direction: column; }
+.stat-box b { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); margin-bottom: 5px; }
+.stat-box span { font-weight: 600; }
 
-  // === SCROLL FADE IN ===
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.feature-card, .skill-card, .hero-content').forEach(el => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(30px)";
-    el.style.transition = "all 0.8s ease-out";
-    observer.observe(el);
-  });
+.scroll-indicator { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600; opacity: 0.7; }
+.mouse {
+    width: 24px; height: 36px; border: 2px solid var(--text-main);
+    border-radius: 12px; position: relative;
+}
+.mouse::before {
+    content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 4px; background: var(--text-main); border-radius: 50%;
+    animation: scrollMouse 2s infinite;
+}
+@keyframes scrollMouse { 0% { top: 6px; opacity: 1; } 100% { top: 20px; opacity: 0; } }
 
-  // === 6. PROFILE CARD TILT ENGINE (Đã chuyển đổi từ React sang JS thuần) ===
-  function initProfileCard() {
-    const wrap = document.getElementById('profileCardWrapper');
-    if (!wrap) return;
+/* ===== 3D VISUAL ===== */
+.hero-visual {
+    flex: 1; height: 500px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    perspective: 1000px;
+}
 
-    let width = wrap.clientWidth;
-    let height = wrap.clientHeight;
-    let targetX = width / 2;
-    let targetY = height / 2;
-    let currentX = width / 2;
-    let currentY = height / 2;
-    let rafId = null;
+.hero-platform {
+    width: 300px; height: 300px;
+    background: var(--primary);
+    border-radius: 40px;
+    transform: rotateX(50deg) rotateZ(-45deg);
+    box-shadow: -20px 20px 50px rgba(81, 56, 238, 0.4);
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.5s;
+}
 
-    // Giới hạn giá trị min/max
-    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+.floating-avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 4px solid #fff;
+    transform: rotateZ(45deg) rotateX(-50deg) translateY(-80px);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+    z-index: 10;
+}
 
-    // Cập nhật biến CSS để tạo hiệu ứng 3D
-    function updateCSS(x, y) {
-        const percentX = clamp((100 / width) * x, 0, 100);
-        const percentY = clamp((100 / height) * y, 0, 100);
-        
-        // Tính toán các thông số vị trí cho ánh sáng và bóng đổ
-        const pointerFromLeft = x / width;
-        const pointerFromTop = y / height;
-        const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
+.floating-cube {
+    position: absolute; width: 60px; height: 60px;
+    background: #fff; border-radius: 10px;
+    box-shadow: -10px 10px 20px rgba(0,0,0,0.1);
+    animation: float 4s ease-in-out infinite;
+}
+.cube-1 { top: 20%; right: 20%; background: #FFD700; animation-delay: 0s; }
+.cube-2 { bottom: 20%; left: 10%; background: #FF6B6B; animation-delay: 2s; }
+.floating-sphere {
+    position: absolute; width: 40px; height: 40px;
+    background: var(--primary); border-radius: 50%;
+    top: 50%; right: 10%;
+    animation: float 3s ease-in-out infinite reverse;
+}
 
-        // Góc xoay (Chia số càng lớn thì xoay càng nhẹ)
-        const rotateX = -((percentY - 50) / 3.5); 
-        const rotateY = (percentX - 50) / 3;
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
 
-        wrap.style.setProperty('--pointer-x', `${percentX}%`);
-        wrap.style.setProperty('--pointer-y', `${percentY}%`);
-        wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
-        wrap.style.setProperty('--pointer-from-top', pointerFromTop);
-        wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
-        wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
-        wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
-    }
+/* ===== SECTIONS ===== */
+.content-section {
+    padding: 100px 5%; max-width: 1200px; margin: 0 auto;
+}
+.section-header { margin-bottom: 50px; }
+.section-tag { font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px; }
+.section-header h2 { font-size: 3rem; font-weight: 800; }
 
-    // Animation loop (Lerp - Linear Interpolation) để chuyển động mượt mà
-    function animate() {
-        const k = 0.1; // Độ trễ (0.1 = mượt, 1 = nhanh)
-        currentX += (targetX - currentX) * k;
-        currentY += (targetY - currentY) * k;
+.cards-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+.feature-card {
+    background: var(--surface); padding: 40px 30px;
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow);
+    transition: 0.4s; border: 1px solid var(--border);
+}
+.feature-card:hover { transform: translateY(-15px); }
 
-        updateCSS(currentX, currentY);
+.card-icon { font-size: 2.5rem; margin-bottom: 20px; }
+.feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+.feature-card p { color: var(--text-muted); margin-bottom: 25px; min-height: 60px; }
 
-        const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
-        if (dist > 0.1) {
-            rafId = requestAnimationFrame(animate);
-        } else {
-            rafId = null;
-        }
-    }
+.tags span {
+    display: inline-block; padding: 5px 12px;
+    background: var(--bg); color: var(--text-muted);
+    border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-right: 5px;
+}
 
-    function startAnimation() {
-        if (!rafId) rafId = requestAnimationFrame(animate);
-    }
+.skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+.skill-card {
+    background: var(--surface); padding: 40px;
+    border-radius: var(--radius-l); border: 1px solid var(--border);
+}
+.clean-list li {
+    padding: 15px 0; border-bottom: 1px solid var(--border);
+    color: var(--text-muted); font-weight: 500;
+}
+.clean-list li:last-child { border-bottom: none; }
 
-    // Sự kiện chuột
-    wrap.addEventListener('mousemove', (e) => {
-        const rect = wrap.getBoundingClientRect();
-        targetX = e.clientX - rect.left;
-        targetY = e.clientY - rect.top;
-        startAnimation();
-    });
+/* ===== FOOTER CTA ===== */
+.footer-cta {
+    background: var(--primary); color: #fff;
+    padding: 100px 5%; margin-top: 100px;
+    border-top-left-radius: 60px; border-top-right-radius: 60px;
+    text-align: center; position: relative; overflow: hidden;
+}
+.cta-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+.cta-tag { opacity: 0.8; font-size: 1.1rem; display: block; margin-bottom: 1rem; }
+.footer-cta h2 { font-size: 3.5rem; margin-bottom: 40px; }
 
-    wrap.addEventListener('mouseleave', () => {
-        targetX = width / 2;
-        targetY = height / 2;
-        startAnimation();
-    });
-    
-    window.addEventListener('resize', () => {
-        width = wrap.clientWidth;
-        height = wrap.clientHeight;
-    });
-    
-    // Khởi tạo trạng thái ban đầu
-    updateCSS(width / 2, height / 2);
-  }
+.contact-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 50px; }
+.btn-pill {
+    padding: 15px 30px; border-radius: 50px; font-weight: 700;
+    text-decoration: none; transition: 0.3s;
+}
+.btn-pill.white { background: #fff; color: var(--primary); }
+.btn-pill.outline { border: 2px solid rgba(255,255,255,0.3); color: #fff; }
+.btn-pill:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 
-  // Kích hoạt Profile Card
-  initProfileCard();
+.real-footer { font-size: 0.9rem; opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; }
 
-});
+@media (max-width: 768px) {
+    .hero-section { flex-direction: column-reverse; padding-top: 100px; text-align: center; }
+    .hero-visual { height: 300px; width: 100%; margin-bottom: 30px; }
+    .hero-title { font-size: 2.5rem; }
+    .hero-stats { justify-content: center; }
+    .nav-links-desktop { display: none; }
+    .footer-cta h2 { font-size: 2.5rem; }
+}
+
+.cursor { animation: blink 1s infinite; font-weight: 100; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ===== BLUR TEXT EFFECT ===== */
+.blur-word {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(-50px);
+    transition: all 0.8s cubic-bezier(0.2, 0.65, 0.3, 0.9);
+    will-change: transform, filter, opacity;
+    margin-right: 0.25em;
+    white-space: nowrap;
+}
+
+.blur-word.is-visible {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+}
