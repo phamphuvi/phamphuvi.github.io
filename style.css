@@ -404,7 +404,7 @@ ul { list-style: none; }
     transform: translateY(0);
 }
 
-/* ===== PHẦN MỚI: HIỆU ỨNG HẠT LẤP LÁNH ===== */
+/* ===== NEW PARTICLES CONTAINER STYLE ===== */
 #particles-container {
     position: absolute;
     inset: 0; /* Phủ kín khung hình hero-visual */
@@ -415,12 +415,12 @@ ul { list-style: none; }
     transition: opacity 0.5s ease;
 }
 
-/* Ẩn hạt khi ở chế độ Light */
+/* Quan trọng: Ẩn Particles khi đang ở chế độ Light */
 body.light #particles-container {
     opacity: 0;
 }
 
-/* Hiện hạt khi ở chế độ Dark (mặc định) */
+/* Hiện Particles khi ở chế độ Dark (mặc định) */
 body:not(.light) #particles-container {
     opacity: 1;
 }
