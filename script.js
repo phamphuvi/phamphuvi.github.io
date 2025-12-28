@@ -1,3 +1,6 @@
+// IMPORT THƯ VIỆN OGL TRỰC TIẾP (QUAN TRỌNG: Cần chạy trên Server để tránh lỗi CORS)
+import { Renderer, Camera, Geometry, Program, Mesh } from 'https://unpkg.com/ogl';
+
 window.addEventListener("DOMContentLoaded", function () {
   
   // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
@@ -265,12 +268,10 @@ window.addEventListener("DOMContentLoaded", function () {
     updateCSS(width / 2, height / 2);
   }
 
-  // === 7. PARTICLES EFFECT (Vanilla JS Ported from React with OGL) ===
+  // === 7. PARTICLES EFFECT (ĐÃ SỬA LẠI ĐỂ DÙNG IMPORT TRỰC TIẾP) ===
   function initParticles() {
       const container = document.getElementById('particles-container');
-      if (!container || !window.ogl) return;
-
-      const { Renderer, Camera, Geometry, Program, Mesh } = window.ogl;
+      if (!container) return; // Nếu không tìm thấy div thì thoát
 
       const particleCount = 200;
       const particleSpread = 10;
