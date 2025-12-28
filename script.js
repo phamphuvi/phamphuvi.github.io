@@ -1,11 +1,9 @@
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (TEXT ĐÃ TỐI ƯU HÓA) ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
   const I18N = {
     vi: {
-      // Dòng này đã được làm đẹp với thẻ <br> và <span highlight>
       heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
-      
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
@@ -27,7 +25,6 @@ window.addEventListener("DOMContentLoaded", function () {
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
-      // ENGLISH VERSION
       heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
 
       roleText: "IoT & Automation Student",
@@ -60,7 +57,6 @@ window.addEventListener("DOMContentLoaded", function () {
     for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
       if (el) {
-          // --- QUAN TRỌNG: Dùng innerHTML để hiển thị màu sắc ---
           el.innerHTML = text; 
       }
     }
@@ -68,7 +64,6 @@ window.addEventListener("DOMContentLoaded", function () {
     if(btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
 
-    // Reset animation
     setTimeout(() => {
         initBlurText("heroTitle", 100);
     }, 50);
@@ -114,12 +109,11 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 5. BLUR TEXT ANIMATION (FIXED FOR SPAN) ===
+  // === 5. BLUR TEXT ANIMATION ===
   function initBlurText(elementId, delay = 150) {
     const el = document.getElementById(elementId);
     if (!el) return;
     
-    // Lấy nội dung gốc để tránh lỗi khi chạy lại
     el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
 
     const childNodes = Array.from(el.childNodes);
@@ -138,7 +132,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
             });
         } else {
-             // Giữ nguyên thẻ Highlight hoặc BR
              const clone = node.cloneNode(true);
              if (clone.tagName !== 'BR' && !clone.classList.contains('blur-word')) {
                  clone.classList.add('blur-word');
@@ -171,7 +164,6 @@ window.addEventListener("DOMContentLoaded", function () {
       initBlurText("sloganProjects", 150);  
       initBlurText("titleContact", 150);  
       
-      // Typewriter Effect
       const typeWriterElement = document.getElementById('typewriter-text');
       const fullText = I18N[currentLang]["typewriter-text"]; 
       let charIndex = 0;
@@ -203,4 +195,90 @@ window.addEventListener("DOMContentLoaded", function () {
     el.style.transition = "all 0.8s ease-out";
     observer.observe(el);
   });
+
+  // === 6. PROFILE CARD TILT ENGINE (Đã chuyển đổi từ React sang JS thuần) ===
+  function initProfileCard() {
+    const wrap = document.getElementById('profileCardWrapper');
+    if (!wrap) return;
+
+    let width = wrap.clientWidth;
+    let height = wrap.clientHeight;
+    let targetX = width / 2;
+    let targetY = height / 2;
+    let currentX = width / 2;
+    let currentY = height / 2;
+    let rafId = null;
+
+    // Giới hạn giá trị min/max
+    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+    // Cập nhật biến CSS để tạo hiệu ứng 3D
+    function updateCSS(x, y) {
+        const percentX = clamp((100 / width) * x, 0, 100);
+        const percentY = clamp((100 / height) * y, 0, 100);
+        
+        // Tính toán các thông số vị trí cho ánh sáng và bóng đổ
+        const pointerFromLeft = x / width;
+        const pointerFromTop = y / height;
+        const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
+
+        // Góc xoay (Chia số càng lớn thì xoay càng nhẹ)
+        const rotateX = -((percentY - 50) / 3.5); 
+        const rotateY = (percentX - 50) / 3;
+
+        wrap.style.setProperty('--pointer-x', `${percentX}%`);
+        wrap.style.setProperty('--pointer-y', `${percentY}%`);
+        wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
+        wrap.style.setProperty('--pointer-from-top', pointerFromTop);
+        wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
+        wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
+        wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
+    }
+
+    // Animation loop (Lerp - Linear Interpolation) để chuyển động mượt mà
+    function animate() {
+        const k = 0.1; // Độ trễ (0.1 = mượt, 1 = nhanh)
+        currentX += (targetX - currentX) * k;
+        currentY += (targetY - currentY) * k;
+
+        updateCSS(currentX, currentY);
+
+        const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
+        if (dist > 0.1) {
+            rafId = requestAnimationFrame(animate);
+        } else {
+            rafId = null;
+        }
+    }
+
+    function startAnimation() {
+        if (!rafId) rafId = requestAnimationFrame(animate);
+    }
+
+    // Sự kiện chuột
+    wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        targetX = e.clientX - rect.left;
+        targetY = e.clientY - rect.top;
+        startAnimation();
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+        targetX = width / 2;
+        targetY = height / 2;
+        startAnimation();
+    });
+    
+    window.addEventListener('resize', () => {
+        width = wrap.clientWidth;
+        height = wrap.clientHeight;
+    });
+    
+    // Khởi tạo trạng thái ban đầu
+    updateCSS(width / 2, height / 2);
+  }
+
+  // Kích hoạt Profile Card
+  initProfileCard();
+
 });
