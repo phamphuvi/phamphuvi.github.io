@@ -8,7 +8,6 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
@@ -109,7 +108,7 @@
           </div>
         </div>
       </div>
-    </section>
+      </section>
 
     <section id="projects" class="content-section">
       <div class="section-header">
@@ -203,8 +202,8 @@
   </main>
 
   <script type="module">
-    // Import thư viện OGL từ link ES Module chuẩn xác
-    import { Renderer, Camera, Geometry, Program, Mesh } from 'https://unpkg.com/ogl/dist/ogl.mjs';
+    // Link thư viện OGL CHÍNH XÁC (v1.0.11)
+    import { Renderer, Camera, Geometry, Program, Mesh } from 'https://cdn.jsdelivr.net/npm/ogl@1.0.11/dist/ogl.mjs';
 
     window.addEventListener("DOMContentLoaded", function () {
       
@@ -443,7 +442,7 @@
         updateCSS(width / 2, height / 2);
       }
 
-      // === 7. PARTICLES EFFECT (Vanilla JS Ported from React with OGL) ===
+      // === 7. PARTICLES EFFECT (Đã sửa link import) ===
       function initParticles() {
           const container = document.getElementById('particles-container');
           if (!container) return;
