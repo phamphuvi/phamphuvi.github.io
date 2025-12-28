@@ -196,7 +196,7 @@ window.addEventListener("DOMContentLoaded", function () {
     observer.observe(el);
   });
 
-  // === 6. PROFILE CARD TILT ENGINE (Đã chuyển đổi từ React sang JS thuần) ===
+  // === 6. PROFILE CARD TILT ENGINE ===
   function initProfileCard() {
     const wrap = document.getElementById('profileCardWrapper');
     if (!wrap) return;
@@ -209,20 +209,14 @@ window.addEventListener("DOMContentLoaded", function () {
     let currentY = height / 2;
     let rafId = null;
 
-    // Giới hạn giá trị min/max
     const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
-    // Cập nhật biến CSS để tạo hiệu ứng 3D
     function updateCSS(x, y) {
         const percentX = clamp((100 / width) * x, 0, 100);
         const percentY = clamp((100 / height) * y, 0, 100);
-        
-        // Tính toán các thông số vị trí cho ánh sáng và bóng đổ
         const pointerFromLeft = x / width;
         const pointerFromTop = y / height;
         const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
-
-        // Góc xoay (Chia số càng lớn thì xoay càng nhẹ)
         const rotateX = -((percentY - 50) / 3.5); 
         const rotateY = (percentX - 50) / 3;
 
@@ -235,27 +229,20 @@ window.addEventListener("DOMContentLoaded", function () {
         wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
     }
 
-    // Animation loop (Lerp - Linear Interpolation) để chuyển động mượt mà
     function animate() {
-        const k = 0.1; // Độ trễ (0.1 = mượt, 1 = nhanh)
+        const k = 0.1;
         currentX += (targetX - currentX) * k;
         currentY += (targetY - currentY) * k;
-
         updateCSS(currentX, currentY);
-
         const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
-        if (dist > 0.1) {
-            rafId = requestAnimationFrame(animate);
-        } else {
-            rafId = null;
-        }
+        if (dist > 0.1) rafId = requestAnimationFrame(animate);
+        else rafId = null;
     }
 
     function startAnimation() {
         if (!rafId) rafId = requestAnimationFrame(animate);
     }
 
-    // Sự kiện chuột
     wrap.addEventListener('mousemove', (e) => {
         const rect = wrap.getBoundingClientRect();
         targetX = e.clientX - rect.left;
@@ -272,13 +259,182 @@ window.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('resize', () => {
         width = wrap.clientWidth;
         height = wrap.clientHeight;
+        updateCSS(width / 2, height / 2);
     });
     
-    // Khởi tạo trạng thái ban đầu
     updateCSS(width / 2, height / 2);
   }
 
-  // Kích hoạt Profile Card
+  // === 7. PARTICLES EFFECT (Vanilla JS Ported from React with OGL) ===
+  function initParticles() {
+      const container = document.getElementById('particles-container');
+      if (!container || !window.ogl) return;
+
+      const { Renderer, Camera, Geometry, Program, Mesh } = window.ogl;
+
+      const particleCount = 200;
+      const particleSpread = 10;
+      const speed = 0.1;
+      const particleBaseSize = 100;
+      const sizeRandomness = 1;
+      const moveParticlesOnHover = true;
+
+      // Render Setup
+      const renderer = new Renderer({ alpha: true, depth: false });
+      const gl = renderer.gl;
+      container.appendChild(gl.canvas);
+      gl.clearColor(0, 0, 0, 0);
+
+      const camera = new Camera(gl, { fov: 15 });
+      camera.position.set(0, 0, 20);
+
+      function resize() {
+          const width = container.clientWidth;
+          const height = container.clientHeight;
+          renderer.setSize(width, height);
+          camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
+      }
+      window.addEventListener('resize', resize, false);
+      resize();
+
+      // Mouse Tracking
+      const mouse = { x: 0, y: 0 };
+      if (moveParticlesOnHover) {
+          container.addEventListener('mousemove', (e) => {
+              const rect = container.getBoundingClientRect();
+              mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+              mouse.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+          });
+      }
+
+      // Helper: Hex to RGB
+      const hexToRgb = (hex) => {
+          hex = hex.replace(/^#/, '');
+          if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+          const int = parseInt(hex, 16);
+          return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
+      };
+
+      // Create Particles Data
+      const count = particleCount;
+      const positions = new Float32Array(count * 3);
+      const randoms = new Float32Array(count * 4);
+      const colors = new Float32Array(count * 3);
+      const palette = ['#ffffff', '#ffffff'];
+
+      for (let i = 0; i < count; i++) {
+          let x, y, z, len;
+          do {
+              x = Math.random() * 2 - 1;
+              y = Math.random() * 2 - 1;
+              z = Math.random() * 2 - 1;
+              len = x * x + y * y + z * z;
+          } while (len > 1 || len === 0);
+          const r = Math.cbrt(Math.random());
+          positions.set([x * r, y * r, z * r], i * 3);
+          randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
+          const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
+          colors.set(col, i * 3);
+      }
+
+      const geometry = new Geometry(gl, {
+          position: { size: 3, data: positions },
+          random: { size: 4, data: randoms },
+          color: { size: 3, data: colors }
+      });
+
+      // Shaders
+      const vertex = `
+          attribute vec3 position;
+          attribute vec4 random;
+          attribute vec3 color;
+          uniform mat4 modelMatrix;
+          uniform mat4 viewMatrix;
+          uniform mat4 projectionMatrix;
+          uniform float uTime;
+          uniform float uSpread;
+          uniform float uBaseSize;
+          uniform float uSizeRandomness;
+          varying vec4 vRandom;
+          varying vec3 vColor;
+          void main() {
+              vRandom = random;
+              vColor = color;
+              vec3 pos = position * uSpread;
+              pos.z *= 10.0;
+              vec4 mPos = modelMatrix * vec4(pos, 1.0);
+              float t = uTime;
+              mPos.x += sin(t * random.z + 6.28 * random.w) * mix(0.1, 1.5, random.x);
+              mPos.y += sin(t * random.y + 6.28 * random.x) * mix(0.1, 1.5, random.w);
+              mPos.z += sin(t * random.w + 6.28 * random.y) * mix(0.1, 1.5, random.z);
+              vec4 mvPos = viewMatrix * mPos;
+              if (uSizeRandomness == 0.0) {
+                  gl_PointSize = uBaseSize;
+              } else {
+                  gl_PointSize = (uBaseSize * (1.0 + uSizeRandomness * (random.x - 0.5))) / length(mvPos.xyz);
+              }
+              gl_Position = projectionMatrix * mvPos;
+          }
+      `;
+
+      const fragment = `
+          precision highp float;
+          uniform float uTime;
+          uniform float uAlphaParticles;
+          varying vec4 vRandom;
+          varying vec3 vColor;
+          void main() {
+              vec2 uv = gl_PointCoord.xy;
+              float d = length(uv - vec2(0.5));
+              if(uAlphaParticles < 0.5) {
+                  if(d > 0.5) discard;
+                  gl_FragColor = vec4(vColor + 0.2 * sin(uv.yxx + uTime + vRandom.y * 6.28), 1.0);
+              } else {
+                  float circle = smoothstep(0.5, 0.4, d) * 0.8;
+                  gl_FragColor = vec4(vColor + 0.2 * sin(uv.yxx + uTime + vRandom.y * 6.28), circle);
+              }
+          }
+      `;
+
+      const program = new Program(gl, {
+          vertex,
+          fragment,
+          uniforms: {
+              uTime: { value: 0 },
+              uSpread: { value: particleSpread },
+              uBaseSize: { value: particleBaseSize },
+              uSizeRandomness: { value: sizeRandomness },
+              uAlphaParticles: { value: 0 }
+          },
+          transparent: true,
+          depthTest: false
+      });
+
+      const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
+
+      // Animation Loop
+      let lastTime = performance.now();
+      let elapsed = 0;
+      function update(t) {
+          requestAnimationFrame(update);
+          const delta = t - lastTime;
+          lastTime = t;
+          elapsed += delta * speed;
+
+          program.uniforms.uTime.value = elapsed * 0.001;
+
+          if (moveParticlesOnHover) {
+              particles.position.x = -mouse.x * 1;
+              particles.position.y = -mouse.y * 1;
+          }
+
+          renderer.render({ scene: particles, camera });
+      }
+      requestAnimationFrame(update);
+  }
+
+  // Khởi chạy các hiệu ứng
   initProfileCard();
+  initParticles();
 
 });
