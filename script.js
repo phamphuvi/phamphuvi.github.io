@@ -1,14 +1,11 @@
-/* FILE: script.js */
-
-// --- SỬA LỖI QUAN TRỌNG: Dùng đường dẫn .mjs để import được module ---
-import { Renderer, Camera, Geometry, Program, Mesh } from 'https://unpkg.com/ogl/dist/ogl.mjs';
-
 window.addEventListener("DOMContentLoaded", function () {
   
-  // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
+  // === 1. DỮ LIỆU ĐA NGÔN NGỮ (TEXT ĐÃ TỐI ƯU HÓA) ===
   const I18N = {
     vi: {
+      // Dòng này đã được làm đẹp với thẻ <br> và <span highlight>
       heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Xin mời bạn tham quan<br> dự án Cá nhân của mình.<br>",
+      
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
@@ -17,6 +14,7 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "Trường", labelLocation: "Nơi sống",
       valSchool: "Đại Học Công Nghệ-Kỹ Thuật Cần Thơ",
       valLocation: "Cần Thơ, Việt Nam",
+
       p1Title: "Mô hình mức nước", p1Text: "Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.",
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
       p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
@@ -25,10 +23,13 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
+      
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
     en: {
+      // ENGLISH VERSION
       heroTitle: "Hello, I'm <span class='text-highlight'>Vi.</span><br>Welcome to my<br>Personal Projects.",
+
       roleText: "IoT & Automation Student",
       navAbout: "About", navProjects: "Projects", navSkills: "Skills", navContact: "Contact",
       ctaCVText: "Download CV", 
@@ -37,6 +38,7 @@ window.addEventListener("DOMContentLoaded", function () {
       labelSchool: "University", labelLocation: "Location",
       valSchool: "Can Tho University of Technology",
       valLocation: "Can Tho, Vietnam",
+
       p1Title: "Water Level Control", p1Text: "Designed and operated a water tank model: level sensors, PID control.",
       p2Title: "IoT Monitoring", p2Text: "Dashboard system for collecting data, alerting for greenhouse farming.",
       p3Title: "PVsyst Optimization", p3Text: "Research & simulation of solar power systems to support investment.",
@@ -45,6 +47,7 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
+
       "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
     }
   };
@@ -56,13 +59,21 @@ window.addEventListener("DOMContentLoaded", function () {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = text; 
+      if (el) {
+          // --- QUAN TRỌNG: Dùng innerHTML để hiển thị màu sắc ---
+          el.innerHTML = text; 
+      }
     }
     const btnText = document.querySelector("#langBtn .btn-text");
     if(btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
-    setTimeout(() => { initBlurText("heroTitle", 100); }, 50);
+
+    // Reset animation
+    setTimeout(() => {
+        initBlurText("heroTitle", 100);
+    }, 50);
   }
+  
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
@@ -96,19 +107,24 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // === 4. LINKS ===
   document.getElementById("year").textContent = new Date().getFullYear();
+  const YOUR_EMAIL = "phamphuvi9@gmail.com";
   document.getElementById("openGmailBtn").addEventListener("click", (e) => {
     e.preventDefault();
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=phamphuvi9@gmail.com`, '_blank');
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`, '_blank');
   });
   document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
 
-  // === 5. BLUR TEXT ANIMATION ===
+  // === 5. BLUR TEXT ANIMATION (FIXED FOR SPAN) ===
   function initBlurText(elementId, delay = 150) {
     const el = document.getElementById(elementId);
     if (!el) return;
+    
+    // Lấy nội dung gốc để tránh lỗi khi chạy lại
     el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
+
     const childNodes = Array.from(el.childNodes);
     el.innerHTML = ''; 
+
     childNodes.forEach(node => {
         if (node.nodeType === Node.TEXT_NODE) {
             const words = node.textContent.trim().split(/\s+/);
@@ -122,6 +138,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 }
             });
         } else {
+             // Giữ nguyên thẻ Highlight hoặc BR
              const clone = node.cloneNode(true);
              if (clone.tagName !== 'BR' && !clone.classList.contains('blur-word')) {
                  clone.classList.add('blur-word');
@@ -130,6 +147,7 @@ window.addEventListener("DOMContentLoaded", function () {
              if (clone.tagName !== 'BR') el.appendChild(document.createTextNode(' '));
         }
     });
+
     const textObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -143,13 +161,17 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       });
     }, { threshold: 0.5 });
+
     textObserver.observe(el);
   }
 
+  // === RUN ANIMATION ===
   setTimeout(() => {
       initBlurText("heroTitle", 100);       
       initBlurText("sloganProjects", 150);  
       initBlurText("titleContact", 150);  
+      
+      // Typewriter Effect
       const typeWriterElement = document.getElementById('typewriter-text');
       const fullText = I18N[currentLang]["typewriter-text"]; 
       let charIndex = 0;
@@ -166,6 +188,7 @@ window.addEventListener("DOMContentLoaded", function () {
       }
   }, 100);
 
+  // === SCROLL FADE IN ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -180,226 +203,4 @@ window.addEventListener("DOMContentLoaded", function () {
     el.style.transition = "all 0.8s ease-out";
     observer.observe(el);
   });
-
-  // === 6. PROFILE CARD TILT ENGINE ===
-  function initProfileCard() {
-    const wrap = document.getElementById('profileCardWrapper');
-    if (!wrap) return;
-    let width = wrap.clientWidth;
-    let height = wrap.clientHeight;
-    let targetX = width / 2;
-    let targetY = height / 2;
-    let currentX = width / 2;
-    let currentY = height / 2;
-    let rafId = null;
-    const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
-    function updateCSS(x, y) {
-        const percentX = clamp((100 / width) * x, 0, 100);
-        const percentY = clamp((100 / height) * y, 0, 100);
-        const pointerFromLeft = x / width;
-        const pointerFromTop = y / height;
-        const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
-        const rotateX = -((percentY - 50) / 3.5); 
-        const rotateY = (percentX - 50) / 3;
-        wrap.style.setProperty('--pointer-x', `${percentX}%`);
-        wrap.style.setProperty('--pointer-y', `${percentY}%`);
-        wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
-        wrap.style.setProperty('--pointer-from-top', pointerFromTop);
-        wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
-        wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
-        wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
-    }
-    function animate() {
-        const k = 0.1;
-        currentX += (targetX - currentX) * k;
-        currentY += (targetY - currentY) * k;
-        updateCSS(currentX, currentY);
-        const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
-        if (dist > 0.1) rafId = requestAnimationFrame(animate);
-        else rafId = null;
-    }
-    function startAnimation() {
-        if (!rafId) rafId = requestAnimationFrame(animate);
-    }
-    wrap.addEventListener('mousemove', (e) => {
-        const rect = wrap.getBoundingClientRect();
-        targetX = e.clientX - rect.left;
-        targetY = e.clientY - rect.top;
-        startAnimation();
-    });
-    wrap.addEventListener('mouseleave', () => {
-        targetX = width / 2;
-        targetY = height / 2;
-        startAnimation();
-    });
-    window.addEventListener('resize', () => {
-        width = wrap.clientWidth;
-        height = wrap.clientHeight;
-        updateCSS(width / 2, height / 2);
-    });
-    updateCSS(width / 2, height / 2);
-  }
-
-  // === 7. PARTICLES EFFECT (Đã sửa import) ===
-  function initParticles() {
-      const container = document.getElementById('particles-container');
-      if (!container) return;
-
-      const particleCount = 200;
-      const particleSpread = 10;
-      const speed = 0.1;
-      const particleBaseSize = 100;
-      const sizeRandomness = 1;
-      const moveParticlesOnHover = true;
-
-      const renderer = new Renderer({ alpha: true, depth: false });
-      const gl = renderer.gl;
-      container.appendChild(gl.canvas);
-      gl.clearColor(0, 0, 0, 0);
-
-      const camera = new Camera(gl, { fov: 15 });
-      camera.position.set(0, 0, 20);
-
-      function resize() {
-          const width = container.clientWidth;
-          const height = container.clientHeight;
-          renderer.setSize(width, height);
-          camera.perspective({ aspect: gl.canvas.width / gl.canvas.height });
-      }
-      window.addEventListener('resize', resize, false);
-      resize();
-
-      const mouse = { x: 0, y: 0 };
-      if (moveParticlesOnHover) {
-          container.addEventListener('mousemove', (e) => {
-              const rect = container.getBoundingClientRect();
-              mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-              mouse.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-          });
-      }
-
-      const hexToRgb = (hex) => {
-          hex = hex.replace(/^#/, '');
-          if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-          const int = parseInt(hex, 16);
-          return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
-      };
-
-      const count = particleCount;
-      const positions = new Float32Array(count * 3);
-      const randoms = new Float32Array(count * 4);
-      const colors = new Float32Array(count * 3);
-      const palette = ['#ffffff', '#ffffff'];
-
-      for (let i = 0; i < count; i++) {
-          let x, y, z, len;
-          do {
-              x = Math.random() * 2 - 1;
-              y = Math.random() * 2 - 1;
-              z = Math.random() * 2 - 1;
-              len = x * x + y * y + z * z;
-          } while (len > 1 || len === 0);
-          const r = Math.cbrt(Math.random());
-          positions.set([x * r, y * r, z * r], i * 3);
-          randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
-          const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
-          colors.set(col, i * 3);
-      }
-
-      const geometry = new Geometry(gl, {
-          position: { size: 3, data: positions },
-          random: { size: 4, data: randoms },
-          color: { size: 3, data: colors }
-      });
-
-      const vertex = `
-          attribute vec3 position;
-          attribute vec4 random;
-          attribute vec3 color;
-          uniform mat4 modelMatrix;
-          uniform mat4 viewMatrix;
-          uniform mat4 projectionMatrix;
-          uniform float uTime;
-          uniform float uSpread;
-          uniform float uBaseSize;
-          uniform float uSizeRandomness;
-          varying vec4 vRandom;
-          varying vec3 vColor;
-          void main() {
-              vRandom = random;
-              vColor = color;
-              vec3 pos = position * uSpread;
-              pos.z *= 10.0;
-              vec4 mPos = modelMatrix * vec4(pos, 1.0);
-              float t = uTime;
-              mPos.x += sin(t * random.z + 6.28 * random.w) * mix(0.1, 1.5, random.x);
-              mPos.y += sin(t * random.y + 6.28 * random.x) * mix(0.1, 1.5, random.w);
-              mPos.z += sin(t * random.w + 6.28 * random.y) * mix(0.1, 1.5, random.z);
-              vec4 mvPos = viewMatrix * mPos;
-              if (uSizeRandomness == 0.0) {
-                  gl_PointSize = uBaseSize;
-              } else {
-                  gl_PointSize = (uBaseSize * (1.0 + uSizeRandomness * (random.x - 0.5))) / length(mvPos.xyz);
-              }
-              gl_Position = projectionMatrix * mvPos;
-          }
-      `;
-
-      const fragment = `
-          precision highp float;
-          uniform float uTime;
-          uniform float uAlphaParticles;
-          varying vec4 vRandom;
-          varying vec3 vColor;
-          void main() {
-              vec2 uv = gl_PointCoord.xy;
-              float d = length(uv - vec2(0.5));
-              if(uAlphaParticles < 0.5) {
-                  if(d > 0.5) discard;
-                  gl_FragColor = vec4(vColor + 0.2 * sin(uv.yxx + uTime + vRandom.y * 6.28), 1.0);
-              } else {
-                  float circle = smoothstep(0.5, 0.4, d) * 0.8;
-                  gl_FragColor = vec4(vColor + 0.2 * sin(uv.yxx + uTime + vRandom.y * 6.28), circle);
-              }
-          }
-      `;
-
-      const program = new Program(gl, {
-          vertex,
-          fragment,
-          uniforms: {
-              uTime: { value: 0 },
-              uSpread: { value: particleSpread },
-              uBaseSize: { value: particleBaseSize },
-              uSizeRandomness: { value: sizeRandomness },
-              uAlphaParticles: { value: 0 }
-          },
-          transparent: true,
-          depthTest: false
-      });
-
-      const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
-
-      let lastTime = performance.now();
-      let elapsed = 0;
-      function update(t) {
-          requestAnimationFrame(update);
-          const delta = t - lastTime;
-          lastTime = t;
-          elapsed += delta * speed;
-
-          program.uniforms.uTime.value = elapsed * 0.001;
-
-          if (moveParticlesOnHover) {
-              particles.position.x = -mouse.x * 1;
-              particles.position.y = -mouse.y * 1;
-          }
-
-          renderer.render({ scene: particles, camera });
-      }
-      requestAnimationFrame(update);
-  }
-
-  initProfileCard();
-  initParticles();
 });
