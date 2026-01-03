@@ -1,6 +1,6 @@
-/* ===== STYLE.CSS - MAIN (FIXED SPACING) ===== */
+/* ===== STYLE.CSS - FIXED SPACING & ORIGINAL COLORS ===== */
 :root {
-    /* LIGHT MODE DEFAULT (Giữ nguyên màu hồng phấn bạn thích) */
+    /* LIGHT MODE DEFAULT (Giữ nguyên màu gốc) */
     --bg: #FFF0F5;              
     --surface: #FFFFFF;         
     --primary: #5138EE;         
@@ -99,15 +99,19 @@ ul { list-style: none; }
     margin-bottom: 20px; text-transform: uppercase;
 }
 
+/* --- CHỈNH SỬA TITLE CHÍNH (H1) --- */
 .hero-title {
     font-size: 3.5rem;
-    line-height: 1.05;
+    line-height: 1.1;
     font-weight: 800;
     margin-bottom: 20px;
-    letter-spacing: -1px;
     color: var(--text-main);
     background: none; 
     max-width: 800px;
+    
+    /* Thu hẹp khoảng cách chữ và từ */
+    letter-spacing: -2px; 
+    word-spacing: -4px;
 }
 
 .text-highlight {
@@ -302,6 +306,7 @@ ul { list-style: none; }
   background: linear-gradient(to bottom, #fff, #a5b4fc);
   -webkit-background-clip: text; color: transparent;
   text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  letter-spacing: -1px; /* Thêm ở đây */
 }
 .pc-details p {
   color: #c7d2fe; font-weight: 600; font-size: 0.9rem; margin-top: -5px;
@@ -315,11 +320,11 @@ ul { list-style: none; }
 .section-header { margin-bottom: 50px; }
 .section-tag { font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px; }
 
-/* --- SỬA LỖI KHOẢNG CÁCH CHỮ Ở ĐÂY --- */
+/* --- CHỈNH SỬA KHOẢNG CÁCH CHỮ CHO H2 --- */
 .section-header h2 { 
     font-size: 3rem; 
-    font-weight: 800;
-    /* Kéo các chữ lại gần nhau hơn */
+    font-weight: 800; 
+    /* Giảm khoảng cách */
     letter-spacing: -2px; 
     word-spacing: -5px;
 }
