@@ -24,15 +24,6 @@ body:not(.light) {
     --shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* Force light mode logic based on JS */
-body.light {
-    --bg: #FFF0F5;
-    --surface: #FFFFFF;
-    --primary: #5138EE;
-    --text-main: #1A1A1A;
-    --text-muted: #666666;
-    --shadow: 0 20px 40px rgba(81, 56, 238, 0.1);
-}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -96,7 +87,7 @@ ul { list-style: none; }
     display: inline-block; padding: 6px 16px;
     background: rgba(81, 56, 238, 0.1); color: var(--primary);
     border-radius: 20px; font-weight: 700; font-size: 0.85rem;
-    margin-bottom: 20px; text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 /* --- CHỈNH SỬA TITLE CHÍNH (H1) --- */
@@ -110,8 +101,8 @@ ul { list-style: none; }
     max-width: 800px;
     
     /* Thu hẹp khoảng cách chữ và từ */
-    letter-spacing: -2px; 
-    word-spacing: -4px;
+    letter-spacing: -1px;
+    word-spacing: -2px;
 }
 
 .text-highlight {
@@ -130,7 +121,7 @@ ul { list-style: none; }
     padding-top: 20px; border-top: 1px solid var(--border);
 }
 .stat-box { display: flex; flex-direction: column; }
-.stat-box b { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); margin-bottom: 5px; }
+.stat-box b { font-size: 0.85rem; color: var(--primary); margin-bottom: 5px; }
 .stat-box span { font-weight: 600; }
 
 .scroll-indicator { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600; opacity: 0.7; }
@@ -436,4 +427,30 @@ body.light #particles-container {
 /* Hiện Particles khi ở chế độ Dark (mặc định) */
 body:not(.light) #particles-container {
     opacity: 1;
+}
+
+
+/* ===== BỔ SUNG: TRẢI NGHIỆM & TRUY CẬP ===== */
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 90px; }   /* thanh menu cố định không che tiêu đề */
+.lead-text, .feature-card p, .clean-list li { line-height: 1.6; }
+
+a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Menu trên điện thoại: hiện hàng link thay vì ẩn hẳn */
+@media (max-width: 768px) {
+    .top-nav { padding: 0.8rem 4%; }
+    .nav-container { flex-wrap: wrap; gap: 8px; }
+    .logo { font-size: 1rem; }
+    .nav-links-desktop { display: flex; order: 3; width: 100%; justify-content: space-between; gap: 8px; }
+    .nav-links-desktop a { font-size: 0.85rem; }
+    .hero-section { padding-top: 130px; }
 }

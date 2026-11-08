@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", function () {
   // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
   const I18N = {
     vi: {
-      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span>Mời bạn tham quan dự án cá<br>nhân của mình.<br>",
+      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span><br>Mời bạn tham quan<br>dự án cá nhân của mình.",
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
@@ -17,10 +17,12 @@ window.addEventListener("DOMContentLoaded", function () {
       p2Title: "Giám sát IoT", p2Text: "Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.",
       p3Title: "Tối ưu hoá PVsyst", p3Text: "Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.",
       titleSkills: "Kỹ năng", skTech: "Kỹ thuật", skTools: "Công cụ",
-      skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python",
+      skTechItem1: "Điện - Điện tử, Mạch nguyên lý", skTechItem2: "Lập trình C/C++, Arduino, Python cơ bản",
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Liên hệ", contactHint: "Đừng ngần ngại liên hệ với tôi qua:",
       langBtnText: "VI",
+      cardRole: "IoT & Automation Student", cardStatus: "Đang tìm thực tập",
+      skTechItem3: "Vi xử lý: ESP32, STM32, PLC", skToolsItem3: "VS Code, Keil C",
       
       "typewriter-text": "Là sinh viên tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT), tôi định hướng phát triển chuyên sâu trong lĩnh vực Tự động hóa và IoT."
     },
@@ -44,6 +46,8 @@ window.addEventListener("DOMContentLoaded", function () {
       skToolsItem1: "Matlab/Simulink, AutoCAD, Altium", skToolsItem2: "PVsyst, GitHub, MS Office",
       titleContact: "Contact", contactHint: "Feel free to contact me via:",
       langBtnText: "EN",
+      cardRole: "IoT & Automation Student", cardStatus: "Open to internships",
+      skTechItem3: "Microcontrollers: ESP32, STM32, PLC", skToolsItem3: "VS Code, Keil C",
 
       "typewriter-text": "As a student at Can Tho University of Technology (CTUT), I aim to specialize in Automation and IoT."
     }
@@ -64,9 +68,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if(btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
 
-    setTimeout(() => {
-        initBlurText("heroTitle", 100);
-    }, 50);
+    document.documentElement.lang = lang;
   }
   
   applyLang(currentLang);
@@ -74,23 +76,19 @@ window.addEventListener("DOMContentLoaded", function () {
   document.getElementById("langBtn").addEventListener("click", () => {
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
-    window.location.reload(); 
-  });
+    runIntro();
+    });
 
   // === 3. DARK MODE ===
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
-  let currentMode = localStorage.getItem("mode") || "light"; 
+  let currentMode = localStorage.getItem("mode") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); 
 
   function applyMode(mode) {
-    if (mode === "light") {
-      root.classList.add("light");
-      modeIcon.textContent = "☀️"; 
-    } else {
-      root.classList.remove("light");
-      modeIcon.textContent = "🌙"; 
-    }
+    root.classList.toggle("light", mode === "light");
+    // Biểu tượng cho biết nút sẽ chuyển sang chế độ nào
+    modeIcon.textContent = mode === "light" ? "🌙" : "☀️";
     localStorage.setItem("mode", mode);
   }
   applyMode(currentMode);
@@ -102,13 +100,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // === 4. LINKS ===
   document.getElementById("year").textContent = new Date().getFullYear();
-  const YOUR_EMAIL = "phamphuvi9@gmail.com";
-  document.getElementById("openGmailBtn").addEventListener("click", (e) => {
-    e.preventDefault();
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${YOUR_EMAIL}`, '_blank');
-  });
-  document.getElementById("fbLink").href = "https://www.facebook.com/PhamVi1209";
-
+  
   // === 5. BLUR TEXT ANIMATION ===
   function initBlurText(elementId, delay = 150) {
     const el = document.getElementById(elementId);
@@ -159,26 +151,30 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   // === RUN ANIMATION ===
-  setTimeout(() => {
-      initBlurText("heroTitle", 100);       
-      initBlurText("sloganProjects", 150);  
-      initBlurText("titleContact", 150);  
-      
-      const typeWriterElement = document.getElementById('typewriter-text');
-      const fullText = I18N[currentLang]["typewriter-text"]; 
-      let charIndex = 0;
-      if(typeWriterElement) {
-        typeWriterElement.textContent = "";
-        function type() {
-            if (charIndex < fullText.length) {
-                typeWriterElement.textContent += fullText.charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 40);
-            }
-        }
-        type();
+  let typeTimer;
+  function runIntro() {
+    initBlurText("heroTitle", 100);
+    initBlurText("sloganProjects", 150);
+    initBlurText("titleContact", 150);
+
+    const el = document.getElementById("typewriter-text");
+    const fullText = I18N[currentLang]["typewriter-text"];
+    clearTimeout(typeTimer);
+    el.textContent = "";
+    // Người dùng bật "giảm chuyển động" thì hiện luôn, không gõ từng chữ
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = fullText;
+      return;
+    }
+    let i = 0;
+    (function type() {
+      if (i < fullText.length) {
+        el.textContent += fullText.charAt(i++);
+        typeTimer = setTimeout(type, 40);
       }
-  }, 100);
+    })();
+  }
+  setTimeout(runIntro, 100);
 
   // === SCROLL FADE IN ===
   const observer = new IntersectionObserver((entries) => {

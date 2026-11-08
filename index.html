@@ -4,9 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Phạm Phú Vĩ - Portfolio</title>
-  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Kỹ sư IoT & Tự động hoá tương lai.">
+  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Sinh viên IoT & Tự động hoá, đang tìm cơ hội thực tập.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Phạm Phú Vĩ - IoT & Automation Student">
+  <meta property="og:description" content="Các dự án PLC, IoT (ESP32) và mô phỏng năng lượng mặt trời (PVsyst).">
+  <meta property="og:image" content="https://phamphuvi.github.io/img/avatar.jpg">
+  <meta property="og:url" content="https://phamphuvi.github.io/">
+  <meta name="twitter:card" content="summary">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
@@ -27,10 +34,10 @@
       </div>
 
       <div class="nav-controls">
-        <button id="langBtn" class="control-btn-small" title="Đổi ngôn ngữ">
+        <button id="langBtn" class="control-btn-small" title="Đổi ngôn ngữ" aria-label="Đổi ngôn ngữ">
           <span class="btn-text">VI</span>
         </button>
-        <button id="modeBtn" class="control-btn-small" title="Giao diện Sáng/Tối">
+        <button id="modeBtn" class="control-btn-small" title="Giao diện Sáng/Tối" aria-label="Đổi giao diện sáng/tối">
           <span class="btn-icon">🌙</span>
         </button>
       </div>
@@ -77,16 +84,16 @@
                 <div class="pc-glare"></div>
                 
                 <div class="pc-content pc-avatar-content">
-                  <img src="img/avatar.jpg" alt="Phạm Phú Vĩ" class="avatar" onerror="this.src='https://via.placeholder.com/400'"/>
+                  <img src="img/avatar.jpg" alt="Phạm Phú Vĩ" class="avatar"/>
                   
                   <div class="pc-user-info">
                     <div class="pc-user-details">
                       <div class="pc-mini-avatar">
-                        <img src="img/avatar.jpg" alt="Mini Avatar" onerror="this.src='https://via.placeholder.com/50'"/>
+                        <img src="img/avatar.jpg" alt="Mini Avatar"/>
                       </div>
                       <div class="pc-user-text">
                         <div class="pc-handle">@phamphuvi</div>
-                        <div class="pc-status">Online</div>
+                        <div class="pc-status" id="cardStatus">Đang tìm thực tập</div>
                       </div>
                     </div>
                     <button class="pc-contact-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
@@ -98,7 +105,7 @@
                 <div class="pc-content">
                   <div class="pc-details">
                     <h3>Phạm Phú Vĩ</h3>
-                    <p>IoT Engineer</p>
+                    <p id="cardRole">IoT & Automation Student</p>
                   </div>
                 </div>
               </div>
@@ -114,6 +121,9 @@
         <h2 id="sloganProjects">Think. Make. Solve.</h2>
       </div>
       
+      <!-- TODO: với mỗi dự án, thêm: ảnh/video demo, vai trò của bạn, kết quả có số liệu,
+           và link GitHub/báo cáo. Ví dụ thêm dưới thẻ <p>:
+           <a class="proj-link" href="https://github.com/phamphuvi/TEN-REPO" target="_blank" rel="noopener">Xem mã nguồn</a> -->
       <div class="cards-grid">
         <article class="feature-card color-1">
           <div class="card-icon">💧</div>
@@ -154,7 +164,7 @@
           <ul class="clean-list">
             <li id="skTechItem1">Điện - Điện tử, Mạch nguyên lý</li>
             <li id="skTechItem2">Lập trình C/C++, Arduino, Python cơ bản</li>
-            <li>Vi xử lý: ESP32, STM32, PLC</li>
+            <li id="skTechItem3">Vi xử lý: ESP32, STM32, PLC</li>
           </ul>
         </div>
         <div class="skill-card">
@@ -162,7 +172,7 @@
           <ul class="clean-list">
             <li id="skToolsItem1">Matlab/Simulink, AutoCAD, Altium</li>
             <li id="skToolsItem2">PVsyst, GitHub, MS Office</li>
-            <li>VS Code, Keil C</li>
+            <li id="skToolsItem3">VS Code, Keil C</li>
           </ul>
         </div>
       </div>
@@ -177,10 +187,15 @@
             <a href="tel:0984810120" class="btn-pill white">
                 📞 0984 810 120
             </a>
-            <a id="openGmailBtn" href="#" class="btn-pill white">
+            <a id="openGmailBtn" href="mailto:phamphuvi9@gmail.com" class="btn-pill white">
                 📧 <span id="yourEmail">phamphuvi9@gmail.com</span>
             </a>
-            <a id="fbLink" href="#" target="_blank" class="btn-pill white">
+            <a href="https://github.com/phamphuvi" target="_blank" rel="noopener" class="btn-pill white">
+                🐙 GitHub
+            </a>
+            <!-- TODO: bỏ chú thích và điền link LinkedIn của bạn
+            <a href="https://www.linkedin.com/in/TEN-CUA-BAN" target="_blank" rel="noopener" class="btn-pill white">💼 LinkedIn</a> -->
+            <a id="fbLink" href="https://www.facebook.com/PhamVi1209" target="_blank" rel="noopener" class="btn-pill white">
                 🔵 Facebook
             </a>
             <a id="ctaCV" href="cv/pham-phu-vi-cv.pdf" target="_blank" class="btn-pill outline">
@@ -189,7 +204,7 @@
         </div>
         
         <footer class="real-footer">
-            © <span id="year">2025</span> Phạm Phú Vĩ.
+            © <span id="year">2026</span> Phạm Phú Vĩ.
         </footer>
       </div>
       
