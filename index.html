@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Phạm Phú Vĩ - Portfolio</title>
-  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Sinh viên IoT & Tự động hoá, đang tìm cơ hội thực tập.">
+  <meta name="description" content="Portfolio của Phạm Phú Vĩ - Kỹ sư Công nghệ Kỹ thuật Năng lượng: điện mặt trời, điện - điện tử, IoT.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Phạm Phú Vĩ - IoT & Automation Student">
-  <meta property="og:description" content="Các dự án PLC, IoT (ESP32) và mô phỏng năng lượng mặt trời (PVsyst).">
+  <meta property="og:title" content="Phạm Phú Vĩ - Kỹ sư Năng lượng">
+  <meta property="og:description" content="Điện mặt trời, mô phỏng PVsyst, IoT cơ bản.">
   <meta property="og:image" content="https://phamphuvi.github.io/img/avatar.jpg">
   <meta property="og:url" content="https://phamphuvi.github.io/">
   <meta name="twitter:card" content="summary">
@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=4" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
@@ -29,6 +29,7 @@
       <div class="nav-links-desktop">
         <a href="#about" id="navAbout">Về tôi</a>
         <a href="#projects" id="navProjects">Dự án</a>
+        <a href="#experience" id="navExp">Kinh nghiệm</a>
         <a href="#skills" id="navSkills">Kỹ năng</a>
         <a href="#contact" id="navContact">Liên hệ</a>
       </div>
@@ -48,7 +49,7 @@
     
     <section class="hero-section" id="about">
       <div class="hero-content">
-        <span class="badge-role" id="roleText">Sinh viên Kỹ thuật & IoT</span>
+        <span class="badge-role" id="roleText">Kỹ sư Công nghệ Kỹ thuật Năng lượng</span>
         
         <h1 class="hero-title" id="heroTitle"></h1>
         
@@ -67,6 +68,11 @@
             <b id="labelLocation">Nơi sống</b>
             <span id="valLocation">Cần Thơ, Việt Nam</span>
           </div>
+        </div>
+
+        <div class="hero-cta">
+          <a href="#projects" id="heroBtnProjects">Xem dự án</a>
+          <a href="cv/pham-phu-vi-cv.pdf" target="_blank" rel="noopener" class="ghost" id="heroBtnCV">Tải CV</a>
         </div>
 
         <div class="scroll-indicator">
@@ -93,7 +99,7 @@
                       </div>
                       <div class="pc-user-text">
                         <div class="pc-handle">@phamphuvi</div>
-                        <div class="pc-status" id="cardStatus">Đang tìm thực tập</div>
+                        <div class="pc-status" id="cardStatus">Mở cơ hội mới</div>
                       </div>
                     </div>
                     <button class="pc-contact-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
@@ -105,7 +111,7 @@
                 <div class="pc-content">
                   <div class="pc-details">
                     <h3>Phạm Phú Vĩ</h3>
-                    <p id="cardRole">IoT & Automation Student</p>
+                    <p id="cardRole">Kỹ sư Năng lượng</p>
                   </div>
                 </div>
               </div>
@@ -121,35 +127,21 @@
         <h2 id="sloganProjects">Think. Make. Solve.</h2>
       </div>
       
-      <!-- TODO: với mỗi dự án, thêm: ảnh/video demo, vai trò của bạn, kết quả có số liệu,
-           và link GitHub/báo cáo. Ví dụ thêm dưới thẻ <p>:
-           <a class="proj-link" href="https://github.com/phamphuvi/TEN-REPO" target="_blank" rel="noopener">Xem mã nguồn</a> -->
       <div class="cards-grid">
         <article class="feature-card color-1">
-          <div class="card-icon">💧</div>
-          <h3 id="p1Title">Mô hình mức nước</h3>
-          <p id="p1Text">Thiết kế và vận hành mô hình bồn nước: cảm biến mức, điều khiển PID/biến tần.</p>
-          <div class="tags">
-            <span>PLC</span><span>PID</span>
-          </div>
+          <div class="card-icon">☀️</div>
+          <h3 id="p1Title">Mô phỏng hệ thống điều hướng tấm pin mặt trời (PVsyst)</h3>
+          <p id="p1Text">Đề tài thực tập tốt nghiệp (báo cáo 8.9/10): dùng PVsyst so sánh hệ cố định, điều hướng 1 trục (có back-tracking) và 2 trục cho hệ 7,38 kWp (12 tấm 615 Wp) kèm pin lưu trữ 14,3 kWh, lấy số liệu từ một công trình thực tế tại Hậu Giang.</p>
+          <p class="proj-res" id="p1Res">Kết quả mô phỏng: 4.326 / 6.997 / 7.721 kWh/năm (cố định / 1 trục / 2 trục). Hệ 1 trục có tỷ số hiệu suất (PR) cao nhất nên được đề xuất cho hộ gia đình, vì cân bằng giữa sản lượng, chi phí và bảo trì.</p>
+          <div class="tags"><span>PVsyst</span><span>Điện mặt trời</span></div>
         </article>
-        
+
         <article class="feature-card color-2">
           <div class="card-icon">🌱</div>
-          <h3 id="p2Title">Giám sát IoT</h3>
-          <p id="p2Text">Hệ thống dashboard thu thập dữ liệu, cảnh báo cho trồng cây nhà kính.</p>
-          <div class="tags">
-            <span>IoT</span><span>ESP32</span>
-          </div>
-        </article>
-        
-        <article class="feature-card color-3">
-          <div class="card-icon">☀️</div>
-          <h3 id="p3Title">Tối ưu hoá PVsyst</h3>
-          <p id="p3Text">Nghiên cứu & mô phỏng hệ thống pin mặt trời hỗ trợ đầu tư.</p>
-          <div class="tags">
-            <span>Solar</span><span>PVsyst</span>
-          </div>
+          <h3 id="p2Title">Hệ thống trồng hoa thông minh dùng năng lượng mặt trời</h3>
+          <p id="p2Text">Đề tài nhỏ trong học tập: thiết kế mô hình, lắp và đấu nối cảm biến, xây dựng luồng điều khiển tưới/chiếu sáng, cấu hình dashboard Blynk để giám sát từ xa và đặt ngưỡng cảnh báo. Mô hình vận hành ổn định trong phòng thí nghiệm.</p>
+          <p class="proj-res" id="p2Res">Tài liệu gốc đã thất lạc; mình đang lên kế hoạch làm lại một bản nhỏ kèm video demo.</p>
+          <div class="tags"><span>IoT</span><span>Blynk</span></div>
         </article>
       </div>
     </section>
@@ -160,21 +152,52 @@
       </div>
       <div class="skills-container">
         <div class="skill-card">
-          <h3 id="skTech">Kỹ thuật</h3>
+          <h3 id="skTech">Chuyên môn</h3>
           <ul class="clean-list">
-            <li id="skTechItem1">Điện - Điện tử, Mạch nguyên lý</li>
-            <li id="skTechItem2">Lập trình C/C++, Arduino, Python cơ bản</li>
-            <li id="skTechItem3">Vi xử lý: ESP32, STM32, PLC</li>
+            <li id="skTechItem1">Khảo sát, lắp đặt, nghiệm thu điện mặt trời áp mái: đã làm khi thực tập</li>
+            <li id="skTechItem2">Mô phỏng và tối ưu hệ điện mặt trời bằng PVsyst: đã dùng trong đề tài</li>
+            <li id="skTechItem3">PLC S7-1200 / TIA Portal, SCADA: cơ bản (học phần)</li>
+            <li id="skTechItem4">IoT với Blynk và cảm biến: cơ bản (đề tài nhỏ)</li>
           </ul>
         </div>
         <div class="skill-card">
-          <h3 id="skTools">Công cụ</h3>
+          <h3 id="skTools">Công cụ và kỹ thuật</h3>
           <ul class="clean-list">
-            <li id="skToolsItem1">Matlab/Simulink, AutoCAD, Altium</li>
-            <li id="skToolsItem2">PVsyst, GitHub, MS Office</li>
-            <li id="skToolsItem3">VS Code, Keil C</li>
+            <li id="skToolsItem1">AutoCAD: cơ bản</li>
+            <li id="skToolsItem2">Mạng LAN/WiFi, máy in, máy chấm công, camera: đã làm thực tế</li>
+            <li id="skToolsItem3">HTML/CSS/JS, GitHub Pages: cơ bản (chính trang này)</li>
+            <li id="skToolsItem4">MS Office, Google Workspace, Canva, CapCut: đã dùng trong công việc</li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <section id="experience" class="content-section">
+      <div class="section-header"><span class="section-tag" id="titleExp">Kinh nghiệm</span></div>
+      <div class="exp-list">
+        <div class="exp-item"><span class="exp-time">04/2026 - nay</span>
+          <h3 id="exp1Title">Nhân viên kỹ thuật, trung tâm bảo hành thiết bị điện tử</h3>
+          <p id="exp1Text">Bảo hành, sửa chữa điện thoại TCL, HONOR và thiết bị trong hệ sinh thái DREAME.</p></div>
+        <div class="exp-item"><span class="exp-time">10/2025 - 12/2025</span>
+          <h3 id="exp2Title">Quản trị website và hỗ trợ kỹ thuật, Công ty TNHH DAFUNA</h3>
+          <p id="exp2Text">Quản trị website, tư vấn khách hàng, hỗ trợ đường truyền internet và thiết bị văn phòng (máy in, camera, máy tính, server nội bộ).</p></div>
+        <div class="exp-item"><span class="exp-time">07/2025 - 10/2025</span>
+          <h3 id="exp3Title">Thực tập sinh kỹ thuật, Công ty Minh Sơn</h3>
+          <p id="exp3Text">Khảo sát và tham gia lắp đặt hệ thống điện mặt trời áp mái, thiết bị điện dân dụng; hỗ trợ mạng nội bộ. Báo cáo thực tập loại Giỏi (8.9/10).</p></div>
+        <div class="exp-item"><span class="exp-time">12/2024 - 06/2025</span>
+          <h3 id="exp4Title">Nhân viên part-time, AM Coffee Cần Thơ</h3>
+          <p id="exp4Text">Chụp ảnh sản phẩm, thiết kế poster, dựng video ngắn; đề xuất lịch đăng bài, giúp lượt tiếp cận trang tăng hơn 30% trong 2 tháng.</p></div>
+      </div>
+    </section>
+
+    <section id="education" class="content-section">
+      <div class="section-header"><span class="section-tag" id="titleEdu">Học vấn và chứng chỉ</span></div>
+      <div class="exp-list">
+        <div class="exp-item"><span class="exp-time">2021 - 2025</span>
+          <h3 id="eduTitle">Kỹ sư Công nghệ Kỹ thuật Năng lượng, ĐH Kỹ thuật - Công nghệ Cần Thơ</h3>
+          <p id="eduText">Tốt nghiệp loại Khá. Học phần tiêu biểu: điều khiển tự động, PLC & SCADA (TIA Portal, S7-1200), IoT công nghiệp, hệ thống năng lượng tái tạo (PVsyst).</p>
+          <ul class="clean-list"><li id="cert1">Chứng nhận năng lực tiếng Anh CTUT: 835 điểm (06/2024)</li>
+          <li id="cert2">Chứng chỉ Ứng dụng công nghệ thông tin cơ bản (01/2025)</li></ul></div>
       </div>
     </section>
 
@@ -214,6 +237,6 @@
 
   </main>
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
