@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", function () {
   // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
   const I18N = {
     vi: {
-      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span><br>Mời bạn tham quan<br>dự án cá nhân của mình.",
+      heroTitle: "Xin chào, mình là <span class='text-highlight'>Vĩ.</span><br>Mời bạn tham quan<br>dự án cá nhân<br>của mình.",
       roleText: "Sinh viên Kỹ thuật & IoT",
       navAbout: "Về tôi", navProjects: "Dự án", navSkills: "Kỹ năng", navContact: "Liên hệ",
       ctaCVText: "Tải CV / Resume", 
