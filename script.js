@@ -25,6 +25,7 @@ window.addEventListener("DOMContentLoaded", function () {
       "p2Title": "Hệ thống trồng hoa thông minh dùng năng lượng mặt trời",
       "p2Text": "Đề tài nhỏ trong học tập: thiết kế mô hình, lắp và đấu nối cảm biến, xây dựng luồng điều khiển tưới/chiếu sáng, cấu hình dashboard Blynk để giám sát từ xa và đặt ngưỡng cảnh báo. Mô hình vận hành ổn định trong phòng thí nghiệm.",
       "p2Res": "Tài liệu gốc đã thất lạc; mình đang lên kế hoạch làm lại một bản nhỏ kèm video demo.",
+      "photoCap": "Hình ảnh công trình áp mái hộ gia đình mà mình tham gia khi thực tập tại Công ty Minh Sơn.",
       "titleSkills": "Kỹ năng",
       "skTech": "Chuyên môn",
       "skTools": "Công cụ và kỹ thuật",
@@ -80,6 +81,7 @@ window.addEventListener("DOMContentLoaded", function () {
       "p2Title": "Smart Flower Garden Powered by Solar Energy",
       "p2Text": "Small academic project: designed the model, wired the sensors, built the irrigation/lighting control flow, and set up a Blynk dashboard for remote monitoring and alert thresholds. The model ran stably in the lab.",
       "p2Res": "The original files were lost; I am planning to rebuild a small version with a demo video.",
+      "photoCap": "Rooftop household installation I took part in during my internship at Minh Son Company.",
       "titleSkills": "Skills",
       "skTech": "Core skills",
       "skTools": "Tools and technical",
@@ -149,7 +151,7 @@ window.addEventListener("DOMContentLoaded", function () {
   function applyMode(mode) {
     root.classList.toggle("light", mode === "light");
     // Biểu tượng cho biết nút sẽ chuyển sang chế độ nào
-    modeIcon.textContent = mode === "light" ? "🌙" : "☀️";
+    modeIcon.textContent = "◐";
     localStorage.setItem("mode", mode);
   }
   applyMode(currentMode);
@@ -211,31 +213,8 @@ window.addEventListener("DOMContentLoaded", function () {
     textObserver.observe(el);
   }
 
-  // === RUN ANIMATION ===
-  let typeTimer;
-  function runIntro() {
-    initBlurText("heroTitle", 100);
-    initBlurText("sloganProjects", 150);
-    initBlurText("titleContact", 150);
-
-    const el = document.getElementById("typewriter-text");
-    const fullText = I18N[currentLang]["typewriter-text"];
-    clearTimeout(typeTimer);
-    el.textContent = "";
-    // Người dùng bật "giảm chuyển động" thì hiện luôn, không gõ từng chữ
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.textContent = fullText;
-      return;
-    }
-    let i = 0;
-    (function type() {
-      if (i < fullText.length) {
-        el.textContent += fullText.charAt(i++);
-        typeTimer = setTimeout(type, 40);
-      }
-    })();
-  }
-  setTimeout(runIntro, 100);
+  // Đã bỏ hiệu ứng gõ chữ và mờ chữ: nội dung do applyLang() hiển thị trực tiếp
+  function runIntro() {}
 
   // === SCROLL FADE IN ===
   const observer = new IntersectionObserver((entries) => {
