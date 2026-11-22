@@ -26,6 +26,8 @@ window.addEventListener("DOMContentLoaded", function () {
       "p2Text": "Đề tài nhỏ trong học tập: thiết kế mô hình, lắp và đấu nối cảm biến, xây dựng luồng điều khiển tưới/chiếu sáng, cấu hình dashboard Blynk để giám sát từ xa và đặt ngưỡng cảnh báo. Mô hình vận hành ổn định trong phòng thí nghiệm.",
       "p2Res": "Tài liệu gốc đã thất lạc; mình đang lên kế hoạch làm lại một bản nhỏ kèm video demo.",
       "photoCap": "Hình ảnh công trình áp mái hộ gia đình mà mình tham gia khi thực tập tại Công ty Minh Sơn.",
+      "btnExpandProj": "Xem kết quả & 5 ảnh công trình",
+      "btnCollapseProj": "Thu gọn chi tiết",
       "titleSkills": "Kỹ năng",
       "skTech": "Chuyên môn",
       "skTools": "Công cụ và kỹ thuật",
@@ -82,6 +84,8 @@ window.addEventListener("DOMContentLoaded", function () {
       "p2Text": "Small academic project: designed the model, wired the sensors, built the irrigation/lighting control flow, and set up a Blynk dashboard for remote monitoring and alert thresholds. The model ran stably in the lab.",
       "p2Res": "The original files were lost; I am planning to rebuild a small version with a demo video.",
       "photoCap": "Rooftop household installation I took part in during my internship at Minh Son Company.",
+      "btnExpandProj": "View results & 5 site photos",
+      "btnCollapseProj": "Collapse details",
       "titleSkills": "Skills",
       "skTech": "Core skills",
       "skTools": "Tools and technical",
@@ -119,6 +123,17 @@ window.addEventListener("DOMContentLoaded", function () {
   // === 2. XỬ LÝ NGÔN NGỮ ===
   let currentLang = localStorage.getItem("lang") || "vi";
 
+  // Cập nhật chữ trên nút thu gọn/mở rộng dự án theo trạng thái và ngôn ngữ hiện tại
+  function updateProjectToggleLabels() {
+    const data = I18N[currentLang];
+    document.querySelectorAll('.proj-toggle-btn').forEach(btn => {
+      const labelEl = btn.querySelector('.toggle-label');
+      if (!labelEl) return;
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      labelEl.textContent = isExpanded ? data.btnCollapseProj : data.btnExpandProj;
+    });
+  }
+
   function applyLang(lang) {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
@@ -131,6 +146,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if (btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
     document.documentElement.lang = lang;
+    updateProjectToggleLabels();
   }
 
   applyLang(currentLang);
@@ -149,7 +165,6 @@ window.addEventListener("DOMContentLoaded", function () {
   function applyMode(mode) {
     const isLight = mode === "light";
     root.classList.toggle("light", isLight);
-    // Biểu tượng thể hiện chế độ sẽ chuyển sang khi bấm
     modeIcon.textContent = isLight ? "🌙" : "☀️";
     modeBtn.title = isLight ? "Chuyển sang giao diện Tối" : "Chuyển sang giao diện Sáng";
     localStorage.setItem("mode", mode);
@@ -310,12 +325,10 @@ window.addEventListener("DOMContentLoaded", function () {
     modal.querySelector('.lightbox-prev').addEventListener('click', () => showPhoto(currentIndex - 1));
     modal.querySelector('.lightbox-next').addEventListener('click', () => showPhoto(currentIndex + 1));
 
-    // Đóng khi bấm ra vùng nền tối bên ngoài
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeLightbox();
     });
 
-    // Hỗ trợ bàn phím: ESC để đóng, mũi tên trái/phải để chuyển ảnh
     document.addEventListener('keydown', (e) => {
       if (!modal.classList.contains('open')) return;
       if (e.key === 'Escape') closeLightbox();
@@ -325,5 +338,24 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   initPhotoLightbox();
+
+  // === 8. THU GỌN / MỞ RỘNG CHI TIẾT DỰ ÁN ===
+  function initProjectToggle() {
+    document.querySelectorAll('.proj-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const details = document.getElementById(targetId);
+        if (!details) return;
+
+        const willOpen = !details.classList.contains('is-open');
+        details.classList.toggle('is-open', willOpen);
+        details.setAttribute('aria-hidden', String(!willOpen));
+        btn.setAttribute('aria-expanded', String(willOpen));
+        updateProjectToggleLabels();
+      });
+    });
+  }
+
+  initProjectToggle();
 
 });
