@@ -120,26 +120,29 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // === 2. HIỆU ỨNG STROKE TEXT CHO TIÊU ĐỀ HERO (SVG + JS THUẦN) ===
+  // === 2. HIỆU ỨNG STROKE TEXT CHẬM RÃI, GIỮ NGUYÊN FONT & KHÔNG VIỀN XANH ===
   let cleanupStrokeTitle = null;
 
   function renderHeroStrokeTitle(htmlText) {
     const titleEl = document.getElementById("heroTitle");
     if (!titleEl) return;
 
-    // Dọn dẹp hiệu ứng và sự kiện cũ trước khi vẽ ngôn ngữ mới
+    // Dọn dẹp hiệu ứng và sự kiện cũ trước khi vẽ lại
     if (typeof cleanupStrokeTitle === "function") {
       cleanupStrokeTitle();
       cleanupStrokeTitle = null;
     }
 
     const SVG_NS = "http://www.w3.org/2000/svg";
-    const FONT_SIZE = 48;
-    const LINE_HEIGHT = 59;
-    const DASH_LEN = 380;
-    const DRAW_DURATION = 950;
-    const STAGGER_MS = 22;
-    const WIPE_DURATION = 680;
+    const computed = window.getComputedStyle(titleEl);
+    const FONT_SIZE = Math.round(parseFloat(computed.fontSize)) || 48;
+    const LINE_HEIGHT = Math.round(FONT_SIZE * 1.15);
+    const DASH_LEN = Math.round(FONT_SIZE * 5.5);
+
+    // Nhịp hiệu ứng chậm rãi, mượt mà (tổng khoảng ~4 giây)
+    const DRAW_DURATION = 1400; // Thời gian vẽ nét mỗi ký tự (ms)
+    const STAGGER_MS = 32;      // Độ trễ giữa các ký tự (ms)
+    const WIPE_DURATION = 1400; // Thời gian quét tô màu từ trái sang phải (ms)
     const PAD = 6;
 
     // Phân tách từng dòng và giữ nguyên đánh dấu highlight cho chữ "Vĩ." / "Vi."
@@ -150,7 +153,8 @@ window.addEventListener("DOMContentLoaded", function () {
       const tokens = [];
       temp.childNodes.forEach(node => {
         const isAccent = node.nodeType === Node.ELEMENT_NODE && node.classList.contains("text-highlight");
-        Array.from(node.textContent || "").forEach(ch => {
+        const normalized = (node.textContent || "").normalize("NFC");
+        Array.from(normalized).forEach(ch => {
           tokens.push({ char: ch, accent: isAccent });
         });
       });
@@ -163,7 +167,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
     const wrapper = document.createElement("span");
     wrapper.className = "stroke-text";
-    wrapper.title = currentLang === "vi" ? "Rê chuột để vẽ lại viền chữ" : "Hover to redraw outline";
+    wrapper.title = currentLang === "vi" ? "Bấm để xem lại hiệu ứng" : "Click to replay animation";
 
     const svg = document.createElementNS(SVG_NS, "svg");
     svg.setAttribute("class", "stroke-text__svg");
@@ -210,7 +214,6 @@ window.addEventListener("DOMContentLoaded", function () {
           if (isStroke && char.trim() !== "") {
             tspan.style.strokeDasharray = String(DASH_LEN);
             tspan.style.strokeDashoffset = String(DASH_LEN);
-            tspan.style.strokeOpacity = "1";
             strokeChars.push(tspan);
           }
           textEl.appendChild(tspan);
@@ -221,7 +224,6 @@ window.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Đặt lớp viền dưới lớp màu nền để sau khi quét xong chữ vẫn sắc nét
     buildTextLayer(true);
     buildTextLayer(false);
     svg.appendChild(strokeGroup);
@@ -231,13 +233,20 @@ window.addEventListener("DOMContentLoaded", function () {
 
     let box = null;
     let isDone = false;
-    let isRedrawing = false;
     let cancelled = false;
     let wipeTimer = null;
     let wipeRaf = null;
     let activeAnims = [];
 
     function cancelActiveAnims() {
+      if (wipeTimer) {
+        clearTimeout(wipeTimer);
+        wipeTimer = null;
+      }
+      if (wipeRaf) {
+        cancelAnimationFrame(wipeRaf);
+        wipeRaf = null;
+      }
       activeAnims.forEach(a => a.cancel());
       activeAnims = [];
     }
@@ -254,7 +263,7 @@ window.addEventListener("DOMContentLoaded", function () {
       updateAlignment();
       let bbox;
       try {
-        bbox = strokeGroup.getBBox();
+        bbox = fillGroup.getBBox();
       } catch {
         return;
       }
@@ -281,16 +290,14 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function setInstantEnd() {
       isDone = true;
-      strokeChars.forEach(el => {
-        el.style.strokeDashoffset = "0";
-        el.style.strokeOpacity = "1";
-      });
+      strokeGroup.style.transition = "none";
+      strokeGroup.style.opacity = "0";
       if (box) {
         wipeRect.setAttribute("width", String(box.width));
       }
     }
 
-    const easeInOutQuad = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+    const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
     function runWipe() {
       if (cancelled || !box) return;
@@ -299,13 +306,17 @@ window.addEventListener("DOMContentLoaded", function () {
       function step(now) {
         if (cancelled) return;
         const progress = Math.min((now - startTime) / WIPE_DURATION, 1);
-        const currentW = (box ? box.width : 0) * easeInOutQuad(progress);
+        const currentW = (box ? box.width : 0) * easeInOutCubic(progress);
         wipeRect.setAttribute("width", currentW.toFixed(2));
+
         if (progress < 1) {
           wipeRaf = requestAnimationFrame(step);
         } else {
           wipeRaf = null;
           isDone = true;
+          // Ẩn hẳn lớp viền sau khi tô màu xong để giữ nguyên nét chữ gốc
+          strokeGroup.style.transition = "opacity 0.45s ease";
+          strokeGroup.style.opacity = "0";
         }
       }
 
@@ -320,74 +331,37 @@ window.addEventListener("DOMContentLoaded", function () {
       }
 
       cancelActiveAnims();
+      isDone = false;
+      wipeRect.setAttribute("width", "0");
+      strokeGroup.style.transition = "none";
+      strokeGroup.style.opacity = "1";
+
       strokeChars.forEach((el, idx) => {
+        el.style.strokeDashoffset = String(DASH_LEN);
         const anim = el.animate(
           [{ strokeDashoffset: DASH_LEN }, { strokeDashoffset: 0 }],
           {
             duration: DRAW_DURATION,
             delay: idx * STAGGER_MS,
-            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
             fill: "forwards"
           }
         );
         activeAnims.push(anim);
       });
 
+      // Chờ gần vẽ xong toàn bộ khung nét rồi mới quét tô màu chậm rãi
       const totalDraw = DRAW_DURATION + Math.max(0, strokeChars.length - 1) * STAGGER_MS;
-      const wipeDelay = Math.max(450, totalDraw - 500);
+      const wipeDelay = Math.max(900, totalDraw - 300);
       wipeTimer = setTimeout(runWipe, wipeDelay);
     }
 
-    // Hiệu ứng hoverRedraw: rê chuột vào tiêu đề để vẽ lại nét viền xanh
-    function handleHoverRedraw() {
-      if (!isDone || isRedrawing || typeof Element.prototype.animate !== "function") return;
-      const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reducedMotion) return;
-
-      isRedrawing = true;
-      cancelActiveAnims();
-
-      const fadeAnims = strokeChars.map(el =>
-        el.animate([{ strokeOpacity: 1 }, { strokeOpacity: 0 }], {
-          duration: 180,
-          easing: "ease-out",
-          fill: "forwards"
-        })
-      );
-      activeAnims = fadeAnims;
-
-      setTimeout(() => {
-        if (cancelled) return;
-        const redrawDuration = 720;
-        const redrawStagger = 16;
-
-        activeAnims = strokeChars.map((el, idx) =>
-          el.animate(
-            [
-              { strokeDashoffset: DASH_LEN, strokeOpacity: 1 },
-              { strokeDashoffset: 0, strokeOpacity: 1 }
-            ],
-            {
-              duration: redrawDuration,
-              delay: idx * redrawStagger,
-              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-              fill: "forwards"
-            }
-          )
-        );
-
-        const lastAnim = activeAnims[activeAnims.length - 1];
-        if (lastAnim) {
-          lastAnim.onfinish = () => {
-            isRedrawing = false;
-          };
-        } else {
-          isRedrawing = false;
-        }
-      }, 190);
+    function handleReplayClick() {
+      if (!isDone) return;
+      playIntro();
     }
 
-    wrapper.addEventListener("pointerenter", handleHoverRedraw);
+    wrapper.addEventListener("click", handleReplayClick);
 
     measure();
     playIntro();
@@ -402,10 +376,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
     cleanupStrokeTitle = () => {
       cancelled = true;
-      if (wipeTimer) clearTimeout(wipeTimer);
-      if (wipeRaf) cancelAnimationFrame(wipeRaf);
       cancelActiveAnims();
-      wrapper.removeEventListener("pointerenter", handleHoverRedraw);
+      wrapper.removeEventListener("click", handleReplayClick);
       window.removeEventListener("resize", measure);
       if (resizeObserver) resizeObserver.disconnect();
     };
