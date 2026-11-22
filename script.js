@@ -258,4 +258,72 @@ window.addEventListener("DOMContentLoaded", function () {
 
   initProfileCard();
 
+  // === 7. LIGHTBOX XEM ẢNH CÔNG TRÌNH PHÓNG TO ===
+  function initPhotoLightbox() {
+    const photos = Array.from(document.querySelectorAll('.photo-grid img'));
+    if (!photos.length) return;
+
+    const modal = document.createElement('div');
+    modal.className = 'lightbox';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.innerHTML = `
+      <button class="lightbox-btn lightbox-close" aria-label="Đóng">✕</button>
+      <button class="lightbox-btn lightbox-prev" aria-label="Ảnh trước">‹</button>
+      <figure class="lightbox-figure">
+        <img src="" alt="" />
+        <figcaption class="lightbox-caption"></figcaption>
+      </figure>
+      <button class="lightbox-btn lightbox-next" aria-label="Ảnh sau">›</button>
+    `;
+    document.body.appendChild(modal);
+
+    const imgEl = modal.querySelector('img');
+    const capEl = modal.querySelector('.lightbox-caption');
+    let currentIndex = 0;
+
+    function showPhoto(index) {
+      currentIndex = (index + photos.length) % photos.length;
+      const target = photos[currentIndex];
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'vi';
+      imgEl.src = target.src;
+      imgEl.alt = target.alt;
+      capEl.textContent = target.dataset[lang === 'en' ? 'capEn' : 'capVi'] || target.alt;
+    }
+
+    function openLightbox(index) {
+      showPhoto(index);
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    photos.forEach((photo, idx) => {
+      photo.addEventListener('click', () => openLightbox(idx));
+    });
+
+    modal.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    modal.querySelector('.lightbox-prev').addEventListener('click', () => showPhoto(currentIndex - 1));
+    modal.querySelector('.lightbox-next').addEventListener('click', () => showPhoto(currentIndex + 1));
+
+    // Đóng khi bấm ra vùng nền tối bên ngoài
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeLightbox();
+    });
+
+    // Hỗ trợ bàn phím: ESC để đóng, mũi tên trái/phải để chuyển ảnh
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPhoto(currentIndex - 1);
+      if (e.key === 'ArrowRight') showPhoto(currentIndex + 1);
+    });
+  }
+
+  initPhotoLightbox();
+
 });
