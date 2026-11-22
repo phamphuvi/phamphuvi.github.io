@@ -120,10 +120,300 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // === 2. XỬ LÝ NGÔN NGỮ ===
+  // === 2. HIỆU ỨNG STROKE TEXT CHO TIÊU ĐỀ HERO (SVG + JS THUẦN) ===
+  let cleanupStrokeTitle = null;
+
+  function renderHeroStrokeTitle(htmlText) {
+    const titleEl = document.getElementById("heroTitle");
+    if (!titleEl) return;
+
+    // Dọn dẹp hiệu ứng và sự kiện cũ trước khi vẽ ngôn ngữ mới
+    if (typeof cleanupStrokeTitle === "function") {
+      cleanupStrokeTitle();
+      cleanupStrokeTitle = null;
+    }
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const FONT_SIZE = 48;
+    const LINE_HEIGHT = 59;
+    const DASH_LEN = 380;
+    const DRAW_DURATION = 950;
+    const STAGGER_MS = 22;
+    const WIPE_DURATION = 680;
+    const PAD = 6;
+
+    // Phân tách từng dòng và giữ nguyên đánh dấu highlight cho chữ "Vĩ." / "Vi."
+    const rawLines = htmlText.split(/<br\s*\/?>/i);
+    const parsedLines = rawLines.map(lineHtml => {
+      const temp = document.createElement("div");
+      temp.innerHTML = lineHtml;
+      const tokens = [];
+      temp.childNodes.forEach(node => {
+        const isAccent = node.nodeType === Node.ELEMENT_NODE && node.classList.contains("text-highlight");
+        Array.from(node.textContent || "").forEach(ch => {
+          tokens.push({ char: ch, accent: isAccent });
+        });
+      });
+      return tokens;
+    });
+
+    const plainText = parsedLines.map(l => l.map(t => t.char).join("")).join(" ");
+    titleEl.setAttribute("aria-label", plainText);
+    titleEl.innerHTML = "";
+
+    const wrapper = document.createElement("span");
+    wrapper.className = "stroke-text";
+    wrapper.title = currentLang === "vi" ? "Rê chuột để vẽ lại viền chữ" : "Hover to redraw outline";
+
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("class", "stroke-text__svg");
+    svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.visibility = "hidden";
+
+    const wipeId = "hero-stroke-wipe-" + Date.now();
+    const defs = document.createElementNS(SVG_NS, "defs");
+    const clipPath = document.createElementNS(SVG_NS, "clipPath");
+    clipPath.setAttribute("id", wipeId);
+    clipPath.setAttribute("clipPathUnits", "userSpaceOnUse");
+
+    const wipeRect = document.createElementNS(SVG_NS, "rect");
+    wipeRect.setAttribute("x", "0");
+    wipeRect.setAttribute("y", "0");
+    wipeRect.setAttribute("width", "0");
+    wipeRect.setAttribute("height", "0");
+
+    clipPath.appendChild(wipeRect);
+    defs.appendChild(clipPath);
+    svg.appendChild(defs);
+
+    const strokeGroup = document.createElementNS(SVG_NS, "g");
+    const fillGroup = document.createElementNS(SVG_NS, "g");
+    fillGroup.setAttribute("clip-path", `url(#${wipeId})`);
+
+    const strokeChars = [];
+    const textEls = [];
+
+    function buildTextLayer(isStroke) {
+      const group = isStroke ? strokeGroup : fillGroup;
+      parsedLines.forEach((tokens, lineIdx) => {
+        const textEl = document.createElementNS(SVG_NS, "text");
+        textEl.setAttribute("class", isStroke ? "stroke-text__stroke" : "stroke-text__fill");
+        textEl.setAttribute("x", "0");
+        textEl.setAttribute("y", String(lineIdx * LINE_HEIGHT));
+        textEl.setAttribute("font-size", String(FONT_SIZE));
+
+        tokens.forEach(({ char, accent }) => {
+          const tspan = document.createElementNS(SVG_NS, "tspan");
+          tspan.textContent = char;
+          if (accent) tspan.setAttribute("class", "is-accent");
+          if (isStroke && char.trim() !== "") {
+            tspan.style.strokeDasharray = String(DASH_LEN);
+            tspan.style.strokeDashoffset = String(DASH_LEN);
+            tspan.style.strokeOpacity = "1";
+            strokeChars.push(tspan);
+          }
+          textEl.appendChild(tspan);
+        });
+
+        textEls.push(textEl);
+        group.appendChild(textEl);
+      });
+    }
+
+    // Đặt lớp viền dưới lớp màu nền để sau khi quét xong chữ vẫn sắc nét
+    buildTextLayer(true);
+    buildTextLayer(false);
+    svg.appendChild(strokeGroup);
+    svg.appendChild(fillGroup);
+    wrapper.appendChild(svg);
+    titleEl.appendChild(wrapper);
+
+    let box = null;
+    let isDone = false;
+    let isRedrawing = false;
+    let cancelled = false;
+    let wipeTimer = null;
+    let wipeRaf = null;
+    let activeAnims = [];
+
+    function cancelActiveAnims() {
+      activeAnims.forEach(a => a.cancel());
+      activeAnims = [];
+    }
+
+    function updateAlignment() {
+      const isMobile = window.innerWidth <= 768;
+      const anchor = isMobile ? "middle" : "start";
+      textEls.forEach(el => el.setAttribute("text-anchor", anchor));
+      svg.setAttribute("preserveAspectRatio", isMobile ? "xMidYMid meet" : "xMinYMid meet");
+    }
+
+    function measure() {
+      if (cancelled) return;
+      updateAlignment();
+      let bbox;
+      try {
+        bbox = strokeGroup.getBBox();
+      } catch {
+        return;
+      }
+      if (!bbox || !bbox.width) return;
+
+      box = {
+        x: bbox.x - PAD,
+        y: bbox.y - PAD,
+        width: bbox.width + PAD * 2,
+        height: bbox.height + PAD * 2
+      };
+
+      svg.setAttribute("viewBox", `${box.x} ${box.y} ${box.width} ${box.height}`);
+      wrapper.style.setProperty("--stroke-text-width", `${box.width}px`);
+      svg.style.visibility = "visible";
+
+      wipeRect.setAttribute("x", String(box.x));
+      wipeRect.setAttribute("y", String(box.y));
+      wipeRect.setAttribute("height", String(box.height));
+      if (isDone) {
+        wipeRect.setAttribute("width", String(box.width));
+      }
+    }
+
+    function setInstantEnd() {
+      isDone = true;
+      strokeChars.forEach(el => {
+        el.style.strokeDashoffset = "0";
+        el.style.strokeOpacity = "1";
+      });
+      if (box) {
+        wipeRect.setAttribute("width", String(box.width));
+      }
+    }
+
+    const easeInOutQuad = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+    function runWipe() {
+      if (cancelled || !box) return;
+      const startTime = performance.now();
+
+      function step(now) {
+        if (cancelled) return;
+        const progress = Math.min((now - startTime) / WIPE_DURATION, 1);
+        const currentW = (box ? box.width : 0) * easeInOutQuad(progress);
+        wipeRect.setAttribute("width", currentW.toFixed(2));
+        if (progress < 1) {
+          wipeRaf = requestAnimationFrame(step);
+        } else {
+          wipeRaf = null;
+          isDone = true;
+        }
+      }
+
+      wipeRaf = requestAnimationFrame(step);
+    }
+
+    function playIntro() {
+      const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reducedMotion || typeof Element.prototype.animate !== "function") {
+        setInstantEnd();
+        return;
+      }
+
+      cancelActiveAnims();
+      strokeChars.forEach((el, idx) => {
+        const anim = el.animate(
+          [{ strokeDashoffset: DASH_LEN }, { strokeDashoffset: 0 }],
+          {
+            duration: DRAW_DURATION,
+            delay: idx * STAGGER_MS,
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            fill: "forwards"
+          }
+        );
+        activeAnims.push(anim);
+      });
+
+      const totalDraw = DRAW_DURATION + Math.max(0, strokeChars.length - 1) * STAGGER_MS;
+      const wipeDelay = Math.max(450, totalDraw - 500);
+      wipeTimer = setTimeout(runWipe, wipeDelay);
+    }
+
+    // Hiệu ứng hoverRedraw: rê chuột vào tiêu đề để vẽ lại nét viền xanh
+    function handleHoverRedraw() {
+      if (!isDone || isRedrawing || typeof Element.prototype.animate !== "function") return;
+      const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reducedMotion) return;
+
+      isRedrawing = true;
+      cancelActiveAnims();
+
+      const fadeAnims = strokeChars.map(el =>
+        el.animate([{ strokeOpacity: 1 }, { strokeOpacity: 0 }], {
+          duration: 180,
+          easing: "ease-out",
+          fill: "forwards"
+        })
+      );
+      activeAnims = fadeAnims;
+
+      setTimeout(() => {
+        if (cancelled) return;
+        const redrawDuration = 720;
+        const redrawStagger = 16;
+
+        activeAnims = strokeChars.map((el, idx) =>
+          el.animate(
+            [
+              { strokeDashoffset: DASH_LEN, strokeOpacity: 1 },
+              { strokeDashoffset: 0, strokeOpacity: 1 }
+            ],
+            {
+              duration: redrawDuration,
+              delay: idx * redrawStagger,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              fill: "forwards"
+            }
+          )
+        );
+
+        const lastAnim = activeAnims[activeAnims.length - 1];
+        if (lastAnim) {
+          lastAnim.onfinish = () => {
+            isRedrawing = false;
+          };
+        } else {
+          isRedrawing = false;
+        }
+      }, 190);
+    }
+
+    wrapper.addEventListener("pointerenter", handleHoverRedraw);
+
+    measure();
+    playIntro();
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measure).catch(() => {});
+    }
+
+    const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (resizeObserver) resizeObserver.observe(titleEl);
+    window.addEventListener("resize", measure);
+
+    cleanupStrokeTitle = () => {
+      cancelled = true;
+      if (wipeTimer) clearTimeout(wipeTimer);
+      if (wipeRaf) cancelAnimationFrame(wipeRaf);
+      cancelActiveAnims();
+      wrapper.removeEventListener("pointerenter", handleHoverRedraw);
+      window.removeEventListener("resize", measure);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  }
+
+  // === 3. XỬ LÝ NGÔN NGỮ ===
   let currentLang = localStorage.getItem("lang") || "vi";
 
-  // Cập nhật chữ trên nút thu gọn/mở rộng dự án theo trạng thái và ngôn ngữ hiện tại
   function updateProjectToggleLabels() {
     const data = I18N[currentLang];
     document.querySelectorAll('.proj-toggle-btn').forEach(btn => {
@@ -137,6 +427,7 @@ window.addEventListener("DOMContentLoaded", function () {
   function applyLang(lang) {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
+      if (id === "heroTitle") continue;
       const el = document.getElementById(id);
       if (el) {
         el.innerHTML = text;
@@ -146,6 +437,8 @@ window.addEventListener("DOMContentLoaded", function () {
     if (btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
     document.documentElement.lang = lang;
+
+    renderHeroStrokeTitle(data.heroTitle);
     updateProjectToggleLabels();
   }
 
@@ -156,7 +449,7 @@ window.addEventListener("DOMContentLoaded", function () {
     applyLang(currentLang);
   });
 
-  // === 3. CHUYỂN ĐỔI SÁNG / TỐI ===
+  // === 4. CHUYỂN ĐỔI SÁNG / TỐI ===
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
@@ -176,10 +469,10 @@ window.addEventListener("DOMContentLoaded", function () {
     applyMode(currentMode);
   });
 
-  // === 4. CẬP NHẬT NĂM FOOTER ===
+  // === 5. CẬP NHẬT NĂM FOOTER ===
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // === 5. HIỆU ỨNG HIỆN DẦN KHI CUỘN TRANG ===
+  // === 6. HIỆU ỨNG HIỆN DẦN KHI CUỘN TRANG ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -196,7 +489,7 @@ window.addEventListener("DOMContentLoaded", function () {
     observer.observe(el);
   });
 
-  // === 6. PROFILE CARD 3D TILT ENGINE ===
+  // === 7. PROFILE CARD 3D TILT ENGINE ===
   function initProfileCard() {
     const wrap = document.getElementById('profileCardWrapper');
     if (!wrap) return;
@@ -273,7 +566,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   initProfileCard();
 
-  // === 7. LIGHTBOX XEM ẢNH CÔNG TRÌNH PHÓNG TO ===
+  // === 8. LIGHTBOX XEM ẢNH CÔNG TRÌNH PHÓNG TO ===
   function initPhotoLightbox() {
     const photos = Array.from(document.querySelectorAll('.photo-grid img'));
     if (!photos.length) return;
@@ -339,7 +632,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   initPhotoLightbox();
 
-  // === 8. THU GỌN / MỞ RỘNG CHI TIẾT DỰ ÁN ===
+  // === 9. THU GỌN / MỞ RỘNG CHI TIẾT DỰ ÁN ===
   function initProjectToggle() {
     document.querySelectorAll('.proj-toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
