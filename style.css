@@ -101,7 +101,7 @@ a:focus-visible, button:focus-visible {
     gap: 50px;
 }
 
-.hero-content { flex: 1; z-index: 2; }
+.hero-content { flex: 1; z-index: 2; min-width: 0; }
 
 .badge-role {
     display: inline-block; padding: 6px 16px;
@@ -117,11 +117,53 @@ a:focus-visible, button:focus-visible {
     font-weight: 800;
     margin-bottom: 20px;
     color: var(--text-main);
-    max-width: 800px;
+    max-width: 100%;
     letter-spacing: -0.5px;
 }
 
 .text-highlight { color: var(--primary); display: inline-block; }
+
+/* ===== HIỆU ỨNG STROKE TEXT CHO TIÊU ĐỀ HERO ===== */
+.stroke-text {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    cursor: pointer;
+}
+
+.stroke-text__svg {
+    display: block;
+    width: 100%;
+    max-width: var(--stroke-text-width, 600px);
+    height: auto;
+    margin: 0;
+    overflow: visible;
+}
+
+.stroke-text__stroke,
+.stroke-text__fill {
+    font-family: var(--font-main);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    user-select: none;
+}
+
+.stroke-text__stroke {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.stroke-text__fill {
+    fill: currentColor;
+    stroke: none;
+}
+
+.stroke-text__fill .is-accent {
+    fill: var(--primary);
+}
 
 .typewriter-container { min-height: 80px; margin-bottom: 30px; }
 .lead-text { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; }
@@ -570,6 +612,7 @@ body:not(.light) .hero-cta a:not(.ghost) { color: #0A1424; }
     }
     .hero-visual { height: 420px; width: 100%; margin-bottom: 30px; }
     .hero-title { font-size: 2.3rem; }
+    .stroke-text__svg { margin: 0 auto; }
     .hero-stats { justify-content: center; }
     .hero-cta { justify-content: center; }
 
