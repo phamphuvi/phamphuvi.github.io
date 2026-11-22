@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", function () {
-  
+
   // === 1. DỮ LIỆU ĐA NGÔN NGỮ ===
   const I18N = {
     vi: {
@@ -118,40 +118,40 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // === 2. XỬ LÝ NGÔN NGỮ ===
   let currentLang = localStorage.getItem("lang") || "vi";
-  
+
   function applyLang(lang) {
     const data = I18N[lang];
     for (const [id, text] of Object.entries(data)) {
       const el = document.getElementById(id);
       if (el) {
-          el.innerHTML = text; 
+        el.innerHTML = text;
       }
     }
     const btnText = document.querySelector("#langBtn .btn-text");
-    if(btnText) btnText.textContent = data.langBtnText;
+    if (btnText) btnText.textContent = data.langBtnText;
     localStorage.setItem("lang", lang);
-
     document.documentElement.lang = lang;
   }
-  
+
   applyLang(currentLang);
 
   document.getElementById("langBtn").addEventListener("click", () => {
     currentLang = currentLang === "vi" ? "en" : "vi";
     applyLang(currentLang);
-    runIntro();
-    });
+  });
 
-  // === 3. DARK MODE ===
+  // === 3. CHUYỂN ĐỔI SÁNG / TỐI ===
   const root = document.body;
   const modeBtn = document.getElementById("modeBtn");
   const modeIcon = modeBtn.querySelector(".btn-icon");
-  let currentMode = localStorage.getItem("mode") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); 
+  let currentMode = localStorage.getItem("mode") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
   function applyMode(mode) {
-    root.classList.toggle("light", mode === "light");
-    // Biểu tượng cho biết nút sẽ chuyển sang chế độ nào
-    modeIcon.textContent = "◐";
+    const isLight = mode === "light";
+    root.classList.toggle("light", isLight);
+    // Biểu tượng thể hiện chế độ sẽ chuyển sang khi bấm
+    modeIcon.textContent = isLight ? "🌙" : "☀️";
+    modeBtn.title = isLight ? "Chuyển sang giao diện Tối" : "Chuyển sang giao diện Sáng";
     localStorage.setItem("mode", mode);
   }
   applyMode(currentMode);
@@ -161,62 +161,10 @@ window.addEventListener("DOMContentLoaded", function () {
     applyMode(currentMode);
   });
 
-  // === 4. LINKS ===
+  // === 4. CẬP NHẬT NĂM FOOTER ===
   document.getElementById("year").textContent = new Date().getFullYear();
-  
-  // === 5. BLUR TEXT ANIMATION ===
-  function initBlurText(elementId, delay = 150) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    
-    el.innerHTML = I18N[currentLang][elementId] || el.innerHTML;
 
-    const childNodes = Array.from(el.childNodes);
-    el.innerHTML = ''; 
-
-    childNodes.forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            const words = node.textContent.trim().split(/\s+/);
-            words.forEach(word => {
-                if (word) {
-                    const span = document.createElement('span');
-                    span.textContent = word;
-                    span.className = 'blur-word';
-                    el.appendChild(span);
-                    el.appendChild(document.createTextNode(' ')); 
-                }
-            });
-        } else {
-             const clone = node.cloneNode(true);
-             if (clone.tagName !== 'BR' && !clone.classList.contains('blur-word')) {
-                 clone.classList.add('blur-word');
-             }
-             el.appendChild(clone);
-             if (clone.tagName !== 'BR') el.appendChild(document.createTextNode(' '));
-        }
-    });
-
-    const textObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const words = entry.target.querySelectorAll('.blur-word');
-          words.forEach((word, index) => {
-            setTimeout(() => {
-              word.classList.add('is-visible');
-            }, index * delay); 
-          });
-          textObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    textObserver.observe(el);
-  }
-
-  // Đã bỏ hiệu ứng gõ chữ và mờ chữ: nội dung do applyLang() hiển thị trực tiếp
-  function runIntro() {}
-
-  // === SCROLL FADE IN ===
+  // === 5. HIỆU ỨNG HIỆN DẦN KHI CUỘN TRANG ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -225,6 +173,7 @@ window.addEventListener("DOMContentLoaded", function () {
       }
     });
   }, { threshold: 0.1 });
+
   document.querySelectorAll('.feature-card, .skill-card, .hero-content').forEach(el => {
     el.style.opacity = "0";
     el.style.transform = "translateY(30px)";
@@ -232,7 +181,7 @@ window.addEventListener("DOMContentLoaded", function () {
     observer.observe(el);
   });
 
-  // === 6. PROFILE CARD TILT ENGINE (Đã chuyển đổi từ React sang JS thuần) ===
+  // === 6. PROFILE CARD 3D TILT ENGINE ===
   function initProfileCard() {
     const wrap = document.getElementById('profileCardWrapper');
     if (!wrap) return;
@@ -245,76 +194,68 @@ window.addEventListener("DOMContentLoaded", function () {
     let currentY = height / 2;
     let rafId = null;
 
-    // Giới hạn giá trị min/max
     const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
-    // Cập nhật biến CSS để tạo hiệu ứng 3D
     function updateCSS(x, y) {
-        const percentX = clamp((100 / width) * x, 0, 100);
-        const percentY = clamp((100 / height) * y, 0, 100);
-        
-        // Tính toán các thông số vị trí cho ánh sáng và bóng đổ
-        const pointerFromLeft = x / width;
-        const pointerFromTop = y / height;
-        const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
+      const percentX = clamp((100 / width) * x, 0, 100);
+      const percentY = clamp((100 / height) * y, 0, 100);
 
-        // Góc xoay (Chia số càng lớn thì xoay càng nhẹ)
-        const rotateX = -((percentY - 50) / 3.5); 
-        const rotateY = (percentX - 50) / 3;
+      const pointerFromLeft = x / width;
+      const pointerFromTop = y / height;
+      const pointerFromCenter = Math.hypot(pointerFromLeft - 0.5, pointerFromTop - 0.5);
 
-        wrap.style.setProperty('--pointer-x', `${percentX}%`);
-        wrap.style.setProperty('--pointer-y', `${percentY}%`);
-        wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
-        wrap.style.setProperty('--pointer-from-top', pointerFromTop);
-        wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
-        wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
-        wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
+      const rotateX = -((percentY - 50) / 3.5);
+      const rotateY = (percentX - 50) / 3;
+
+      wrap.style.setProperty('--pointer-x', `${percentX}%`);
+      wrap.style.setProperty('--pointer-y', `${percentY}%`);
+      wrap.style.setProperty('--pointer-from-left', pointerFromLeft);
+      wrap.style.setProperty('--pointer-from-top', pointerFromTop);
+      wrap.style.setProperty('--pointer-from-center', pointerFromCenter);
+      wrap.style.setProperty('--rotate-x', `${rotateX}deg`);
+      wrap.style.setProperty('--rotate-y', `${rotateY}deg`);
     }
 
-    // Animation loop (Lerp - Linear Interpolation) để chuyển động mượt mà
     function animate() {
-        const k = 0.1; // Độ trễ (0.1 = mượt, 1 = nhanh)
-        currentX += (targetX - currentX) * k;
-        currentY += (targetY - currentY) * k;
+      const k = 0.1;
+      currentX += (targetX - currentX) * k;
+      currentY += (targetY - currentY) * k;
 
-        updateCSS(currentX, currentY);
+      updateCSS(currentX, currentY);
 
-        const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
-        if (dist > 0.1) {
-            rafId = requestAnimationFrame(animate);
-        } else {
-            rafId = null;
-        }
+      const dist = Math.abs(targetX - currentX) + Math.abs(targetY - currentY);
+      if (dist > 0.1) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        rafId = null;
+      }
     }
 
     function startAnimation() {
-        if (!rafId) rafId = requestAnimationFrame(animate);
+      if (!rafId) rafId = requestAnimationFrame(animate);
     }
 
-    // Sự kiện chuột
     wrap.addEventListener('mousemove', (e) => {
-        const rect = wrap.getBoundingClientRect();
-        targetX = e.clientX - rect.left;
-        targetY = e.clientY - rect.top;
-        startAnimation();
+      const rect = wrap.getBoundingClientRect();
+      targetX = e.clientX - rect.left;
+      targetY = e.clientY - rect.top;
+      startAnimation();
     });
 
     wrap.addEventListener('mouseleave', () => {
-        targetX = width / 2;
-        targetY = height / 2;
-        startAnimation();
+      targetX = width / 2;
+      targetY = height / 2;
+      startAnimation();
     });
-    
+
     window.addEventListener('resize', () => {
-        width = wrap.clientWidth;
-        height = wrap.clientHeight;
+      width = wrap.clientWidth;
+      height = wrap.clientHeight;
     });
-    
-    // Khởi tạo trạng thái ban đầu
+
     updateCSS(width / 2, height / 2);
   }
 
-  // Kích hoạt Profile Card
   initProfileCard();
 
 });
