@@ -423,6 +423,78 @@ body:not(.light) .hero-cta a:not(.ghost) { color: #0A1424; }
     border-radius: 20px; font-size: 0.8rem; font-weight: 600;
 }
 
+/* Khối thu gọn / mở rộng chi tiết dự án */
+.proj-details {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.38s ease, opacity 0.3s ease;
+}
+.proj-details.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+.proj-details-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 2px;
+}
+
+/* Chạy hiệu ứng biểu đồ thanh ngay lúc người dùng bấm mở rộng */
+.proj-details .bar-row i::after {
+    width: 0;
+    animation: none;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+.proj-details.is-open .bar-row i::after {
+    width: var(--w);
+}
+
+/* Thanh chân thẻ chứa tags và nút thu gọn/mở rộng */
+.card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+.card-footer .tags {
+    margin-top: 0;
+}
+
+.proj-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--primary);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.proj-toggle-btn:hover {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 10%, var(--bg));
+    transform: translateY(-1px);
+}
+.proj-toggle-btn .toggle-icon {
+    display: inline-block;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+.proj-toggle-btn[aria-expanded="true"] .toggle-icon {
+    transform: rotate(180deg);
+}
+
 /* ===== KINH NGHIỆM & HỌC VẤN ===== */
 .exp-list { display: grid; gap: 16px; max-width: 820px; }
 .exp-item {
